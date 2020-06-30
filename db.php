@@ -17,8 +17,8 @@ if (!mysqli_select_db($conn, $dbName)) { // בודק אם מסד הנתונים 
     }
 }
 $conn = new mysqli($servername, $username, $password, $dbName);
-//users list
 
+//users table creation
 $sql = "SELECT id FROM Users";
 if (!$conn->query(($sql))) {
     //create table if it doesnt exist
@@ -34,11 +34,51 @@ if($conn->query($sql)===TRUE){
     echo "Error creating table: ".$conn->error;
 }
 
-//list
-// $sql = "SELECT id FROM list";
+//list table creation
+$sql = "SELECT id FROM Users";
+if (!$conn->query(($sql))) {
+    //create table if it doesnt exist
+  $sql = "CREATE TABLE List( id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+   name Varchar(50),
+    creationDT datetime not null
+ )";
+  
+}
+if($conn->query($sql)===TRUE){
+    echo "Table List Created successfully";
+}else{
+    echo "Error creating table: ".$conn->error;
+}
+// //products table creation
+// $sql = "SELECT id FROM Users";
 // if (!$conn->query(($sql))) {
 //     //create table if it doesnt exist
-    
+//     $sql = "CREATE TABLE Users( id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+//     Email Varchar(50) NOT null UNIQUE CHECK (email like '_%@_%._%'), 
+//     pswrd varchar(20) not null CHECK (length(pswrd)>=5), 
+//     Nickname varchar(30), 
+//     phone char(10)check (Phone like '%[0-9]%'and length(Phone)<=10) )";
+// }
+// if($conn->query($sql)===TRUE){
+//     echo "Table Users Created successfully";
+// }else{
+//     echo "Error creating table: ".$conn->error;
+// }
+
+// //products in List table creation
+// $sql = "SELECT id FROM Users";
+// if (!$conn->query(($sql))) {
+//     //create table if it doesnt exist
+//     $sql = "CREATE TABLE Users( id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+//     Email Varchar(50) NOT null UNIQUE CHECK (email like '_%@_%._%'), 
+//     pswrd varchar(20) not null CHECK (length(pswrd)>=5), 
+//     Nickname varchar(30), 
+//     phone char(10)check (Phone like '%[0-9]%'and length(Phone)<=10) )";
+// }
+// if($conn->query($sql)===TRUE){
+//     echo "Table Users Created successfully";
+// }else{
+//     echo "Error creating table: ".$conn->error;
 // }
 
 
