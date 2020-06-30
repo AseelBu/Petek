@@ -24,7 +24,7 @@
   <header>
     <div class="fixed-top">
       <nav class="navbar navbar-expand-lg navbar-light">
-        <a class="navbar-brand" href="#"> <img src="images/post-it.png" class="img-fluid rounded mx-auto" width="30"
+        <a class="navbar-brand" href="index.php"> <img src="images/post-it.png" class="img-fluid rounded mx-auto" width="30"
             height="30" alt="Sticky Note Icon">Petek</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,7 +55,7 @@
           </ul>
           <div class="d-flex justify-content-end">
 
-            <a href="signup.html"> <button class=" btn btn-default">Sign-up</button></a>
+            <a href="signup.php"> <button class=" btn btn-default">Sign-up</button></a>
 
           </div>
         </div>
@@ -94,9 +94,9 @@
 
 
           <br>
-          <span class="psw"> <a href="resetPassword.html">Forgot password?</a></span>
+          <span class="psw"> <a href="resetPassword.php">Forgot password?</a></span>
           <br>
-          <span class="signup">Dont have an acount? <a href="signup.html">Sing Up</a></span>
+          <span class="signup">Dont have an acount? <a href="signup.php">Sing Up</a></span>
 
           <div class="d-flex justify-content-end">
             <input type="submit" class="btn btn-default" value="Login">

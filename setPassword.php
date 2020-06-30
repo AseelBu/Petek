@@ -24,7 +24,7 @@
     <header>
         <div class="fixed-top">
             <nav class="navbar navbar-expand-lg navbar-light navbar-fixed-top">
-                <a class="navbar-brand" href="#"> <img src="images/post-it.png" class="img-fluid rounded mx-auto"
+                <a class="navbar-brand" href="index.php"> <img src="images/post-it.png" class="img-fluid rounded mx-auto"
                         width="30" height="30" alt="Sticky Note Icon">Petek</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -56,7 +56,7 @@
                     </ul>
                     <div class="d-flex justify-content-end">
 
-                        <a href="login.html"><button class=" btn btn-default">Login</button></a>
+                        <a href="login.php"><button class=" btn btn-default">Login</button></a>
 
                     </div>
                 </div>

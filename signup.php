@@ -23,7 +23,7 @@
   <header>
     <div class="fixed-top">
       <nav class="navbar navbar-expand-lg navbar-light">
-        <a class="navbar-brand" href="#"> <img src="images/post-it.png" class="img-fluid rounded mx-auto" width="30"
+        <a class="navbar-brand" href="index.php"> <img src="images/post-it.png" class="img-fluid rounded mx-auto" width="30"
             height="30" alt="Sticky Note Icon">Petek</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,7 +59,7 @@
           </ul>
           <div class="d-flex justify-content-end">
 
-            <a href="login.html"><button class=" btn btn-default">Login</button></a>
+            <a href="login.php"><button class=" btn btn-default">Login</button></a>
 
           </div>
         </div>
@@ -98,7 +98,7 @@
           <span id="signUpValditionMsg" class="message "></span>
           <div class="form-row my-2 d-flex justify-content-end">
             <button type="submit" class="btn btn-default" id="btnSbmtSign">Next</button>
-            <a href="setPassword.html" id="toPasswordLink"></a>
+            <a href="setPassword.php" id="toPasswordLink"></a>
           </div>
         </div>
       </form>
