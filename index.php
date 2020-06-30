@@ -17,7 +17,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/stylesheet.css">
 
-
 </head>
 
 <body>
