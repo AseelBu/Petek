@@ -172,16 +172,16 @@ $(document).ready(function () {
         var usrMAil2 = document.getElementById("Email-confirm").value;
 
         if (usrMAil !== usrMAil2) {
-            e.preventDefault();
+            // e.preventDefault();
             invalidate("input#Email-confirm");
 
             let msg = "* Inserted Emails don't match !";
             $("span#signUpValditionMsg").append(msg);
         }
-        else {
-            resetForm();
-            // window.location.href = "setPassword.html";
-        }
+        // else {
+        //     resetForm();
+        //     // window.location.href = "setPassword.html";
+        // }
     });
     /************list script**************/
 

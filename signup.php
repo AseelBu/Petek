@@ -72,7 +72,7 @@
       <h2><b>Sign-Up</b></h2>
       <p>Create new account</p>
 
-      <form id="SignUpFrm" action="/action_page.php">
+      <form id="SignUpFrm" method="POST" action="insertUser.php">
         <div class="form-group col-12">
           <div class="form-row">
             <label for="Email">Email:*</label>
@@ -87,8 +87,8 @@
           </div>
 
           <div class="form-row">
-            <label for="Nickname"> Nickname:*</label>
-            <input type="text" class="form-control" id="Nickname" name="Nickname" placeholder="Enter nickname" required>
+            <label for="Nickname"> Nickname:</label>
+            <input type="text" class="form-control" id="Nickname" name="Nickname" placeholder="Enter nickname">
           </div>
           <div class="form-row mb-2">
             <label for="Phone">Phone Number:</label>
