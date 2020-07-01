@@ -267,6 +267,15 @@ $(document).ready(function () {
         let name = $("#prdctName").val();
         let amount = null;
 
+        $.ajax({
+            type: "POST",
+            url: "api/addProduct.php",
+            data: ({listID:listId,productName:name,amount:amount}),
+            success: function (response) {
+                let id=response;
+            }
+        })
+
         //if product already exists in this list
         if (listProducts.some(pr => pr.name === name)) {
             $("span#modalMsg").append("Product already exists in your list!");
@@ -303,4 +312,16 @@ $(document).ready(function () {
     //     window.location.href = "grocery_list.html";
 
     // })
-})
+
+
+    // // Ajax & JSON
+    // $.ajax({
+    //     type: "GET",
+    //     url: "api/getProducts.php",
+    //     data: "data",
+    //     dataType: "dataType",
+    //     success: function (data) {
+            
+    //     }
+    // });
+});

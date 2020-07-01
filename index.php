@@ -156,7 +156,7 @@ if (is_null($usermail)) {
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="addProduct">
+                    <form id="addProduct" >
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-12">

@@ -11,9 +11,9 @@ $dbName = "Petek";
 if (!mysqli_select_db($conn, $dbName)) { // בודק אם מסד הנתונים לא קיים כבר
     $sql = "CREATE DATABASE $dbName";
     if ($conn->query($sql) === TRUE) {
-        echo "Database created successfully ";
+      //  echo "Database created successfully ";
     } else {
-        echo "Error creating database: " . $conn->error;
+      //  echo "Error creating database: " . $conn->error;
     }
 }
 $conn = new mysqli($servername, $username, $password, $dbName);
@@ -29,9 +29,9 @@ if (!$conn->query(($sql))) {
     phone varchar(10))";
 }
 if($conn->query($sql)===TRUE){
-    echo "Table Users Created successfully ".PHP_EOL;
+ //   echo "Table Users Created successfully ".PHP_EOL;
 }else{
-    echo "Error creating table: ".$conn->error;
+ //  echo "Error creating table: ".$conn->error;
 }
 
 //list table creation
@@ -40,12 +40,12 @@ if (!$conn->query(($sql))) {
     //create table if it doesnt exist
     $sql = "CREATE TABLE List( id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name Varchar(50),
-    creteTime datetime NOT null  DEFAULT CURRENT_TIMESTAMP)";
+    createTime datetime NOT null  DEFAULT CURRENT_TIMESTAMP)";
 }
 if($conn->query($sql)===TRUE){
-    echo "Table List Created successfully ".PHP_EOL;
+   // echo "Table List Created successfully ".PHP_EOL;
 }else{
-    echo "Error creating table: ".$conn->error;
+   // echo "Error creating table: ".$conn->error;
 }
 //product table creation
 $sql = "SELECT id FROM Product";
@@ -55,9 +55,9 @@ if (!$conn->query(($sql))) {
     name Varchar(50) NOT null UNIQUE )";
 }
 if($conn->query($sql)===TRUE){
-    echo "Table Product Created successfully ".PHP_EOL;
+  //  echo "Table Product Created successfully ".PHP_EOL;
 }else{
-    echo "Error creating table: ".$conn->error;
+   // echo "Error creating table: ".$conn->error;
 }
 
 //ListProducts table creation
@@ -72,8 +72,8 @@ PRIMARY KEY(ListId,ProductID)
 )";
 }
 if($conn->query($sql)===TRUE){
-    echo "Table ListProducts Created successfully ".PHP_EOL;
+   // echo "Table ListProducts Created successfully ".PHP_EOL;
 }else{
-    echo "Error creating table: ".$conn->error;
+   // echo "Error creating table: ".$conn->error;
 }
 
