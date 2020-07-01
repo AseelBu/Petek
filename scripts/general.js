@@ -137,29 +137,29 @@ $(document).ready(function () {
     // resetForm();
 
     /***********password script**********/
-    $("form#passwordRegFrm").submit(function (e) {
+    // $("form#passwordRegFrm").submit(function (e) {
 
-        $("span#message").empty();
-        validate("input#pwdReg");
-        validate("input#conpwdReg");
-        const rslt = checkPasswordReg();
-        if (rslt === short) {
-           // e.preventDefault();
-            invalidate("input#pwdReg");
-            $("span#message").append("* Password too short, must contain at lest 5 characters");
-        }
-        else if (rslt === noMatch) {
-          //  e.preventDefault();
-            invalidate("input#conpwdReg");
-            $("span#message").append("* Passwords don't match !");
+    //     $("span#message").empty();
+    //     validate("input#pwdReg");
+    //     validate("input#conpwdReg");
+    //     const rslt = checkPasswordReg();
+    //     if (rslt === short) {
+    //        // e.preventDefault();
+    //         invalidate("input#pwdReg");
+    //         $("span#message").append("* Password too short, must contain at lest 5 characters");
+    //     }
+    //     else if (rslt === noMatch) {
+    //       //  e.preventDefault();
+    //         invalidate("input#conpwdReg");
+    //         $("span#message").append("* Passwords don't match !");
 
-        }
-        else {
-            resetForm();
-            // window.location.href = "login.html";
+    //     }
+    //     else {
+    //         resetForm();
+    //         // window.location.href = "login.html";
 
-        }
-    })
+    //     }
+    // })
     /***************sign up script************/
     // $("form#SignUpFrm").submit(function (e) {
 

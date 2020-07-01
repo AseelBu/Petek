@@ -1,14 +1,22 @@
 <?php
+session_start();
 require_once('db.php');
-$Email =isset($_SESSION['signupmail']) ? $_SESSION['signupmail'] :null;
-$Nickname = isset($_SESSION['signupnickname']) ? $_SESSION['signupnickname'] :null;
-$Phone = isset($_SESSION['signupphone']) ? $_SESSION['signupphone'] :null;
+
+var_dump($_SESSION['signupmail']);
+
+$Email = isset($_SESSION['signupmail']) ? $_SESSION['signupmail'] : null;
+$Nickname = isset($_SESSION['signupnickname']) ? $_SESSION['signupnickname'] : null;
+$Phone = isset($_SESSION['signupphone']) ? $_SESSION['signupphone'] : null;
 
 if (isset($_POST['Email']) && isset($_POST['Email-confirm'])) {
     $Email = htmlspecialchars($_POST['Email']);
     $ConfirmMail = htmlspecialchars($_POST['Email-confirm']);
     $Nickname = htmlspecialchars($_POST['Nickname']);
     $Phone = htmlspecialchars($_POST['Phone']);
+
+    $_SESSION['signupmail'] = $Email;
+    $_SESSION['signupnickname'] = $Nickname;
+    $_SESSION['signupphone'] = $Phone;
 
     //check if the confrmation mail matches the original
     if (strcmp($Email, $ConfirmMail) !== 0) {
@@ -27,12 +35,18 @@ if (isset($_POST['Email']) && isset($_POST['Email-confirm'])) {
             }
         }
     }
-
-    $_SESSION['signupmail']=$Email;
-    $_SESSION['signupnickname']=$Nickname;
-    $_SESSION['signupphone']=$Phone;
-    $conn->close();
+    //if the phone number doesn't consist onnly of digits or has more than 10 
+    if(!is_null($phone)&&(!ctype_digit($phone)|| strlen($phone)!=10)){
+        $_SESSION['signupphone']="";
+        header("Location:signup.php?status=phoneformat");
+        exit();
+    }
 }
+if (is_null($Email)) {
+    header("Location:signup.php?status=requireMail");
+    exit();
+}
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -69,6 +83,15 @@ if (isset($_POST['Email']) && isset($_POST['Email-confirm'])) {
     </header>
     <div class="container  my-5 px-4 py-4 d-flex justify-content-center overflow-auto">
         <div class="py-3 px-3 shadow main" id="password">
+        <?php
+                    if (isset($_GET["status"]) && $_GET["status"] == "nopswrd") :
+                        $MSG = "<strong>Insert password in order to continue</strong>";
+                    ?>
+                        <div class="alert alert-danger" role="alert">
+                            <?= $MSG ?>
+                        </div>
+
+                    <?php endif; ?>
             <h2><b>Sign-Up</b></h2>
             <p>Set your password</p>
             <form class="align-middle" id="passwordRegFrm" method="POST" action="insertUser.php">
@@ -85,10 +108,7 @@ if (isset($_POST['Email']) && isset($_POST['Email-confirm'])) {
                         <label for="conpwdReg" class="">Confirm Password: </label>
                         <input type="password" class="form-control" id="conpwdReg" name="conpwdReg" placeholder=" Confirm Password" required>
                     </div>
-                    <!-- hidden input for sign up-->
-                    <!-- <input type="hidden" name="email" value="<?= $Email; ?>">
-                    <input type="hidden" name="nickname" value="<?= (is_null($Nickname) ? "" : $Nickname) ?>">
-                    <input type="hidden" name="phone" value="<?= (is_null($Phone) ? "" : $Phone) ?>"> -->
+                  
                     <br>
                     <?php
                     if (isset($_GET["status"]) && ($_GET["status"] == "misMatch" || $_GET["status"] == "shortPass")) :

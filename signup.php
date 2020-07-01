@@ -1,3 +1,13 @@
+<?php
+session_start();
+$Email =isset($_SESSION['signupmail']) ? $_SESSION['signupmail'] :"";
+$Nickname = isset($_SESSION['signupnickname']) ? $_SESSION['signupnickname'] :"";
+$Phone = isset($_SESSION['signupphone']) ? $_SESSION['signupphone'] :"";
+
+if(isset($_GET['status']) && $_GET["status"] == "exists"){
+  $Email="";
+}
+?>
 <!doctype html>
 <html lang="en">
 
@@ -34,6 +44,13 @@
   </header>
   <div class="container  my-5 px-4 py-4 d-flex justify-content-center overflow-auto">
     <div class="py-3 px-3 shadow main" id="signUp">
+    <?php
+          if (isset($_GET["status"]) && ($_GET["status"] == "requireMail" )) :?>
+           <div class="alert alert-danger" role="alert">
+              <strong>An Email is required for signing up</strong>
+            </div>
+           
+          <?php endif; ?>
 
       <h2><b>Sign-Up</b></h2>
       <p>Create new account</p>
@@ -42,7 +59,7 @@
         <div class="form-group col-12">
           <div class="form-row">
             <label for="Email">Email:*</label>
-            <input type="email" class="form-control" id="Email" name="Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="Email@Email.com" required>
+            <input type="email" class="form-control" id="Email" name="Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="Email@Email.com" value="<?=$Email?>" required>
           </div>
 
           <div class="form-row">
@@ -52,16 +69,16 @@
 
           <div class="form-row">
             <label for="Nickname"> Nickname:</label>
-            <input type="text" class="form-control" id="Nickname" name="Nickname" placeholder="Enter nickname">
+            <input type="text" class="form-control" id="Nickname" name="Nickname" placeholder="Enter nickname" value="<?=$Nickname?>">
           </div>
           <div class="form-row mb-2">
             <label for="Phone">Phone Number:</label>
-            <input type="tel" class="form-control" id="Phone" name="Phone" pattern="^\d{10}$" placeholder="Enter your phone number">
+            <input type="tel" class="form-control" id="Phone" name="Phone" pattern="^\d{10}$" placeholder="Enter your phone number" value="<?=$Phone?>">
           </div>
           
           <?php
-          if (isset($_GET["status"]) && ($_GET["status"] == "misMatch" || $_GET["status"] == "exists")) :
-            $MSG = ($_GET["status"] == "misMatch") ?  "Inserted Emails are not identical" : "This Email already has an account";
+          if (isset($_GET["status"]) && ($_GET["status"] == "misMatch" || $_GET["status"] == "exists" ||$_GET["status"] == "phoneformat")) :
+            $MSG = ($_GET["status"] == "misMatch") ?  "Inserted Emails are not identical" : $_GET["status"] == "exists"? "This Email already has an account":"Incorrect phone format";
           ?>
           <div class="alert alert-danger" role="alert">
               <strong><?= $MSG ?></strong>
