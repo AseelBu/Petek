@@ -1,13 +1,12 @@
 <?php
 require_once('db.php');
-$Email = null;
-$Nickname = null;
-$Phone = null;
+$Email =isset($_SESSION['signupmail']) ? $_SESSION['signupmail'] :null;
+$Nickname = isset($_SESSION['signupnickname']) ? $_SESSION['signupnickname'] :null;
+$Phone = isset($_SESSION['signupphone']) ? $_SESSION['signupphone'] :null;
+
 if (isset($_POST['Email']) && isset($_POST['Email-confirm'])) {
     $Email = htmlspecialchars($_POST['Email']);
     $ConfirmMail = htmlspecialchars($_POST['Email-confirm']);
-    var_dump($Email);
-
     $Nickname = htmlspecialchars($_POST['Nickname']);
     $Phone = htmlspecialchars($_POST['Phone']);
 
@@ -28,6 +27,10 @@ if (isset($_POST['Email']) && isset($_POST['Email-confirm'])) {
             }
         }
     }
+
+    $_SESSION['signupmail']=$Email;
+    $_SESSION['signupnickname']=$Nickname;
+    $_SESSION['signupphone']=$Phone;
     $conn->close();
 }
 ?>
@@ -83,9 +86,9 @@ if (isset($_POST['Email']) && isset($_POST['Email-confirm'])) {
                         <input type="password" class="form-control" id="conpwdReg" name="conpwdReg" placeholder=" Confirm Password" required>
                     </div>
                     <!-- hidden input for sign up-->
-                    <input type="hidden" name="email" value="<?= $Email; ?>">
+                    <!-- <input type="hidden" name="email" value="<?= $Email; ?>">
                     <input type="hidden" name="nickname" value="<?= (is_null($Nickname) ? "" : $Nickname) ?>">
-                    <input type="hidden" name="phone" value="<?= (is_null($Phone) ? "" : $Phone) ?>">
+                    <input type="hidden" name="phone" value="<?= (is_null($Phone) ? "" : $Phone) ?>"> -->
                     <br>
                     <?php
                     if (isset($_GET["status"]) && ($_GET["status"] == "misMatch" || $_GET["status"] == "shortPass")) :

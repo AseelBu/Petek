@@ -1,18 +1,14 @@
 <?php
 require_once('db.php');
 
-if (isset($_POST['email'])) {
-    var_dump($_POST['email']);
-    if (isset($_POST['pwdReg']) && isset($_POST['conpwdReg'])) {
-        $Email = $_POST['email'];
-        $password = $_POST['pwdReg'];
-        $ConfirmPass = $_POST['conpwdReg'];
-        $Nickname = $_POST['nickname'];
-        $Phone = $_POST['phone'];
+$Email = isset($_SESSION['signupmail']) ? $_SESSION['signupmail'] : null;
+$Nickname = isset($_SESSION['signupnickname']) ? $_SESSION['signupnickname'] : null;
+$Phone = isset($_SESSION['signupphone']) ? $_SESSION['signupphone'] : null;
 
-        // for security, check again that email doesn't exist in db
-        $sql = "SELECT  `Email`
-    FROM `users`";
+if (!is_null($Email)) {
+    // for security, check again that email doesn't exist in db
+    $sql = "SELECT  `Email`
+     FROM `users`";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
@@ -22,10 +18,17 @@ if (isset($_POST['email'])) {
             }
         }
     }
+
+    if (isset($_POST['pwdReg']) && isset($_POST['conpwdReg'])) {
+
+        $password = $_POST['pwdReg'];
+        $ConfirmPass = $_POST['conpwdReg'];
+
+
         //if the password is too short
-        if(strlen($password<5)){
-            header("Location:login.php?status=shortPass");
-                exit();
+        if (strlen($password < 5)) {
+            header("Location:setPassword.php?status=shortPass");
+            exit();
         }
         //passwords are identical-create new user
         if (strcmp($password, $ConfirmPass) === 0) {
@@ -42,9 +45,11 @@ if (isset($_POST['email'])) {
         else {
             header("Location:setPassword.php?status=misMatch");
         }
-    }header("Location:setpassword.php");
+    }
+    header("Location:setpassword.php?s=error");
     exit();
-}header("Location:signup.php");
+}
+header("Location:signup.php");
 exit();
 
 $conn->close();
