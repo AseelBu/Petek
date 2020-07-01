@@ -1,8 +1,39 @@
+<?php
+require_once('db.php');
+$Email = null;
+$Nickname = null;
+$Phone = null;
+if (isset($_POST['Email']) && isset($_POST['Email-confirm'])) {
+    $Email = htmlspecialchars($_POST['Email']);
+    $ConfirmMail = htmlspecialchars($_POST['Email-confirm']);
+    var_dump($Email);
+
+    $Nickname = htmlspecialchars($_POST['Nickname']);
+    $Phone = htmlspecialchars($_POST['Phone']);
+
+    //check if the confrmation mail matches the original
+    if (strcmp($Email, $ConfirmMail) !== 0) {
+        header("Location:signup.php?status=misMatch");
+        exit();
+    }
+    //check if the email already exists in the system
+    $sql = "SELECT  `Email`
+    FROM `users`";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            if (strcmp($row['Email'], $Email) === 0) {
+                header("Location:signup.php?status=exists");
+                exit();
+            }
+        }
+    }
+    $conn->close();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
-
-</html>
-
 
 <head>
     <meta charset="UTF-8">
@@ -37,7 +68,7 @@
         <div class="py-3 px-3 shadow main" id="password">
             <h2><b>Sign-Up</b></h2>
             <p>Set your password</p>
-            <form class="align-middle" id="passwordRegFrm" novalidate>
+            <form class="align-middle" id="passwordRegFrm" method="POST" action="insertUser.php">
                 <div class="form-group col-md-12">
                     <div class="form-row ">
 
@@ -51,8 +82,20 @@
                         <label for="conpwdReg" class="">Confirm Password: </label>
                         <input type="password" class="form-control" id="conpwdReg" name="conpwdReg" placeholder=" Confirm Password" required>
                     </div>
+                    <!-- hidden input for sign up-->
+                    <input type="hidden" name="email" value="<?= $Email; ?>">
+                    <input type="hidden" name="nickname" value="<?= (is_null($Nickname) ? "" : $Nickname) ?>">
+                    <input type="hidden" name="phone" value="<?= (is_null($Phone) ? "" : $Phone) ?>">
                     <br>
-                    <span class="my-4 message" id='message'></span>
+                    <?php
+                    if (isset($_GET["status"]) && ($_GET["status"] == "misMatch" || $_GET["status"] == "shortPass")) :
+                        $MSG = ($_GET["status"] == "misMatch") ?  "Inserted Passwords are not identical" : "<strong>Password too short.</strong> <br>It must contain at lest 5 characters";
+                    ?>
+                        <div class="alert alert-danger" role="alert">
+                            <?= $MSG ?>
+                        </div>
+
+                    <?php endif; ?>
                     <div class="d-flex justify-content-end my-2">
                         <input type="submit" class="btn btn-default" value="Set Password">
                     </div>

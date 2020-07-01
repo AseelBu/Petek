@@ -1,2 +1,3 @@
 # Petek
-web based systems's project
+project for course "Web Based Systems"
+29.6.2020

@@ -11,7 +11,7 @@ $dbName = "Petek";
 if (!mysqli_select_db($conn, $dbName)) { // בודק אם מסד הנתונים לא קיים כבר
     $sql = "CREATE DATABASE $dbName";
     if ($conn->query($sql) === TRUE) {
-        echo "Database created successfully";
+        echo "Database created successfully ";
     } else {
         echo "Error creating database: " . $conn->error;
     }
@@ -29,7 +29,7 @@ if (!$conn->query(($sql))) {
     phone char(10)check (Phone like '%[0-9]%'and length(Phone)<=10) )";
 }
 if($conn->query($sql)===TRUE){
-    echo "Table Users Created successfully ";
+    echo "Table Users Created successfully ".PHP_EOL;
 }else{
     echo "Error creating table: ".$conn->error;
 }
@@ -43,7 +43,7 @@ if (!$conn->query(($sql))) {
     creteTime datetime NOT null  DEFAULT CURRENT_TIMESTAMP)";
 }
 if($conn->query($sql)===TRUE){
-    echo "Table List Created successfully ";
+    echo "Table List Created successfully ".PHP_EOL;
 }else{
     echo "Error creating table: ".$conn->error;
 }
@@ -55,7 +55,7 @@ if (!$conn->query(($sql))) {
     name Varchar(50) NOT null UNIQUE )";
 }
 if($conn->query($sql)===TRUE){
-    echo "Table Product Created successfully ";
+    echo "Table Product Created successfully ".PHP_EOL;
 }else{
     echo "Error creating table: ".$conn->error;
 }
@@ -72,9 +72,8 @@ PRIMARY KEY(ListId,ProductID)
 )";
 }
 if($conn->query($sql)===TRUE){
-    echo "Table ListProducts Created successfully ";
+    echo "Table ListProducts Created successfully ".PHP_EOL;
 }else{
     echo "Error creating table: ".$conn->error;
 }
 
-$conn->close();

@@ -37,9 +37,23 @@
   <div class="container  my-5 px-4 py-4 d-flex justify-content-center overflow-auto">
 
     <div class="py-3 px-3 shadow main" id="Login">
+      <!-- the user tried to access pages without logging in -->
+    <?php
+      if (isset($_GET["status"]) && $_GET["status"] == "showMsg") : ?>
+        <div class="alert alert-warning" role="alert">
+          Please Login to view the page
+        </div>
+      <?php endif; ?>
+      <!-- The user finished signing up -->
+      <?php
+      if (isset($_GET["status"]) && $_GET["status"] == "signUp") : ?>
+        <div class="alert alert-success" role="alert">
+          <strong>Thanks for signing up! </strong><br>Login to get started
+        </div>
+      <?php endif; ?>
       <h2><b>Login</b></h2>
-
-      <form class="align-middle " id="loginFrm" novalidate>
+      
+      <form class="align-middle" id="loginFrm" method="POST" action="index.php">
         <div class="form-group col-md-12">
           <div class="form-row">
             <label for="email" class="">Enter Email: </label>
@@ -54,14 +68,19 @@
 
           <div class="form-check form-row">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="chkRememberMe" id="chkRememberMe" value="checkedValue" checked>
+              <input type="checkbox" class="form-check-input" name="chkRememberMe" id="chkRememberMe" value="remember" checked>
               Remember Me
             </label>
           </div>
-
-
-
           <br>
+          <?php
+          if (isset($_GET["status"]) && ($_GET["status"] == "wrongpassword" || $_GET["status"] == "wrongemail")) :
+            $MSG = ($_GET["status"] == "wrongpassword") ?  "wrong password" : "wrong email";
+          ?>
+            <div class="alert alert-danger" role="alert">
+              <strong>Login Failed</strong>-<?= $MSG ?>
+            </div>
+          <?php endif; ?>
           <span class="psw"> <a href="resetPassword.php">Forgot password?</a></span>
           <br>
           <span class="signup">Dont have an acount? <a href="signup.php">Sing Up</a></span>

@@ -134,7 +134,7 @@ function reorderList() {
 
 $(document).ready(function () {
 
-    resetForm();
+    // resetForm();
 
     /***********password script**********/
     $("form#passwordRegFrm").submit(function (e) {
@@ -144,12 +144,12 @@ $(document).ready(function () {
         validate("input#conpwdReg");
         const rslt = checkPasswordReg();
         if (rslt === short) {
-            e.preventDefault();
+           // e.preventDefault();
             invalidate("input#pwdReg");
             $("span#message").append("* Password too short, must contain at lest 5 characters");
         }
         else if (rslt === noMatch) {
-            e.preventDefault();
+          //  e.preventDefault();
             invalidate("input#conpwdReg");
             $("span#message").append("* Passwords don't match !");
 
@@ -161,28 +161,28 @@ $(document).ready(function () {
         }
     })
     /***************sign up script************/
-    $("form#SignUpFrm").submit(function (e) {
+    // $("form#SignUpFrm").submit(function (e) {
 
-        $("span#signUpValditionMsg").empty();
-        validate("input#Email");
-        validate("input#Email-confirm");
-        validate("input#Nickname");
+    //     $("span#signUpValditionMsg").empty();
+    //     validate("input#Email");
+    //     validate("input#Email-confirm");
+    //     validate("input#Nickname");
 
-        var usrMAil = document.getElementById("Email").value;
-        var usrMAil2 = document.getElementById("Email-confirm").value;
+    //     var usrMAil = document.getElementById("Email").value;
+    //     var usrMAil2 = document.getElementById("Email-confirm").value;
 
-        if (usrMAil !== usrMAil2) {
-            // e.preventDefault();
-            invalidate("input#Email-confirm");
+    //     if (usrMAil !== usrMAil2) {
+    //         // e.preventDefault();
+    //         invalidate("input#Email-confirm");
 
-            let msg = "* Inserted Emails don't match !";
-            $("span#signUpValditionMsg").append(msg);
-        }
-        // else {
-        //     resetForm();
-        //     // window.location.href = "setPassword.html";
-        // }
-    });
+    //         let msg = "* Inserted Emails don't match !";
+    //         $("span#signUpValditionMsg").append(msg);
+    //     }
+    //     // else {
+    //     //     resetForm();
+    //     //     // window.location.href = "setPassword.html";
+    //     // }
+    // });
     /************list script**************/
 
     // initList();

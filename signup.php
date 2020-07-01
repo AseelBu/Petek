@@ -38,7 +38,7 @@
       <h2><b>Sign-Up</b></h2>
       <p>Create new account</p>
 
-      <form id="SignUpFrm" method="POST" action="insertUser.php">
+      <form id="SignUpFrm" method="POST" action="setPassword.php">
         <div class="form-group col-12">
           <div class="form-row">
             <label for="Email">Email:*</label>
@@ -58,10 +58,20 @@
             <label for="Phone">Phone Number:</label>
             <input type="tel" class="form-control" id="Phone" name="Phone" pattern="^\d{10}$" placeholder="Enter your phone number">
           </div>
-          <span id="signUpValditionMsg" class="message "></span>
+          
+          <?php
+          if (isset($_GET["status"]) && ($_GET["status"] == "misMatch" || $_GET["status"] == "exists")) :
+            $MSG = ($_GET["status"] == "misMatch") ?  "Inserted Emails are not identical" : "This Email already has an account";
+          ?>
+          <div class="alert alert-danger" role="alert">
+              <strong><?= $MSG ?></strong>
+            </div>
+           
+          <?php endif; ?>
+          
           <div class="form-row my-2 d-flex justify-content-end">
-            <button type="submit" class="btn btn-default" id="btnSbmtSign">Next</button>
-            <a href="setPassword.php" id="toPasswordLink"></a>
+            <button type="submit" class="btn btn-default" id="btnSbmtSign">Set Password</button>
+            
           </div>
         </div>
       </form>
@@ -69,7 +79,6 @@
   </div>
 
   <?php require "footer.php"; ?>
-
 
   <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 

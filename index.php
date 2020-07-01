@@ -1,3 +1,47 @@
+<?php
+session_start();
+require_once('db.php');
+
+$usermail = isset($_SESSION['usermail']) ? $_SESSION['usermail'] :
+    isset($_COOKIE['usermail']) ? $_COOKIE['usermail'] : null;
+
+$password = isset($_SESSION['password']) ? $_SESSION['password'] :
+    isset($_COOKIE['password']) ? $_COOKIE['password'] : null;
+
+$id = isset($_SESSION['id']) ? $_SESSION['id'] : null;
+
+if (isset($_POST["email"])) {
+    $usermail = htmlspecialchars($_POST['email']);
+    $password = htmlspecialchars($_POST['Password']);
+
+    $sql = "SELECT  `id`,`pswrd` FROM `users` where `email` like '$usermail'";
+    $result = $conn->query($sql);
+    if ($result->num_rows === 1) {
+        $row = $result->fetch_assoc();
+
+        //login successfull
+        if (strcmp($row['pswrd'], $password) === 0) {
+            $_SESSION['usermail'] = $usermail;
+            $_SESSION['password'] = $password;
+            $_SESSION['id'] = $row['id'];
+            if ($_POST['chkRememberMe'] == 'remember') {
+                setcookie('usermail', $usermail, time() + (60 * 60 * 24 * 15));
+                setcookie('password', $password, time() + (60 * 60 * 24 * 15));
+            }
+        } else { //failed to login- wrong password
+            header("Location:login.php?status=wrongpassword");
+            exit();
+        }
+    } else { //failed to login-wrong email
+        header("Location:login.php?status=wrongemail");
+        exit();
+    }
+}
+if (is_null($usermail)) {
+    header("Location:login.php?status=showMsg");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,7 +69,7 @@
                 <?php require "header.php"; ?>
                 <div class="d-flex justify-content-end">
 
-                    <a href="login.php"><button class=" btn btn-default">Log Out</button></a>
+                    <a href="logout.php"><button class=" btn btn-default">Log Out</button></a>
 
                 </div>
         </div>
@@ -221,6 +265,7 @@
     <script src="scripts/list_script.js"></script>
     <script src="scripts/general.js"></script>
 
+    <?php $conn->close(); ?>
 </body>
 
 </html>
