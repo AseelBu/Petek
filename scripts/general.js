@@ -220,7 +220,6 @@ $(document).ready(function () {
         $("table tr.check input[type=checkbox]").prop("checked", true);
     })
 
-
     //removing product
     $(".remove.modal").modal({
         'backdrop': "static",
@@ -235,6 +234,7 @@ $(document).ready(function () {
 
         $(".remove.modal .modal-body p").html(`You are about to delete <i>${productName}</i>`)
     })
+
 
     $(".btnRemoveConfirm").click(function () {
         $(".remove.modal").modal("hide");
@@ -470,7 +470,7 @@ $(document).ready(function () {
             //1- initiate the table
             refreshProducts(listId);
             //2-populate lists combo box with all user's lists
-            populateListsCombo( userId);
+            populateListsDrop(userId);
         }
     }
 

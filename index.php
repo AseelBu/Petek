@@ -9,9 +9,24 @@ $password = isset($_SESSION['password']) ? $_SESSION['password'] :
     isset($_COOKIE['password']) ? $_COOKIE['password'] : null;
 
 $userId = isset($_SESSION['id']) ? $_SESSION['id'] : null;
-$listId = isset($_GET['listId']) ? $_GET['listId']:null;
 
+$listId = null;
+
+if(isset($_GET['listId'])){ 
+    $listId = $_GET['listId'];
+}elseif(isset($_SESSION['listId'])){
+    $listId = $_SESSION['listId'];
+}
+//user was chose to view old list
 if(!is_null($listId)){
+    //check if this list is for this user
+    $sql="SELECT `userId` FROM `userlists` WHERE `userId`=$userId AND `listId`=$listId";
+    $result = $conn->query($sql);
+    //this list doesn't belong to user
+    if ($result->num_rows <= 0) {
+        header("Location:noAccess.php");
+        exit();
+    }
     $sql="SELECT `name` FROM `list` where `id`=$listId";
     $result = $conn->query($sql);
     if ($result->num_rows === 1) {
@@ -53,8 +68,8 @@ if (isset($_POST["email"])) {
                 $list = $result->fetch_assoc();
                 $listId=$list['id'];
                 $listName=$list['name'];
-                // $_SESSION['listId'] = $listId;
-                // $_SESSION['listame'] = $listame;
+                $_SESSION['listId'] = $listId;
+                $_SESSION['listame'] = $listame;
             } //if user has no lists yet 
             else {
                 //TODO move to page with create list
