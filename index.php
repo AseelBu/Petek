@@ -22,7 +22,7 @@ if(isset($_GET['listId'])){
 
 //user was chose to view old list
 if(!is_null($listId)){
-    echo ("hallooo");
+    
     //check if this list is for this user
     $sql="SELECT `userId` FROM `userlists` WHERE `userId`=$userId AND `listId`=$listId";
     $result = $conn->query($sql);

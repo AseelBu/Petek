@@ -87,7 +87,7 @@ function addProductToTable(product) {
     let isChecked = product.isChecked;
 
     amount = amount == null ? '---' : amount;
-    isChecked = isChecked.toLowerCase === 'Y' ? "check" : "uncheck";
+    isChecked = isChecked === 'Y' ? "check" : "uncheck";
 
     let tr = `<tr class="${isChecked}" data-id="${id}"> <td class="btnDone">
           <input type="checkbox" class="btnDone"></td>
@@ -189,35 +189,59 @@ $(document).ready(function () {
 
     $(document).on('click', 'input.btnDone', function (e) {
 
-        var dataId = $(this).parents("tr").attr("data-id");
+        let dataId = $(this).parents("tr").attr("data-id");
         const name = $(this).parents("tr").find(".name").text();
         const amount = $(this).parents("tr").find(".amount").text();
 
+        let listId = $("input#listIdIndex").val();
         if ($(this).is(":checked")) {
 
             $(this).parents("tr").addClass("check");
             $(this).parents("tr").removeClass("uncheck");
+           
+            //change done property for product in DB to 'Y'
+            $.ajax({
+                type: "POST",
+                url: "api/updateProduct.php",
+                data: {
+                    listId: listId,
+                    productId: dataId,
+                    done: 'Y'
+                },
+                
+                success: function (response) {
+                    refreshProducts(listId);
+                },
+                error: function (xhr, ajaxOptions, error){
+                    console.log("error: product Done state wasn't updated");
+                }
+            });
 
-            listProducts[dataId].isChecked = true;
-            //push down
-            let row = $(this).parents("tr");
-            $(this).parents("tr").fadeOut(20, function () {
-                $(this).parents("tr").remove();
-            })
-
-            $(row).appendTo("table#products tbody#checkedRows").hide().fadeIn(200);
 
         }
         else {
 
             $(this).parents("tr").addClass("uncheck");
             $(this).parents("tr").removeClass("check");
-            listProducts[dataId].isChecked = false;
-            //push up
-            reorderList();
 
+            //change done property for product in DB to 'N'
+            $.ajax({
+                type: "POST",
+                url: "api/updateProduct.php",
+                data: {
+                    listId: listId,
+                    productId: dataId,
+                    done: 'N'
+                },
+                success: function (response) {
+                    refreshProducts(listId);
+                },
+                error: function (xhr, ajaxOptions, error){
+                    console.log("error: product Done state wasn't updated");
+                }
+            });                        
         }
-        $("table tr.check input[type=checkbox]").prop("checked", true);
+        
     })
 
     //removing product
@@ -386,10 +410,11 @@ $(document).ready(function () {
                         product = { "id": item['id'], "name": item['name'], "amount": item['amount'], "isChecked": item['done'] }
                         addProductToTable(product);
                     }
+                    $("table tr.check input[type=checkbox]").prop("checked", true);
                 } else {
                     //TODO list is empty
-               }
-            }, 
+                }
+            },
             error: function (xhr, ajaxOptions, error) {
                 console.log(error);
             }
@@ -432,7 +457,7 @@ $(document).ready(function () {
 
 
 
-    function populateListsDrop(currentListId,userId) {
+    function populateListsDrop(currentListId, userId) {
         //get the products for the list
         $.ajax({
             type: "GET",
@@ -449,8 +474,8 @@ $(document).ready(function () {
                         let id = list.id;
                         let name = list.name;
                         let link = `<a class="dropdown-item" data-id="${id}" href="index.php?listId=${id}">${name}</a>`;
-                        if(currentListId!=id){
-                        $("div #listsDrop").append(link);
+                        if (currentListId != id) {
+                            $("div #listsDrop").append(link);
                         }
                     }
                 } else {
@@ -471,8 +496,9 @@ $(document).ready(function () {
             let listId = $("input#listIdIndex").val();
             //1- initiate the table
             refreshProducts(listId);
+            
             //2-populate lists combo box with all user's lists
-            populateListsDrop(listId,userId);
+            populateListsDrop(listId, userId);
         }
     }
 
