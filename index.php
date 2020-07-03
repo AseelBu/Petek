@@ -14,7 +14,17 @@ $listId = null;
 
 if (isset($_GET['listId'])) {
     $listId = $_GET['listId'];
+    //check if this list is for this user
+    $sql = "SELECT `userId` FROM `userlists` WHERE `userId`=$userId AND `listId`=$listId";
+    $result = $conn->query($sql);
+    //this list doesn't belong to user
+    if ($result->num_rows <= 0) {
+        
+        header("Location:index.php?status=noAccess");
+        exit();
+    }else{
     setcookie('listId', $listId);
+    }
 } elseif (isset($_COOKIE['listId'])) {
 
     $listId = $_COOKIE['listId'];
@@ -23,14 +33,7 @@ if (isset($_GET['listId'])) {
 //user was chose to view old list
 if (!is_null($listId)) {
 
-    //check if this list is for this user
-    $sql = "SELECT `userId` FROM `userlists` WHERE `userId`=$userId AND `listId`=$listId";
-    $result = $conn->query($sql);
-    //this list doesn't belong to user
-    if ($result->num_rows <= 0) {
-        header("Location:noAccess.php");
-        exit();
-    }
+    
     $sql = "SELECT `name` FROM `list` where `id`=$listId";
     $result = $conn->query($sql);
     if ($result->num_rows === 1) {
@@ -77,10 +80,7 @@ if (isset($_POST["email"])) {
                 setcookie('listId', $listId);
                 setcookie('listName', $listName);
             } //if user has no lists yet 
-            else {
-                //TODO move to page with create list
-               
-            }
+
         } else { //failed to login- wrong password
             header("Location:login.php?status=wrongpassword");
             exit();
@@ -94,8 +94,8 @@ if (is_null($usermail)) {
     header("Location:login.php?status=showMsg");
     exit();
 }
-if(is_null($listId)){
-$listName="You don't have lists yet!";
+if (is_null($listId)) {
+    $listName = "You don't have lists yet!";
 }
 ?>
 <!DOCTYPE html>
@@ -119,7 +119,7 @@ $listName="You don't have lists yet!";
 </head>
 
 <body>
-    
+
     <header>
         <div class="fixed-top">
             <nav class="navbar navbar-expand-lg navbar-light sticky-top">
@@ -135,16 +135,22 @@ $listName="You don't have lists yet!";
     </header>
 
     <div class="container my-5 px-4 py-4 overflow-auto">
-
+    <?php
+      if (isset($_GET["status"]) && $_GET["status"] == "noAccess") : ?>
+        <div class="alert alert-danger" role="alert">
+          You are not authorized to access the requested page!
+        </div>
+      <?php endif; ?>
         <div class="container row d-flex justify-content-between">
+      
             <span class="col-sm-6">
                 <h2 id="id=" listName"><?= $listName ?></h2>
             </span>
             <div class="container d-flex justify-content-end col-sm-12 ">
-                <?php if(!is_null($listId)):?>
-                <button type="button" data-toggle="modal" data-target="#modalNewProduct" id="btnNP" class="btn btn-default mx-1 col-sm-3 my-1"><i class="fas fa-plus"></i> New
-                    Product </button>
-                <?php endif;?>
+                <?php if (!is_null($listId)) : ?>
+                    <button type="button" data-toggle="modal" data-target="#modalNewProduct" id="btnNP" class="btn btn-default mx-1 col-sm-3 my-1"><i class="fas fa-plus"></i> New
+                        Product </button>
+                <?php endif; ?>
                 <button type="button" data-toggle="modal" data-target="#modalNewList" id="btnNewList" class="btn btn-default mx-1 my-1  col-sm-3"><i class="fas fa-folder-plus"></i> New List
                 </button>
                 <!-- <button type="button" id="btnNewList" class="btn btn-default mx-1 my-1  col-sm-3">
@@ -157,24 +163,24 @@ $listName="You don't have lists yet!";
         <br>
 
         <div class="table-responsive">
-        <?php if(!is_null($listId)):?>
-            <table class="table table-hover text-center shadow rounded" id="products">
-                <thead>
-                    <tr>
-                        <th scope="col">Done</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody id="uncheckedRows">
-                    <!--unchecked products will go here-->
-                </tbody>
-                <tbody id="checkedRows">
-                    <!--checked products will go here-->
-                </tbody>
-            </table>
-        <?php endif;?>
+            <?php if (!is_null($listId)) : ?>
+                <table class="table table-hover text-center shadow rounded" id="products">
+                    <thead>
+                        <tr>
+                            <th scope="col">Done</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="uncheckedRows">
+                        <!--unchecked products will go here-->
+                    </tbody>
+                    <tbody id="checkedRows">
+                        <!--checked products will go here-->
+                    </tbody>
+                </table>
+            <?php endif; ?>
         </div>
     </div>
     <!-- hidden input -->

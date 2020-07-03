@@ -1,7 +1,6 @@
 <?php
-$email=isset($_COOKIE['email'])? $_COOKIE['email']:"";
+$email=isset($_COOKIE['usermail'])? $_COOKIE['usermail']:"";
 $password=isset($_COOKIE['password'])? $_COOKIE['password']:"";
-
 
 ?>
 <!DOCTYPE html>
