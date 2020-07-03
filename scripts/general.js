@@ -432,7 +432,7 @@ $(document).ready(function () {
 
 
 
-    function populateListsDrop(userId) {
+    function populateListsDrop(currentListId,userId) {
         //get the products for the list
         $.ajax({
             type: "GET",
@@ -449,7 +449,9 @@ $(document).ready(function () {
                         let id = list.id;
                         let name = list.name;
                         let link = `<a class="dropdown-item" data-id="${id}" href="index.php?listId=${id}">${name}</a>`;
+                        if(currentListId!=id){
                         $("div #listsDrop").append(link);
+                        }
                     }
                 } else {
                     //TODO lists is empty
@@ -470,7 +472,7 @@ $(document).ready(function () {
             //1- initiate the table
             refreshProducts(listId);
             //2-populate lists combo box with all user's lists
-            populateListsDrop(userId);
+            populateListsDrop(listId,userId);
         }
     }
 

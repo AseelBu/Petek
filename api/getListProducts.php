@@ -14,8 +14,7 @@ if (isset($_GET['listId'])) {
     $result = $conn->query($sql);
     $products = array();
     while ($row = $result->fetch_assoc()) { 
-        $products[] = $row;
-        
+        $products[] = $row;  
     }
     echo json_encode($products);
 }

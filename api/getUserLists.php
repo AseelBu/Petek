@@ -9,7 +9,7 @@ if (isset($_GET['userId'])) {
     $sql = "SELECT `list`.`id`, `list`.`name` 
 FROM `userlists` INNER JOIN `list` on `userlists`.`listId`=`list`.`id`
 WHERE `userId`=$userid 
-ORDER BY `list`.`creteTime` DESC
+ORDER BY `list`.`name` 
 ";
     $result = $conn->query($sql);
     $lists = array();
