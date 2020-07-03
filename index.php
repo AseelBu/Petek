@@ -8,17 +8,21 @@ $usermail = isset($_SESSION['usermail']) ? $_SESSION['usermail'] :
 $password = isset($_SESSION['password']) ? $_SESSION['password'] :
     isset($_COOKIE['password']) ? $_COOKIE['password'] : null;
 
-$userId = isset($_SESSION['id']) ? $_SESSION['id'] : null;
+$userId = isset($_COOKIE['id']) ? $_COOKIE['id'] : null;
 
 $listId = null;
 
 if(isset($_GET['listId'])){ 
     $listId = $_GET['listId'];
-}elseif(isset($_SESSION['listId'])){
-    $listId = $_SESSION['listId'];
+    setcookie('listId', $listId, time() + (60 * 60 * 24 * 15));
+}elseif(isset($_COOKIE['listId'])){
+    
+    $listId = $_COOKIE['listId'];
 }
+
 //user was chose to view old list
 if(!is_null($listId)){
+    echo ("hallooo");
     //check if this list is for this user
     $sql="SELECT `userId` FROM `userlists` WHERE `userId`=$userId AND `listId`=$listId";
     $result = $conn->query($sql);
@@ -48,7 +52,8 @@ if (isset($_POST["email"])) {
         if (strcmp($row['pswrd'], $password) === 0) {
             $_SESSION['usermail'] = $usermail;
             $_SESSION['password'] = $password;
-            $_SESSION['id'] = $row['id'];
+            setcookie('id', $row['id'], time() + (60 * 60 * 24 * 15));
+           
             $userId = $row['id'];
             if ($_POST['chkRememberMe'] == 'remember') {
                 //stay logged in for 15 days
@@ -68,8 +73,10 @@ if (isset($_POST["email"])) {
                 $list = $result->fetch_assoc();
                 $listId=$list['id'];
                 $listName=$list['name'];
-                $_SESSION['listId'] = $listId;
-                $_SESSION['listame'] = $listame;
+
+                setcookie('listId', $listId, time() + (60 * 60 * 24 * 15));
+                setcookie('listName', $listName, time() + (60 * 60 * 24 * 15));
+               
             } //if user has no lists yet 
             else {
                 //TODO move to page with create list
