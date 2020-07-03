@@ -8,7 +8,17 @@ $usermail = isset($_SESSION['usermail']) ? $_SESSION['usermail'] :
 $password = isset($_SESSION['password']) ? $_SESSION['password'] :
     isset($_COOKIE['password']) ? $_COOKIE['password'] : null;
 
-$id = isset($_SESSION['id']) ? $_SESSION['id'] : null;
+$userId = isset($_SESSION['id']) ? $_SESSION['id'] : null;
+$listId = isset($_GET['listId']) ? $_GET['listId']:null;
+
+if(!is_null($listId)){
+    $sql="SELECT `name` FROM `list` where `id`=$listId";
+    $result = $conn->query($sql);
+    if ($result->num_rows === 1) {
+        $row = $result->fetch_assoc();
+        $listName=$row['name'];
+    }
+}
 
 if (isset($_POST["email"])) {
     $usermail = htmlspecialchars($_POST['email']);
@@ -24,9 +34,30 @@ if (isset($_POST["email"])) {
             $_SESSION['usermail'] = $usermail;
             $_SESSION['password'] = $password;
             $_SESSION['id'] = $row['id'];
+            $userId = $row['id'];
             if ($_POST['chkRememberMe'] == 'remember') {
+                //stay logged in for 15 days
                 setcookie('usermail', $usermail, time() + (60 * 60 * 24 * 15));
                 setcookie('password', $password, time() + (60 * 60 * 24 * 15));
+            }
+
+            //get detaails of most recent list for user
+            $sql = "SELECT `list`.* 
+            FROM `userlists` INNER JOIN `list` on `userlists`.`listId`=`list`.`id`
+            WHERE `userlists`.`userId`= $userId
+            ORDER BY `list`.`creteTime` DESC
+            LIMIT 1";
+
+            $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+                $list = $result->fetch_assoc();
+                $listId=$list['id'];
+                $listName=$list['name'];
+                // $_SESSION['listId'] = $listId;
+                // $_SESSION['listame'] = $listame;
+            } //if user has no lists yet 
+            else {
+                //TODO move to page with create list
             }
         } else { //failed to login- wrong password
             header("Location:login.php?status=wrongpassword");
@@ -67,8 +98,8 @@ if (is_null($usermail)) {
         <div class="fixed-top">
             <nav class="navbar navbar-expand-lg navbar-light sticky-top">
                 <?php require "header.php"; ?>
-                <div class="d-flex justify-content-end">
 
+                <div class="d-flex justify-content-end">
                     <a href="logout.php"><button class=" btn btn-default">Log Out</button></a>
 
                 </div>
@@ -80,18 +111,17 @@ if (is_null($usermail)) {
     <div class="container my-5 px-4 py-4 overflow-auto">
 
         <div class="container row d-flex justify-content-between">
-            <!-- <span class="col-sm-6" >
-                <h2 id="List-Name"><!--List Name-for Later</h2>-->
-            <!-- </span> -->
+            <span class="col-sm-6">
+                <h2 id="id=" listName"><?=$listName?></h2>
+            </span>
             <div class="container d-flex justify-content-end col-sm-12 ">
                 <button type="button" data-toggle="modal" data-target="#modalNewProduct" id="btnNP" class="btn btn-default mx-1 col-sm-3 my-1"><i class="fas fa-plus"></i> New
                     Product </button>
-                <!-- <button type="button" data-toggle="modal" data-target="#modalNewList" id="btnNewList"
-                    class="btn btn-default mx-1 my-1  col-sm-3"><i class="fas fa-folder-plus"></i> New List
-                </button> -->
-                <button type="button" id="btnNewList" class="btn btn-default mx-1 my-1  col-sm-3">
-                    <i class="fas fa-folder-plus"></i> New List
+                <button type="button" data-toggle="modal" data-target="#modalNewList" id="btnNewList" class="btn btn-default mx-1 my-1  col-sm-3"><i class="fas fa-folder-plus"></i> New List
                 </button>
+                <!-- <button type="button" id="btnNewList" class="btn btn-default mx-1 my-1  col-sm-3">
+                    <i class="fas fa-folder-plus"></i> New List
+                </button> -->
             </div>
             <!--<button type="button" id="btnNP" class="btn btn-outline-warning"><i class="fas fa-plus"> New
                     Product</i></button>-->
@@ -115,12 +145,12 @@ if (is_null($usermail)) {
                 <tbody id="checkedRows">
                     <!--checked products will go here-->
                 </tbody>
-
-
             </table>
         </div>
-
     </div>
+    <!-- hidden input -->
+    <input type="hidden" id="userIdIndex" name="userIdIndex" value="<?= $userId ?>">
+    <input type="hidden" id="listIdIndex" name="listIdIndex" value="<?= $listId ?>">
 
     <?php require "footer.php"; ?>
 
@@ -145,7 +175,7 @@ if (is_null($usermail)) {
     </div>
 
 
-
+    <!-- new product modal -->
     <div class="modal fade" tabindex="-1" role="dialog" id="modalNewProduct">
         <div class="modal-dialog " role="document">
             <div class="modal-content main">
@@ -156,7 +186,7 @@ if (is_null($usermail)) {
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="addProduct" >
+                    <form id="addProduct">
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-12">
@@ -175,7 +205,8 @@ if (is_null($usermail)) {
                                     <div class="form-check">
                                         <input type="checkbox" id="amountChkBox" class="form-check-input " name="amountChkBox" aria-describedby="helpId">
                                         <label for="amountChkBox" class="form-check-label">Choose Product Amount
-                                        </label><br>
+                                        </label>
+                                        <br>
                                     </div>
                                 </div>
 
@@ -186,6 +217,7 @@ if (is_null($usermail)) {
 
                                 </div>
                             </div>
+
 
                             <div class="row my-3">
                                 <div class="col">
@@ -211,8 +243,9 @@ if (is_null($usermail)) {
 
     </div>
 
-    <!--new List modal-for later-->
-    <!-- <div class="modal fade" tabindex="-1" role="dialog" id="modalNewList">
+
+    <!--new List modal-->
+    <div class="modal fade " tabindex="-1" role="dialog" id="modalNewList">
         <div class="modal-dialog " role="document">
             <div class="modal-content main">
                 <div class="modal-header">
@@ -227,14 +260,36 @@ if (is_null($usermail)) {
                             <div class="row">
                                 <div class="col-md-12">
                                     <label for="listName" class="">List Name: </label><br>
-                                    <input type="text" name="listName" id="listName" class="form-control"
-                                        placeholder="List Name" aria-describedby="helpId" required>
+                                    <input type="text" name="listName" id="listName" class="form-control" placeholder="List Name" aria-describedby="helpId" required>
                                 </div>
                             </div>
-                            <div class="row my-3">
-                                <button type="submit" class="btn btn-default d-none" id="submitList"></button>
+                            <br>
+                            <div class="row ">
+                                <div class="col-md-12">
+
+                                    <div class="form-check">
+                                        <input type="checkbox" id="oldListChkBox" class="form-check-input " name="oldListChkBox" aria-describedby="helpId">
+                                        <label for="oldListChkBox" class="form-check-label">Add all Products from old list
+                                        </label>
+                                        <br>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12" id="oldList">
+                                    <br>
+                                    <label for="oldListSelect" class="">Choose list to import products: </label><br>
+                                    <select class="form-control" id="oldListSelect" name="oldListSelect">
+                                    </select>
+
+
+                                </div>
                             </div>
+
                         </div>
+                        <div class="row my-3">
+                            <button type="submit" class="btn btn-default d-none" id="submitList"></button>
+                        </div>
+
                     </form>
 
                 </div>
@@ -248,7 +303,7 @@ if (is_null($usermail)) {
             </div>
         </div>
 
-    </div> -->
+    </div>
 
 
 

@@ -80,14 +80,14 @@ function sortByTr(a, b) {
 }
 
 
-function addProductToView(product) {
+function addProductToTable(product) {
     let id = product.id;
     let name = product.name;
     let amount = product.amount;
     let isChecked = product.isChecked;
 
     amount = amount == null ? '---' : amount;
-    isChecked = isChecked === true ? "check" : "uncheck";
+    isChecked = isChecked.toLowerCase === 'Y' ? "check" : "uncheck";
 
     let tr = `<tr class="${isChecked}" data-id="${id}"> <td class="btnDone">
           <input type="checkbox" class="btnDone"></td>
@@ -118,7 +118,7 @@ function initList() {
     for (const i in tempArr) {
         let p = tempArr[i];
 
-        addProductToView(p);
+        addProductToTable(p);
     }
     $("table tr.check input[type=checkbox]").prop("checked", true);
 }
@@ -248,7 +248,7 @@ $(document).ready(function () {
         });
     })
 
-    //add product modal
+    //product amount check box
     $(document).on('click', '#amountChkBox', function () {
 
         if ($(this).is(":checked")) {
@@ -256,6 +256,17 @@ $(document).ready(function () {
 
         } else {
             $("div.amount").hide();
+
+        }
+    });
+    //products from previous list check box
+    $(document).on('click', '#oldListChkBox', function () {
+
+        if ($(this).is(":checked")) {
+            $("div#oldList").show();
+
+        } else {
+            $("div#oldList").hide();
 
         }
     });
@@ -270,9 +281,9 @@ $(document).ready(function () {
         $.ajax({
             type: "POST",
             url: "api/addProduct.php",
-            data: ({listID:listId,productName:name,amount:amount}),
+            data: ({ listID: listId, productName: name, amount: amount }),
             success: function (response) {
-                let id=response;
+                let id = response;
             }
         })
 
@@ -290,7 +301,7 @@ $(document).ready(function () {
 
         const product = { "id": cntr, "name": name, "amount": amount, "isChecked": false };
         listProducts.push(product);
-        addProductToView(product);
+        addProductToTable(product);
         reorderList();
         cntr++;
         $("span#modalGoodMsg").append("Product was added to list successfuly !");
@@ -303,10 +314,10 @@ $(document).ready(function () {
         $("#submitProduct").click();
     })
 
-    $("button#btnNewList").click(function () {
-        
-       window.open('grocery_list.html', '_blank');
-    })
+    // $("button#btnNewList").click(function () {
+
+    //     window.open('grocery_list.html', '_blank');
+    // })
     /***********login script**********/
     // $("form#loginFrm").submit(function (e) {
     //     window.location.href = "grocery_list.html";
@@ -315,13 +326,188 @@ $(document).ready(function () {
 
 
     // // Ajax & JSON
-    // $.ajax({
-    //     type: "GET",
-    //     url: "api/getProducts.php",
-    //     data: "data",
-    //     dataType: "dataType",
-    //     success: function (data) {
-            
+    // function getInitListDetails(userId) {
+    //     $.ajax({
+    //         type: "GET",
+    //         url: "api/listForUser.php",
+    //         data: {
+    //             userId: userId
+    //         },
+    //         success: function (data) {
+    //             return data;
+    //         },
+    //         error: function (xhr, ajaxOptions, error) {
+    //             console.log(error);
+    //         }
+    //     });
+
+    // }
+
+    // function getProductsFromList(listId) {
+    //     $.ajax({
+    //         type: "GET",
+    //         url: "api/getListProducts.php",
+    //         data: {
+    //             listId: listId
+    //         },
+    //         success: function (data) {
+    //             return data;
+    //         },
+    //         error: function (xhr, ajaxOptions, error) {
+    //             console.log(error);
+    //         }
+
+
+    //     });
+    // }
+
+    // function refreshListProducts(products) {
+    //     $("table#products tbody").html("");
+    //     for (item of products) {
+    //         product = { "id": item['id'], "name": item['name'], "amount": item['amount'], "isChecked": item['done'] }
+    //         addProductToTable(product);
     //     }
-    // });
+    // }
+
+
+    //get the products for the list and refresh table
+    function refreshProducts(listId) {
+
+        $.ajax({
+            type: "GET",
+            url: "api/getListProducts.php",
+            data: {
+                listId: listId
+            },
+            success: function (products) {
+                if (product.length !== 0) {
+                    $("table#products tbody").html("");
+                    for (item of products) {
+                        product = { "id": item['id'], "name": item['name'], "amount": item['amount'], "isChecked": item['done'] }
+                        addProductToTable(product);
+                    }
+                } else {
+                    //TODO list is empty
+               }
+            }, 
+            error: function (xhr, ajaxOptions, error) {
+                console.log(error);
+            }
+        });
+    }
+
+    // //initiate products table
+    // function initProductTable(userId) {
+    //     // get the newest list details
+    //     $.ajax({
+    //         type: "GET",
+    //         url: "api/listForUser.php",
+    //         data: {
+    //             userId: userId
+    //         },
+    //         success: function (list) {
+    //             //TODO if no values returned
+    //             if (!$.isEmptyObject(list)) {
+    //                 let listId = list.id;
+    //                 let listName = list.name;
+
+    //                 // setListName in the title
+    //                 $("span h2 #listName").html("");
+    //                 $("span h2 #listName").append(listName);
+
+    //                 $("input #listIdIndex").val(listId);
+    //                 refreshProducts(listId);
+
+    //             } else {
+    //                 //TODO no lists for user
+    //             }
+
+    //         },
+    //         error: function (xhr, ajaxOptions, error) {
+    //             console.log(error);
+    //         }
+    //     });
+
+    // }
+
+
+
+    function populateListsDrop(userId) {
+        //get the products for the list
+        $.ajax({
+            type: "GET",
+            url: "api/getUserLists.php",
+            data: {
+                userId: userId
+            },
+            success: function (lists) {
+                if (lists.length !== 0) {
+                    $("li div #lists").html("");
+                    for (item of lists) {
+                        list = { "id": item['id'], "name": item['name'] }
+                        ///add list to view
+                        let id = list.id;
+                        let name = list.name;
+                        let link = `<a class="dropdown-item" data-id="${id}" href="index.php?listId=${id}">${name}</a>`;
+                        $("div #listsDrop").append(link);
+                    }
+                } else {
+                    //TODO lists is empty
+                }
+            },
+            error: function (xhr, ajaxOptions, error) {
+                console.log(error);
+            }
+        });
+    }
+    //initiate index page data
+    function initIndexPage() {
+        let userId = $("input#userIdIndex");
+        if (userId.length != 0) {
+            userId = userId.val();
+            let listId = $("input#listIdIndex").val();
+            //1- initiate the table
+            refreshProducts(listId);
+            //2-populate lists combo box with all user's lists
+            populateListsCombo("allLists", userId);
+        }
+    }
+
+    // // $("#btnRefreshTable").click(function(){
+    // let userId = $("input#userIdIndex");
+    // if (userId.length != 0) {
+    //     userId = userId.val();
+
+    //     $.ajax({
+    //         type: "GET",
+    //         url: "api/listForUser.php",
+    //         data: {
+    //             userId: userId
+    //         },
+    //         success: function (data) {
+    //             let listid = data.id;
+    //             let listName = data.name;
+
+    //             $.ajax({
+    //                 type: "GET",
+    //                 url: "api/getListProducts.php",
+    //                 data: {
+    //                     listId: listId
+    //                 },
+    //                 success: function (data) {
+    //                     $("table#customers tbody").html("");
+    //                     for (item of data) {
+    //                         customer = { "firstName": item['first name'], "lastName": item['last name'], "phone": item['phone'] }
+    //                         addProductToTable(product);
+    //                     }
+
+    //                 }
+
+    //             });
+    //         },
+    //         error: function (xhr, ajaxOptions, error) {
+    //             console.log(error);
+    //         }
+    //     });
+    // }
 });

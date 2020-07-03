@@ -78,7 +78,9 @@ div .main {
 div.amount {
   display: none;
 }
-
+div#oldList {
+  display: none;
+}
 /*dropdownList*/
 .dropdown-item {
   color: #f4b031;
@@ -194,4 +196,9 @@ footer {
   border-radius: 4px;
   padding: 5px;
   width: 150px;
+}
+/************select dropdown***********/
+.dropdown-menu {         
+  max-height: 200px;
+  overflow-y: auto;
 }
