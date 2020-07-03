@@ -12,36 +12,36 @@ $userId = isset($_COOKIE['id']) ? $_COOKIE['id'] : null;
 
 $listId = null;
 
-if(isset($_GET['listId'])){ 
+if (isset($_GET['listId'])) {
     $listId = $_GET['listId'];
-    setcookie('listId', $listId, time() + (60 * 60 * 24 * 15));
-}elseif(isset($_COOKIE['listId'])){
-    
+    setcookie('listId', $listId);
+} elseif (isset($_COOKIE['listId'])) {
+
     $listId = $_COOKIE['listId'];
 }
 
 //user was chose to view old list
-if(!is_null($listId)){
-    
+if (!is_null($listId)) {
+
     //check if this list is for this user
-    $sql="SELECT `userId` FROM `userlists` WHERE `userId`=$userId AND `listId`=$listId";
+    $sql = "SELECT `userId` FROM `userlists` WHERE `userId`=$userId AND `listId`=$listId";
     $result = $conn->query($sql);
     //this list doesn't belong to user
     if ($result->num_rows <= 0) {
         header("Location:noAccess.php");
         exit();
     }
-    $sql="SELECT `name` FROM `list` where `id`=$listId";
+    $sql = "SELECT `name` FROM `list` where `id`=$listId";
     $result = $conn->query($sql);
     if ($result->num_rows === 1) {
         $row = $result->fetch_assoc();
-        $listName=$row['name'];
+        $listName = $row['name'];
     }
 }
 
 if (isset($_POST["email"])) {
     $usermail = htmlspecialchars($_POST['email']);
-    $password = htmlspecialchars($_POST['Password']);
+    $password = htmlspecialchars($_POST['password']);
 
     $sql = "SELECT  `id`,`pswrd` FROM `users` where `email` like '$usermail'";
     $result = $conn->query($sql);
@@ -53,7 +53,7 @@ if (isset($_POST["email"])) {
             $_SESSION['usermail'] = $usermail;
             $_SESSION['password'] = $password;
             setcookie('id', $row['id'], time() + (60 * 60 * 24 * 15));
-           
+
             $userId = $row['id'];
             if ($_POST['chkRememberMe'] == 'remember') {
                 //stay logged in for 15 days
@@ -71,15 +71,15 @@ if (isset($_POST["email"])) {
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
                 $list = $result->fetch_assoc();
-                $listId=$list['id'];
-                $listName=$list['name'];
+                $listId = $list['id'];
+                $listName = $list['name'];
 
-                setcookie('listId', $listId, time() + (60 * 60 * 24 * 15));
-                setcookie('listName', $listName, time() + (60 * 60 * 24 * 15));
-               
+                setcookie('listId', $listId);
+                setcookie('listName', $listName);
             } //if user has no lists yet 
             else {
                 //TODO move to page with create list
+               
             }
         } else { //failed to login- wrong password
             header("Location:login.php?status=wrongpassword");
@@ -93,6 +93,9 @@ if (isset($_POST["email"])) {
 if (is_null($usermail)) {
     header("Location:login.php?status=showMsg");
     exit();
+}
+if(is_null($listId)){
+$listName="You don't have lists yet!";
 }
 ?>
 <!DOCTYPE html>
@@ -116,6 +119,7 @@ if (is_null($usermail)) {
 </head>
 
 <body>
+    
     <header>
         <div class="fixed-top">
             <nav class="navbar navbar-expand-lg navbar-light sticky-top">
@@ -134,11 +138,13 @@ if (is_null($usermail)) {
 
         <div class="container row d-flex justify-content-between">
             <span class="col-sm-6">
-                <h2 id="id=" listName"><?=$listName?></h2>
+                <h2 id="id=" listName"><?= $listName ?></h2>
             </span>
             <div class="container d-flex justify-content-end col-sm-12 ">
+                <?php if(!is_null($listId)):?>
                 <button type="button" data-toggle="modal" data-target="#modalNewProduct" id="btnNP" class="btn btn-default mx-1 col-sm-3 my-1"><i class="fas fa-plus"></i> New
                     Product </button>
+                <?php endif;?>
                 <button type="button" data-toggle="modal" data-target="#modalNewList" id="btnNewList" class="btn btn-default mx-1 my-1  col-sm-3"><i class="fas fa-folder-plus"></i> New List
                 </button>
                 <!-- <button type="button" id="btnNewList" class="btn btn-default mx-1 my-1  col-sm-3">
@@ -151,7 +157,7 @@ if (is_null($usermail)) {
         <br>
 
         <div class="table-responsive">
-
+        <?php if(!is_null($listId)):?>
             <table class="table table-hover text-center shadow rounded" id="products">
                 <thead>
                     <tr>
@@ -168,6 +174,7 @@ if (is_null($usermail)) {
                     <!--checked products will go here-->
                 </tbody>
             </table>
+        <?php endif;?>
         </div>
     </div>
     <!-- hidden input -->

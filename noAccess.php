@@ -33,7 +33,7 @@
     <div class="container  my-5 px-4 py-4 d-flex justify-content-center   overflow-auto">
 
         <div class="py-3 px-3 shadow main" id="noAccess">
-            <h3><strong>You can't access this list</strong></h3>
+            <h3><strong>Sorry! <br>You can't access this page</strong></h3>
 
         </div>
     </div>

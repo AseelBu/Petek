@@ -52,6 +52,23 @@ if ($conn->query($sql) === TRUE) {
 } else {
     // echo "Error creating table: ".$conn->error;
 }
+
+// create Users' Lists
+$sql = "SELECT listId FROM userLists";
+if (!$conn->query(($sql))) {
+    //create table if it doesnt exist
+    $sql = "CREATE TABLE userLists( listId INT(6) NOT null REFERENCES List(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    userId INT(6) NOT null REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+PRIMARY KEY(listId, userId)                          
+)";
+}
+if ($conn->query($sql) === TRUE) {
+    // echo "Table ListProducts Created successfully ".PHP_EOL;
+} else {
+    // echo "Error creating table: ".$conn->error;
+}
+
+
 //product table creation
 $sql = "SELECT id FROM Product";
 if (!$conn->query(($sql))) {
@@ -66,11 +83,11 @@ if ($conn->query($sql) === TRUE) {
 }
 
 //ListProducts table creation
-$sql = "SELECT id FROM ListProducts";
+$sql = "SELECT ListId FROM ListProducts";
 if (!$conn->query(($sql))) {
     //create table if it doesnt exist
-    $sql = "CREATE TABLE ListProducts( ListId INT(6) NOT null REFERENCES List(id),
-    ProductId INT(6) NOT null REFERENCES product(id),
+    $sql = "CREATE TABLE ListProducts( ListId INT(6) NOT null REFERENCES List(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    ProductId INT(6) NOT null REFERENCES product(id) ON DELETE CASCADE ON UPDATE CASCADE,
     amount int(6) CHECK (amount>=0), 
     done char(1) NOT null CHECK (done='Y' or done='N'),
 PRIMARY KEY(ListId,ProductID)                          

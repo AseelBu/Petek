@@ -1,8 +1,11 @@
+<?php
+$email=isset($_COOKIE['email'])? $_COOKIE['email']:"";
+$password=isset($_COOKIE['password'])? $_COOKIE['password']:"";
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
-
-</html>
-
 
 <head>
   <meta charset="UTF-8">
@@ -57,13 +60,13 @@
         <div class="form-group col-md-12">
           <div class="form-row">
             <label for="email" class="">Enter Email: </label>
-            <input type="email" class="form-control" id="EmailLogin" name="email" placeholder="Email@Email.com" required>
+            <input type="email" class="form-control" id="EmailLogin" name="email" placeholder="Email@Email.com" value="<?=$email?>" required>
           </div>
 
           <br>
           <div class="form-row">
-            <label for="Password" class="">Enter Password: </label>
-            <input type="password" class="form-control" id="Password" name="Password" placeholder=" Enter Password" required>
+            <label for="password" class="">Enter Password: </label>
+            <input type="password" class="form-control" id="Password" name="password" placeholder=" Enter Password" value="<?=$password?>" required>
           </div>
 
           <div class="form-check form-row">

@@ -198,21 +198,21 @@ $(document).ready(function () {
 
             $(this).parents("tr").addClass("check");
             $(this).parents("tr").removeClass("uncheck");
-           
+
             //change done property for product in DB to 'Y'
             $.ajax({
                 type: "POST",
-                url: "api/updateProduct.php",
+                url: "api/updateDoneProduct.php",
                 data: {
                     listId: listId,
                     productId: dataId,
                     done: 'Y'
                 },
-                
+
                 success: function (response) {
                     refreshProducts(listId);
                 },
-                error: function (xhr, ajaxOptions, error){
+                error: function (xhr, ajaxOptions, error) {
                     console.log("error: product Done state wasn't updated");
                 }
             });
@@ -227,7 +227,7 @@ $(document).ready(function () {
             //change done property for product in DB to 'N'
             $.ajax({
                 type: "POST",
-                url: "api/updateProduct.php",
+                url: "api/updateDoneProduct.php",
                 data: {
                     listId: listId,
                     productId: dataId,
@@ -236,12 +236,12 @@ $(document).ready(function () {
                 success: function (response) {
                     refreshProducts(listId);
                 },
-                error: function (xhr, ajaxOptions, error){
+                error: function (xhr, ajaxOptions, error) {
                     console.log("error: product Done state wasn't updated");
                 }
-            });                        
+            });
         }
-        
+
     })
 
     //removing product
@@ -283,6 +283,7 @@ $(document).ready(function () {
 
         }
     });
+
     //products from previous list check box
     $(document).on('click', '#oldListChkBox', function () {
 
@@ -301,15 +302,7 @@ $(document).ready(function () {
         $("span#modalGoodMsg").empty();
         let name = $("#prdctName").val();
         let amount = null;
-
-        $.ajax({
-            type: "POST",
-            url: "api/addProduct.php",
-            data: ({ listID: listId, productName: name, amount: amount }),
-            success: function (response) {
-                let id = response;
-            }
-        })
+        let listId = $("input#listIdIndex").val();
 
         //if product already exists in this list
         if (listProducts.some(pr => pr.name === name)) {
@@ -317,21 +310,32 @@ $(document).ready(function () {
             return;
         }
 
-
         if ($("#amountChkBox").is(":checked")) {
             amount = $("#prdctAmount").val();
         }
 
-
-        const product = { "id": cntr, "name": name, "amount": amount, "isChecked": false };
-        listProducts.push(product);
-        addProductToTable(product);
-        reorderList();
-        cntr++;
-        $("span#modalGoodMsg").append("Product was added to list successfuly !");
-
-        $("form#addProduct input#prdctName").val("");
-        $("form#addProduct input#prdctAmount").val("1");
+        $.ajax({
+            type: "POST",
+            url: "api/newProduct.php",
+            data: {
+                listId: listId,
+                productName: name,
+                amount: amount
+            },
+            success: function (response) {
+                if (respose !== false) {
+                    refreshProducts(listId);
+                    $("span#modalGoodMsg").append("Product was added to list successfuly !");
+                    $("form#addProduct input#prdctName").val("");
+                    $("form#addProduct input#prdctAmount").val("1");
+                }
+            }
+            // const product = { "id": cntr, "name": name, "amount": amount, "isChecked": false };
+            // listProducts.push(product);
+            // addProductToTable(product);
+            // reorderList();
+            // cntr++;
+        });
     });
 
     $(" #modalAddProduct").click(function () {
@@ -397,29 +401,29 @@ $(document).ready(function () {
     //get the products for the list and refresh table
     function refreshProducts(listId) {
 
-        $.ajax({
-            type: "GET",
-            url: "api/getListProducts.php",
-            data: {
-                listId: listId
-            },
-            success: function (products) {
-                if (products.length !== 0) {
-                    $("table#products tbody").html("");
-                    for (item of products) {
-                        product = { "id": item['id'], "name": item['name'], "amount": item['amount'], "isChecked": item['done'] }
-                        addProductToTable(product);
+            $.ajax({
+                type: "GET",
+                url: "api/getListProducts.php",
+                data: {
+                    listId: listId
+                },
+                success: function (products) {
+                    if (products.length !== 0) {
+                        $("table#products tbody").html("");
+                        for (item of products) {
+                            product = { "id": item['id'], "name": item['name'], "amount": item['amount'], "isChecked": item['done'] }
+                            addProductToTable(product);
+                        }
+                        $("table tr.check input[type=checkbox]").prop("checked", true);
+                    } else {
+                        //TODO list is empty
                     }
-                    $("table tr.check input[type=checkbox]").prop("checked", true);
-                } else {
-                    //TODO list is empty
+                },
+                error: function (xhr, ajaxOptions, error) {
+                    console.log(error);
                 }
-            },
-            error: function (xhr, ajaxOptions, error) {
-                console.log(error);
-            }
-        });
-    }
+            });
+        }
 
     // //initiate products table
     // function initProductTable(userId) {
@@ -458,49 +462,49 @@ $(document).ready(function () {
 
 
     function populateListsDrop(currentListId, userId) {
-        //get the products for the list
-        $.ajax({
-            type: "GET",
-            url: "api/getUserLists.php",
-            data: {
-                userId: userId
-            },
-            success: function (lists) {
-                if (lists.length !== 0) {
-                    $("li div #lists").html("");
-                    for (item of lists) {
-                        list = { "id": item['id'], "name": item['name'] }
-                        ///add list to view
-                        let id = list.id;
-                        let name = list.name;
-                        let link = `<a class="dropdown-item" data-id="${id}" href="index.php?listId=${id}">${name}</a>`;
-                        if (currentListId != id) {
-                            $("div #listsDrop").append(link);
+            //get the products for the list
+            $.ajax({
+                type: "GET",
+                url: "api/getUserLists.php",
+                data: {
+                    userId: userId
+                },
+                success: function (lists) {
+                    if (lists.length !== 0) {
+                        $("li div #lists").html("");
+                        for (item of lists) {
+                            list = { "id": item['id'], "name": item['name'] }
+                            ///add list to view
+                            let id = list.id;
+                            let name = list.name;
+                            let link = `<a class="dropdown-item" data-id="${id}" href="index.php?listId=${id}">${name}</a>`;
+                            if (currentListId != id) {
+                                $("div #listsDrop").append(link);
+                            }
                         }
+                    } else {
+                        //TODO lists is empty
                     }
-                } else {
-                    //TODO lists is empty
+                },
+                error: function (xhr, ajaxOptions, error) {
+                    console.log(error);
                 }
-            },
-            error: function (xhr, ajaxOptions, error) {
-                console.log(error);
-            }
-        });
-    }
+            });
+        }
 
     //initiate index page data
     function initIndexPage() {
-        let userId = $("input#userIdIndex");
-        if (userId.length != 0) {
-            userId = userId.val();
-            let listId = $("input#listIdIndex").val();
-            //1- initiate the table
-            refreshProducts(listId);
-            
-            //2-populate lists combo box with all user's lists
-            populateListsDrop(listId, userId);
+            let userId = $("input#userIdIndex");
+            if (userId.length != 0) {
+                userId = userId.val();
+                let listId = $("input#listIdIndex").val();
+                //1- initiate the table
+                refreshProducts(listId);
+
+                //2-populate lists combo box with all user's lists
+                populateListsDrop(listId, userId);
+            }
         }
-    }
 
     initIndexPage();
 
@@ -542,3 +546,4 @@ $(document).ready(function () {
     //     });
     // }
 });
+
