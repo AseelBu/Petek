@@ -380,7 +380,7 @@ $(document).ready(function () {
                 listId: listId
             },
             success: function (products) {
-                if (product.length !== 0) {
+                if (products.length !== 0) {
                     $("table#products tbody").html("");
                     for (item of products) {
                         product = { "id": item['id'], "name": item['name'], "amount": item['amount'], "isChecked": item['done'] }
@@ -460,7 +460,7 @@ $(document).ready(function () {
             }
         });
     }
-    
+
     //initiate index page data
     function initIndexPage() {
         let userId = $("input#userIdIndex");
@@ -470,7 +470,7 @@ $(document).ready(function () {
             //1- initiate the table
             refreshProducts(listId);
             //2-populate lists combo box with all user's lists
-            populateListsCombo("allLists", userId);
+            populateListsCombo( userId);
         }
     }
 

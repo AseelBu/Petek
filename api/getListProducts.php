@@ -15,8 +15,7 @@ if (isset($_GET['listId'])) {
     $products = array();
     while ($row = $result->fetch_assoc()) { 
         $products[] = $row;
-        var_dump($result);
-        echo ("<br>");
+        
     }
     echo json_encode($products);
 }
