@@ -460,6 +460,7 @@ $(document).ready(function () {
             }
         });
     }
+    
     //initiate index page data
     function initIndexPage() {
         let userId = $("input#userIdIndex");
@@ -472,6 +473,8 @@ $(document).ready(function () {
             populateListsCombo("allLists", userId);
         }
     }
+
+    initIndexPage();
 
     // // $("#btnRefreshTable").click(function(){
     // let userId = $("input#userIdIndex");
