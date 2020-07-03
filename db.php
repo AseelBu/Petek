@@ -43,7 +43,7 @@ $sql = "SELECT id FROM List";
 if (!$conn->query(($sql))) {
     //create table if it doesnt exist
     $sql = "CREATE TABLE List( id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    name Varchar(50),
+    name Varchar(50) NOT null UNIQUE,
     creteTime datetime NOT null  DEFAULT CURRENT_TIMESTAMP)";
 }
 if ($conn->query($sql) === TRUE) {
