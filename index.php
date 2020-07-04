@@ -8,7 +8,7 @@ $usermail = isset($_SESSION['usermail']) ? $_SESSION['usermail'] :
 $password = isset($_SESSION['password']) ? $_SESSION['password'] :
     isset($_COOKIE['password']) ? $_COOKIE['password'] : null;
 
-$userId = isset($_COOKIE['id']) ? $_COOKIE['id'] : null;
+$userId = isset($_SESSION['userId']) ? $_SESSION['userId'] : null;
 
 $listId = null;
 
@@ -25,7 +25,8 @@ if (isset($_POST["email"])) {
         if (strcmp($row['pswrd'], $password) === 0) {
             $_SESSION['usermail'] = $usermail;
             $_SESSION['password'] = $password;
-            setcookie('id', $row['id'], time() + (60 * 60 * 24 * 15));
+            // setcookie('id', $row['id'], time() + (60 * 60 * 24 * 15));
+            $_SESSION['userId'] = $row['id'];
 
             $userId = $row['id'];
             if ($_POST['chkRememberMe'] == 'remember') {
@@ -42,7 +43,7 @@ if (isset($_POST["email"])) {
         exit();
     }
 }
-if (is_null($usermail)) {
+if (is_null($userId)) {
     header("Location:login.php?status=showMsg");
     exit();
 } else {
@@ -56,16 +57,14 @@ if (is_null($usermail)) {
 
             header("Location:index.php?status=noAccess");
             exit();
-        }
-         else {
-           
+        } else {
+
             setcookie('listId', $listId);
         }
-    } elseif (isset($_COOKIE['listId'])&& isset($_GET['status']) && $_GET['status']=='noAccess') {
+    } elseif (isset($_COOKIE['listId']) && isset($_GET['status']) && $_GET['status'] == 'noAccess') {
 
         $listId = $_COOKIE['listId'];
-    }
-     else {
+    } else {
         //get details of most recent list for user
         $sql = "SELECT `list`.* 
     FROM `userlists` INNER JOIN `list` on `userlists`.`listId`=`list`.`id`
@@ -102,18 +101,8 @@ else {
 
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <?php require_once('parts\headLinks.php');?>
     <title>Grocery Lists</title>
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
-    <!--font-->
-    <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles/stylesheet.css">
 
 </head>
 
@@ -122,7 +111,7 @@ else {
     <header>
         <div class="fixed-top">
             <nav class="navbar navbar-expand-lg navbar-light sticky-top">
-                <?php require "header.php"; ?>
+                <?php require "parts\header.php"; ?>
 
                 <div class="d-flex justify-content-end">
                     <a href="logout.php"><button class=" btn btn-default">Log Out</button></a>
@@ -138,6 +127,12 @@ else {
         if (isset($_GET["status"]) && $_GET["status"] == "noAccess") : ?>
             <div class="alert alert-danger" role="alert">
                 You are not authorized to access the requested page!
+            </div>
+        <?php endif;?>
+        <?php
+            if (isset($_GET["status"]) && $_GET["status"] == "noProducts") : ?>
+            <div class="alert alert-warning" role="alert">
+                The List you chose doesn't have any products
             </div>
         <?php endif; ?>
         <div class="container row d-flex justify-content-between">
@@ -186,7 +181,7 @@ else {
     <input type="hidden" id="userIdIndex" name="userIdIndex" value="<?= $userId ?>">
     <input type="hidden" id="listIdIndex" name="listIdIndex" value="<?= $listId ?>">
 
-    <?php require "footer.php"; ?>
+    <?php require "parts\footer.php"; ?>
 
     <div class="modal fade remove " tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-centered " role="document">
@@ -289,11 +284,11 @@ else {
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="addList">
+                    <form id="addList" method="POST" action="newList.php">
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <label for="listName" class="">List Name: </label><br>
+                                    <label for="listName" class="">List Name*: </label><br>
                                     <input type="text" name="listName" id="listName" class="form-control" placeholder="List Name" aria-describedby="helpId" required>
                                 </div>
                             </div>
@@ -302,7 +297,7 @@ else {
                                 <div class="col-md-12">
 
                                     <div class="form-check">
-                                        <input type="checkbox" id="oldListChkBox" class="form-check-input " name="oldListChkBox" aria-describedby="helpId">
+                                        <input type="checkbox" id="oldListChkBox" class="form-check-input " name="oldListChkBox" value="on" aria-describedby="helpId">
                                         <label for="oldListChkBox" class="form-check-label">Add all Products from old list
                                         </label>
                                         <br>
@@ -312,23 +307,21 @@ else {
                                 <div class="col-md-12" id="oldList">
                                     <br>
                                     <label for="oldListSelect" class="">Choose list to import products: </label><br>
-                                    <select class="form-control" id="oldListSelect" name="oldListSelect">
-                                    </select>
-
-
+                                    <select class="form-control" id="oldListSelect" name="oldListSelect"></select>
                                 </div>
                             </div>
 
                         </div>
                         <div class="row my-3">
-                            <button type="submit" class="btn btn-default d-none" id="submitList"></button>
+                            <button type="submit" name="submit" class="btn btn-default d-none" id="submitList">Add List</button>
                         </div>
 
                     </form>
 
+
                 </div>
                 <div class="d-flex justify-content-end modal-footer">
-
+                <span class="message" id="modalMsgList"></span>
 
                     <button type="button" class="btn btn-default" id="btnAddList">Add List</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

@@ -43,6 +43,10 @@ let listProducts = [
 //current products in the list 
 ]
 
+let userLists=[
+    //current lists
+];
+
 // var cntr = listProducts.length;
 
 // function resetAddPrdct() {
@@ -332,6 +336,23 @@ $(document).ready(function () {
         $("#submitProduct").click();
     })
 
+
+    $("form#addList").submit(function (e) {
+        
+        validate("input#listName");
+        $("span#modalMsgList").empty();
+        let name = $("#prdctName").val();
+       
+        for(list in userLists){
+            if(list.name===name){
+                e.preventDefault();
+                invalidate("input#listName");
+                $("span#modalMsgList").append("You already have list with this name");
+                
+            }
+        }
+        
+    });
     // $("button#btnNewList").click(function () {
 
     //     window.open('grocery_list.html', '_blank');
@@ -451,8 +472,6 @@ $(document).ready(function () {
 
     // }
 
-
-
     function populateListsDrop(currentListId, userId) {
         //get the products for the list
         $.ajax({
@@ -462,20 +481,28 @@ $(document).ready(function () {
                 userId: userId
             },
             success: function (lists) {
+                userLists=[];
                 if (lists.length !== 0) {
                     $("li div #lists").html("");
                     for (item of lists) {
-                        list = { "id": item['id'], "name": item['name'] }
+                        list = { "id": item['id'], "name": item['name'] };
+                        userLists.push(list);
                         ///add list to view
                         let id = list.id;
                         let name = list.name;
+
+                        //add Lists to navbar
                         let link = `<a class="dropdown-item" data-id="${id}" href="index.php?listId=${id}">${name}</a>`;
                         if (currentListId != id) {
                             $("div #listsDrop").append(link);
                         }
+                        //add lists to new list selection
+                        let option=`<option value="${id}">${name}</option>`;
+                        $(option).appendTo("div#oldList select#oldListSelect");
                     }
                 } else {
-                    //TODO lists is empty
+                    
+                    //TODO lists is empty disable check box
                 }
             },
             error: function (xhr, ajaxOptions, error) {

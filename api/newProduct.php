@@ -1,5 +1,5 @@
 <?php
-require("..\db.php");
+require_once("..\db.php");
 
 header('Content-Type: application/json');
 
@@ -11,8 +11,7 @@ if (isset($_POST['listId']) && isset($_POST['productName']) && isset($_POST['amo
 
     $productName=strtolower($productName);
     $productName=ucfirst($productName);
-
-    $response = array();
+    
     $productId = null;
 
     // 1- check if product name already exists in DB
