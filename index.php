@@ -64,22 +64,6 @@ if (isset($_POST["email"])) {
                 setcookie('password', $password, time() + (60 * 60 * 24 * 15));
             }
 
-            //get detaails of most recent list for user
-            $sql = "SELECT `list`.* 
-            FROM `userlists` INNER JOIN `list` on `userlists`.`listId`=`list`.`id`
-            WHERE `userlists`.`userId`= $userId
-            ORDER BY `list`.`creteTime` DESC
-            LIMIT 1";
-
-            $result = $conn->query($sql);
-            if ($result->num_rows > 0) {
-                $list = $result->fetch_assoc();
-                $listId = $list['id'];
-                $listName = $list['name'];
-
-                setcookie('listId', $listId);
-                setcookie('listName', $listName);
-            } //if user has no lists yet 
 
         } else { //failed to login- wrong password
             header("Location:login.php?status=wrongpassword");
@@ -93,6 +77,23 @@ if (isset($_POST["email"])) {
 if (is_null($usermail)) {
     header("Location:login.php?status=showMsg");
     exit();
+}else{
+    //get details of most recent list for user
+    $sql = "SELECT `list`.* 
+    FROM `userlists` INNER JOIN `list` on `userlists`.`listId`=`list`.`id`
+    WHERE `userlists`.`userId`= $userId
+    ORDER BY `list`.`creteTime` DESC
+    LIMIT 1";
+
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        $list = $result->fetch_assoc();
+        $listId = $list['id'];
+        $listName = $list['name'];
+
+        setcookie('listId', $listId);
+        setcookie('listName', $listName);
+    }
 }
 if (is_null($listId)) {
     $listName = "You don't have lists yet!";
