@@ -39,25 +39,11 @@ function validate(selector) {
 
 /**********grocery_list script*********/
 
-var listProducts = [
-    // {
-    //     "id": 0,
-    //     "name": "Bread",
-    //     "amount": 3,
-    //     "isChecked": true
-
-    // },
-    // {
-    //     "id": 1,
-    //     "name": "Milk",
-    //     "amount": null,
-    //     "isChecked": false
-
-    // },
-
+let listProducts = [
+//current products in the list 
 ]
 
-var cntr = listProducts.length;
+// var cntr = listProducts.length;
 
 // function resetAddPrdct() {
 //     $('#prdctName').val("");
@@ -81,7 +67,7 @@ function sortByTr(a, b) {
 
 
 function addProductToTable(product) {
-    console.log(product);
+   
     let id = product.id;
     let name = product.name;
     let amount = product.amount;
@@ -305,8 +291,11 @@ $(document).ready(function () {
         let amount = null;
         let listId = $("input#listIdIndex").val();
 
+        name = name.toLowerCase();
+        
+        
         //if product already exists in this list
-        if (listProducts.some(pr => pr.name === name)) {
+        if (listProducts.some(pr => (pr.name).toLowerCase() === name)) {
             $("span#modalMsg").append("Product already exists in your list!");
             return;
         }
@@ -325,8 +314,8 @@ $(document).ready(function () {
             },
         
             success: function (response) {
-                console.log(response);
-                if (response === 1) {
+              
+                if (response === true) {
                     refreshProducts(listId);
                     $("span#modalGoodMsg").append("Product was added to list successfuly !");
                     $("form#addProduct input#prdctName").val("");
@@ -336,12 +325,6 @@ $(document).ready(function () {
             error: function (xhr, ajaxOptions, error) {
                 console.log(error);
             }
-
-            // const product = { "id": cntr, "name": name, "amount": amount, "isChecked": false };
-            // listProducts.push(product);
-            // addProductToTable(product);
-            // reorderList();
-            // cntr++;
         });
     });
 
@@ -415,11 +398,13 @@ $(document).ready(function () {
                 listId: listId
             },
             success: function (products) {
+                listProducts=[];
                 if (products.length !== 0) {
                     $("table#products tbody").html("");
                     for (item of products) {
                         product = { "id": item['id'], "name": item['name'], "amount": item['amount'], "isChecked": item['done'] }
                         addProductToTable(product);
+                        listProducts.push(product);
                     }
                     $("table tr.check input[type=checkbox]").prop("checked", true);
                 } else {

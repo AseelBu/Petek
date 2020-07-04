@@ -2,6 +2,7 @@
 require("..\db.php");
 
 header('Content-Type: application/json');
+
 if (isset($_POST['listId']) && isset($_POST['productName']) && isset($_POST['amount'])) {
 
     $listId = htmlspecialchars($_POST['listId']);
@@ -13,8 +14,9 @@ if (isset($_POST['listId']) && isset($_POST['productName']) && isset($_POST['amo
 
     $response = array();
     $productId = null;
+
     // 1- check if product name already exists in DB
-    $sql = "SELECT * FROM `product` WHERE `name`= $productName";
+    $sql = "SELECT * FROM `product` WHERE `name`like '$productName'";
     $result = $conn->query($sql);
 
     //product exists
@@ -29,27 +31,28 @@ if (isset($_POST['listId']) && isset($_POST['productName']) && isset($_POST['amo
         if ($conn->query($sql) === TRUE) {
             $productId = $conn->insert_id;
         } 
-        // else {
-        //     echo json_encode($conn->error);
-        // }
+        else {
+            echo json_encode($conn->error);
+        }
     }
+    //2- add product to user's list
     if (!is_null($productId)) {
         if (is_null($amount)) {
             $sql = "INSERT INTO `listproducts`(`ListId`, `ProductId`, `done`) VALUES ('$listId','$productId','N')";
         } else {
-            $sql = "INSERT INTO `listproducts`(`ListId`, `ProductId`, `amount`, `done`) VALUES ('$listId','$productId',$amount,'N')";
+            $sql = "INSERT INTO `listproducts`(`ListId`, `ProductId`, `amount`, `done`) VALUES ('$listId','$productId','$amount','N')";
         }
 
         if ($conn->query($sql) === TRUE) {
            
-            // echo json_encode("new product inserted");
+            echo json_encode(TRUE);
         }
-        //  else {
-        //     echo json_encode($conn->error);
-        // }
+         else {
+            echo json_encode($conn->error);
+        }
     } else {
-    //     $error=array();
-    //    echo json_encode($error);
+    
+       echo json_encode(FALSE);
     }
 }
 // end of the file
