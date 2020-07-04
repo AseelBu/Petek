@@ -40,10 +40,10 @@ function validate(selector) {
 /**********grocery_list script*********/
 
 let listProducts = [
-//current products in the list 
+    //current products in the list 
 ]
 
-let userLists=[
+let userLists = [
     //current lists
 ];
 
@@ -71,7 +71,7 @@ function sortByTr(a, b) {
 
 
 function addProductToTable(product) {
-   
+
     let id = product.id;
     let name = product.name;
     let amount = product.amount;
@@ -296,8 +296,8 @@ $(document).ready(function () {
         let listId = $("input#listIdIndex").val();
 
         name = name.toLowerCase();
-        
-        
+
+
         //if product already exists in this list
         if (listProducts.some(pr => (pr.name).toLowerCase() === name)) {
             $("span#modalMsg").append("Product already exists in your list!");
@@ -316,9 +316,9 @@ $(document).ready(function () {
                 productName: name,
                 amount: amount
             },
-        
+
             success: function (response) {
-              
+
                 if (response === true) {
                     refreshProducts(listId);
                     $("span#modalGoodMsg").append("Product was added to list successfuly !");
@@ -337,22 +337,34 @@ $(document).ready(function () {
     })
 
 
-    $("form#addList").submit(function (e) {
-        
+    // $("form#addList").submit(function (e) {
+    //     console.log("halloooo");
+    //     validate("input#listName");
+    //     $("span#modalMsgList").empty();
+    //     let name = $("#prdctName").val();
+    //     console.log(userLists);
+    //     if (userLists.some(list => list.name === name)) {
+    //         e.preventDefault();
+    //         console.log("list name exists for user");
+    //         invalidate("input#listName");
+    //         $("span#modalMsgList").append("You already have list with this name");
+    //     }
+
+    // });
+
+    $(" button#btnAddList").click(function () {
         validate("input#listName");
         $("span#modalMsgList").empty();
-        let name = $("#prdctName").val();
-       
-        for(list in userLists){
-            if(list.name===name){
-                e.preventDefault();
-                invalidate("input#listName");
-                $("span#modalMsgList").append("You already have list with this name");
-                
-            }
+        let name = $("input#listName").val();
+        if (userLists.some(list => list.name === name)) {
+            console.log("list name exists for user");
+            invalidate("input#listName");
+            $("span#modalMsgList").append("You already have list with this name");
         }
-        
-    });
+        else {
+            $("#submitList").click();
+        }
+    })
     // $("button#btnNewList").click(function () {
 
     //     window.open('grocery_list.html', '_blank');
@@ -419,7 +431,7 @@ $(document).ready(function () {
                 listId: listId
             },
             success: function (products) {
-                listProducts=[];
+                listProducts = [];
                 if (products.length !== 0) {
                     $("table#products tbody").html("");
                     for (item of products) {
@@ -481,7 +493,7 @@ $(document).ready(function () {
                 userId: userId
             },
             success: function (lists) {
-                userLists=[];
+                userLists = [];
                 if (lists.length !== 0) {
                     $("li div #lists").html("");
                     for (item of lists) {
@@ -497,11 +509,11 @@ $(document).ready(function () {
                             $("div #listsDrop").append(link);
                         }
                         //add lists to new list selection
-                        let option=`<option value="${id}">${name}</option>`;
+                        let option = `<option value="${id}">${name}</option>`;
                         $(option).appendTo("div#oldList select#oldListSelect");
                     }
                 } else {
-                    
+
                     //TODO lists is empty disable check box
                 }
             },

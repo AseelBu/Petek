@@ -101,7 +101,7 @@ else {
 
 
 <head>
-  <?php require_once('parts\headLinks.php');?>
+  <?php require_once('parts/headLinks.php');?>
     <title>Grocery Lists</title>
 
 </head>
@@ -111,7 +111,7 @@ else {
     <header>
         <div class="fixed-top">
             <nav class="navbar navbar-expand-lg navbar-light sticky-top">
-                <?php require "parts\header.php"; ?>
+                <?php require "parts/header.php"; ?>
 
                 <div class="d-flex justify-content-end">
                     <a href="logout.php"><button class=" btn btn-default">Log Out</button></a>
@@ -181,7 +181,7 @@ else {
     <input type="hidden" id="userIdIndex" name="userIdIndex" value="<?= $userId ?>">
     <input type="hidden" id="listIdIndex" name="listIdIndex" value="<?= $listId ?>">
 
-    <?php require "parts\footer.php"; ?>
+    <?php require "parts/footer.php"; ?>
 
     <div class="modal fade remove " tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-centered " role="document">
@@ -284,7 +284,7 @@ else {
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="addList" method="POST" action="newList.php">
+                    <form id="addList" method="POST" action="api/newList.php">
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-12">
@@ -313,7 +313,7 @@ else {
 
                         </div>
                         <div class="row my-3">
-                            <button type="submit" name="submit" class="btn btn-default d-none" id="submitList">Add List</button>
+                            <button type="submit"  class="btn btn-default d-none" id="submitList">Add List</button>
                         </div>
 
                     </form>

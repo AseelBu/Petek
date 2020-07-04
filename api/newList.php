@@ -1,12 +1,13 @@
 <?php
-require_once("db.php");
+require_once("../db.php");
 session_start();
 
-if (isset($_SESSION['userId']) && isset($_POST['listName']) && isset($_POST['oldListChkBox']) && isset($_POST['oldListSelect'])) {
+
+if (isset($_SESSION['userId']) && isset($_POST['listName'])  && isset($_POST['oldListSelect'])) {
 
     $userId = $_SESSION['userId'];
     $listName = htmlspecialchars($_POST['listName']);
-    $listChkBox = htmlspecialchars($_POST['oldListChkBox']);
+    $listChkBox = $_POST['oldListChkBox'];
     $copyListId = htmlspecialchars($_POST['oldListSelect']);
 
     
@@ -18,22 +19,28 @@ if (isset($_SESSION['userId']) && isset($_POST['listName']) && isset($_POST['old
         $sql = "INSERT INTO `userlists` (`listId`, `userId`) VALUES ('$listId', '$userId')";
         if ($conn->query($sql) === TRUE) {
             //if user chose to import products from list
-            if (strcmp($listChkBox, "on")) {
+
+            if (strcmp($listChkBox, "on")===0) {
                 // 3-get products from the copy list
-                require("api/getListProducts.php?listId=$copyListId");
-                $products = json_decode($products);
-                require_once("db.php");
+                $_GET['listId']=$copyListId;
+                
+                require("getListProducts.php");
+                require('../db.php');
                 if (count($products) !== 0) {
                     //4- add each product to new list in the db
                     foreach ($products as $product) {
-                        $sql = "INSERT INTO `listproducts` (`ListId`, `ProductId`) VALUES ('$listId', '$product->id')";
+                        
+                        $pId=$product['id'];
+                        $pAmount=$product['amount'];
+                        $sql = "INSERT INTO `listproducts` (`ListId`, `ProductId`, `amount`, `done`) 
+                        VALUES ('$listId', '$pId','$pAmount','N')";
                         if ($conn->query($sql) === TRUE) {
                         } else {
                             echo $conn->error;
                         }
                     }
                 } else {
-                    header("Location:index.php?status=noProducts");
+                    header("Location:../index.php?status=noProducts");
                     exit();
                 }
             } else {
@@ -43,7 +50,7 @@ if (isset($_SESSION['userId']) && isset($_POST['listName']) && isset($_POST['old
             echo $conn->error;
         }
     }
-    header("Location:index.php");
+    header("Location:../index.php");
     exit();
 }
 // end of the file
