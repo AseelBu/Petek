@@ -253,13 +253,25 @@ $(document).ready(function () {
 
     $(".btnRemoveConfirm").click(function () {
         $(".remove.modal").modal("hide");
+        let listId = $("input#listIdIndex").val();
         rowToRemove.fadeOut(function () {
-            rowToRemove.remove();
-            for (i in listProducts) {
-                if (listProducts[i].id == rowToRemove.data("id")) {
-                    listProducts.splice(i, 1);
+            
+            $.ajax({
+                type: "POST",
+                url: "api/deleteUrL!!",
+                data: {
+                    productId:rowToRemove.data('id'),
+                    listId:listId
+                },
+                success: function (response) {
+                    rowToRemove.remove();
                 }
-            }
+            });
+            // for (i in listProducts) {
+            //     if (listProducts[i].id == rowToRemove.data("id")) {
+            //         listProducts.splice(i, 1);
+            //     }
+            // }
         });
     })
 
