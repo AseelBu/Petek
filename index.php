@@ -12,36 +12,6 @@ $userId = isset($_COOKIE['id']) ? $_COOKIE['id'] : null;
 
 $listId = null;
 
-if (isset($_GET['listId'])) {
-    $listId = $_GET['listId'];
-    //check if this list is for this user
-    $sql = "SELECT `userId` FROM `userlists` WHERE `userId`=$userId AND `listId`=$listId";
-    $result = $conn->query($sql);
-    //this list doesn't belong to user
-    if ($result->num_rows <= 0) {
-        
-        header("Location:index.php?status=noAccess");
-        exit();
-    }else{
-    setcookie('listId', $listId);
-    }
-} elseif (isset($_COOKIE['listId'])) {
-
-    $listId = $_COOKIE['listId'];
-}
-
-//user was chose to view old list
-if (!is_null($listId)) {
-
-    
-    $sql = "SELECT `name` FROM `list` where `id`=$listId";
-    $result = $conn->query($sql);
-    if ($result->num_rows === 1) {
-        $row = $result->fetch_assoc();
-        $listName = $row['name'];
-    }
-}
-
 if (isset($_POST["email"])) {
     $usermail = htmlspecialchars($_POST['email']);
     $password = htmlspecialchars($_POST['password']);
@@ -63,8 +33,6 @@ if (isset($_POST["email"])) {
                 setcookie('usermail', $usermail, time() + (60 * 60 * 24 * 15));
                 setcookie('password', $password, time() + (60 * 60 * 24 * 15));
             }
-
-
         } else { //failed to login- wrong password
             header("Location:login.php?status=wrongpassword");
             exit();
@@ -77,26 +45,56 @@ if (isset($_POST["email"])) {
 if (is_null($usermail)) {
     header("Location:login.php?status=showMsg");
     exit();
-}else{
-    //get details of most recent list for user
-    $sql = "SELECT `list`.* 
+} else {
+    if (isset($_GET['listId'])) {
+        $listId = $_GET['listId'];
+        //check if this list is for this user
+        $sql = "SELECT `userId` FROM `userlists` WHERE `userId`=$userId AND `listId`=$listId";
+        $result = $conn->query($sql);
+        //this list doesn't belong to user
+        if ($result->num_rows <= 0) {
+
+            header("Location:index.php?status=noAccess");
+            exit();
+        }
+         else {
+           
+            setcookie('listId', $listId);
+        }
+    } elseif (isset($_COOKIE['listId'])&& isset($_GET['status']) && $_GET['status']=='noAccess') {
+
+        $listId = $_COOKIE['listId'];
+    }
+     else {
+        //get details of most recent list for user
+        $sql = "SELECT `list`.* 
     FROM `userlists` INNER JOIN `list` on `userlists`.`listId`=`list`.`id`
     WHERE `userlists`.`userId`= $userId
     ORDER BY `list`.`creteTime` DESC
     LIMIT 1";
 
-    $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
-        $list = $result->fetch_assoc();
-        $listId = $list['id'];
-        $listName = $list['name'];
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            $list = $result->fetch_assoc();
+            $listId = $list['id'];
+            $listName = $list['name'];
 
-        setcookie('listId', $listId);
-        setcookie('listName', $listName);
+            setcookie('listId', $listId);
+            setcookie('listName', $listName);
+        }
     }
 }
+
 if (is_null($listId)) {
     $listName = "You don't have lists yet!";
+} //user chose to view old list
+else {
+    $sql = "SELECT `name` FROM `list` where `id`=$listId";
+    $result = $conn->query($sql);
+    if ($result->num_rows === 1) {
+        $row = $result->fetch_assoc();
+        $listName = $row['name'];
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -136,14 +134,14 @@ if (is_null($listId)) {
     </header>
 
     <div class="container my-5 px-4 py-4 overflow-auto">
-    <?php
-      if (isset($_GET["status"]) && $_GET["status"] == "noAccess") : ?>
-        <div class="alert alert-danger" role="alert">
-          You are not authorized to access the requested page!
-        </div>
-      <?php endif; ?>
+        <?php
+        if (isset($_GET["status"]) && $_GET["status"] == "noAccess") : ?>
+            <div class="alert alert-danger" role="alert">
+                You are not authorized to access the requested page!
+            </div>
+        <?php endif; ?>
         <div class="container row d-flex justify-content-between">
-      
+
             <span class="col-sm-6">
                 <h2 id="id=" listName"><?= $listName ?></h2>
             </span>
