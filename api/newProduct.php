@@ -28,24 +28,28 @@ if (isset($_POST['listId']) && isset($_POST['productName']) && isset($_POST['amo
         $sql = "INSERT INTO `product`(`name`) VALUES ('$productName')";
         if ($conn->query($sql) === TRUE) {
             $productId = $conn->insert_id;
-        } else {
-            echo json_encode($conn->error);
-        }
+        } 
+        // else {
+        //     echo json_encode($conn->error);
+        // }
     }
     if (!is_null($productId)) {
         if (is_null($amount)) {
             $sql = "INSERT INTO `listproducts`(`ListId`, `ProductId`, `done`) VALUES ('$listId','$productId','N')";
         } else {
-            $sql = "INSERT INTO `listproducts`(`ListId`, `ProductId`, `amount`, `done`) VALUES ('$listId','$productId','$amount','N')";
+            $sql = "INSERT INTO `listproducts`(`ListId`, `ProductId`, `amount`, `done`) VALUES ('$listId','$productId',$amount,'N')";
         }
 
         if ($conn->query($sql) === TRUE) {
-            echo json_encode(TRUE);
-        } else {
-            echo json_encode($conn->error);
+           
+            // echo json_encode("new product inserted");
         }
+        //  else {
+        //     echo json_encode($conn->error);
+        // }
     } else {
-        echo json_encode(FALSE);
+    //     $error=array();
+    //    echo json_encode($error);
     }
 }
 // end of the file

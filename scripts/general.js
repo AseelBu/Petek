@@ -81,12 +81,13 @@ function sortByTr(a, b) {
 
 
 function addProductToTable(product) {
+    console.log(product);
     let id = product.id;
     let name = product.name;
     let amount = product.amount;
     let isChecked = product.isChecked;
 
-    amount = amount == null ? '---' : amount;
+    amount = amount == 0 ? '---' : amount;
     isChecked = isChecked === 'Y' ? "check" : "uncheck";
 
     let tr = `<tr class="${isChecked}" data-id="${id}"> <td class="btnDone">
@@ -109,27 +110,27 @@ function addProductToTable(product) {
     }
 }
 
-function initList() {
-    //  $("table#products tbody").empty();
+// function initList() {
+//     //  $("table#products tbody").empty();
 
-    let tempArr = listProducts;
-    tempArr.sort(sortByName);
-    var checkedPrdcts = [];
-    for (const i in tempArr) {
-        let p = tempArr[i];
+//     let tempArr = listProducts;
+//     tempArr.sort(sortByName);
+//     var checkedPrdcts = [];
+//     for (const i in tempArr) {
+//         let p = tempArr[i];
 
-        addProductToTable(p);
-    }
-    $("table tr.check input[type=checkbox]").prop("checked", true);
-}
+//         addProductToTable(p);
+//     }
+//     $("table tr.check input[type=checkbox]").prop("checked", true);
+// }
 
 
-function reorderList() {
-    let uncheckedRows = $("table#products tbody tr.uncheck");
-    uncheckedRows = uncheckedRows.sort(sortByTr);
-    $(uncheckedRows).remove();
-    $("table#products tbody#uncheckedRows").append(uncheckedRows);
-}
+// function reorderList() {
+//     let uncheckedRows = $("table#products tbody tr.uncheck");
+//     uncheckedRows = uncheckedRows.sort(sortByTr);
+//     $(uncheckedRows).remove();
+//     $("table#products tbody#uncheckedRows").append(uncheckedRows);
+// }
 
 
 $(document).ready(function () {
@@ -322,14 +323,20 @@ $(document).ready(function () {
                 productName: name,
                 amount: amount
             },
+        
             success: function (response) {
-                if (respose !== false) {
+                console.log(response);
+                if (response === 1) {
                     refreshProducts(listId);
                     $("span#modalGoodMsg").append("Product was added to list successfuly !");
                     $("form#addProduct input#prdctName").val("");
                     $("form#addProduct input#prdctAmount").val("1");
                 }
+            },
+            error: function (xhr, ajaxOptions, error) {
+                console.log(error);
             }
+
             // const product = { "id": cntr, "name": name, "amount": amount, "isChecked": false };
             // listProducts.push(product);
             // addProductToTable(product);
@@ -401,29 +408,29 @@ $(document).ready(function () {
     //get the products for the list and refresh table
     function refreshProducts(listId) {
 
-            $.ajax({
-                type: "GET",
-                url: "api/getListProducts.php",
-                data: {
-                    listId: listId
-                },
-                success: function (products) {
-                    if (products.length !== 0) {
-                        $("table#products tbody").html("");
-                        for (item of products) {
-                            product = { "id": item['id'], "name": item['name'], "amount": item['amount'], "isChecked": item['done'] }
-                            addProductToTable(product);
-                        }
-                        $("table tr.check input[type=checkbox]").prop("checked", true);
-                    } else {
-                        //TODO list is empty
+        $.ajax({
+            type: "GET",
+            url: "api/getListProducts.php",
+            data: {
+                listId: listId
+            },
+            success: function (products) {
+                if (products.length !== 0) {
+                    $("table#products tbody").html("");
+                    for (item of products) {
+                        product = { "id": item['id'], "name": item['name'], "amount": item['amount'], "isChecked": item['done'] }
+                        addProductToTable(product);
                     }
-                },
-                error: function (xhr, ajaxOptions, error) {
-                    console.log(error);
+                    $("table tr.check input[type=checkbox]").prop("checked", true);
+                } else {
+                    //TODO list is empty
                 }
-            });
-        }
+            },
+            error: function (xhr, ajaxOptions, error) {
+                console.log(error);
+            }
+        });
+    }
 
     // //initiate products table
     // function initProductTable(userId) {
@@ -462,49 +469,49 @@ $(document).ready(function () {
 
 
     function populateListsDrop(currentListId, userId) {
-            //get the products for the list
-            $.ajax({
-                type: "GET",
-                url: "api/getUserLists.php",
-                data: {
-                    userId: userId
-                },
-                success: function (lists) {
-                    if (lists.length !== 0) {
-                        $("li div #lists").html("");
-                        for (item of lists) {
-                            list = { "id": item['id'], "name": item['name'] }
-                            ///add list to view
-                            let id = list.id;
-                            let name = list.name;
-                            let link = `<a class="dropdown-item" data-id="${id}" href="index.php?listId=${id}">${name}</a>`;
-                            if (currentListId != id) {
-                                $("div #listsDrop").append(link);
-                            }
+        //get the products for the list
+        $.ajax({
+            type: "GET",
+            url: "api/getUserLists.php",
+            data: {
+                userId: userId
+            },
+            success: function (lists) {
+                if (lists.length !== 0) {
+                    $("li div #lists").html("");
+                    for (item of lists) {
+                        list = { "id": item['id'], "name": item['name'] }
+                        ///add list to view
+                        let id = list.id;
+                        let name = list.name;
+                        let link = `<a class="dropdown-item" data-id="${id}" href="index.php?listId=${id}">${name}</a>`;
+                        if (currentListId != id) {
+                            $("div #listsDrop").append(link);
                         }
-                    } else {
-                        //TODO lists is empty
                     }
-                },
-                error: function (xhr, ajaxOptions, error) {
-                    console.log(error);
+                } else {
+                    //TODO lists is empty
                 }
-            });
-        }
+            },
+            error: function (xhr, ajaxOptions, error) {
+                console.log(error);
+            }
+        });
+    }
 
     //initiate index page data
     function initIndexPage() {
-            let userId = $("input#userIdIndex");
-            if (userId.length != 0) {
-                userId = userId.val();
-                let listId = $("input#listIdIndex").val();
-                //1- initiate the table
-                refreshProducts(listId);
+        let userId = $("input#userIdIndex");
+        if (userId.length != 0) {
+            userId = userId.val();
+            let listId = $("input#listIdIndex").val();
+            //1- initiate the table
+            refreshProducts(listId);
 
-                //2-populate lists combo box with all user's lists
-                populateListsDrop(listId, userId);
-            }
+            //2-populate lists combo box with all user's lists
+            populateListsDrop(listId, userId);
         }
+    }
 
     initIndexPage();
 
