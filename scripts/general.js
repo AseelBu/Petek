@@ -258,14 +258,19 @@ $(document).ready(function () {
             
             $.ajax({
                 type: "POST",
-                url: "api/deleteUrL!!",
+                url: "api/deleteProductList.php",
                 data: {
                     productId:rowToRemove.data('id'),
                     listId:listId
                 },
                 success: function (response) {
-                    rowToRemove.remove();
+                    //rowToRemove.remove();
+                    refreshProducts();
+                }, 
+                error: function (xhr, ajaxOptions, error) {
+                    console.log(error);
                 }
+                
             });
             // for (i in listProducts) {
             //     if (listProducts[i].id == rowToRemove.data("id")) {
