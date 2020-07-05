@@ -75,12 +75,19 @@ div .main {
   color: #f4b031;
 }
 
+div.loggedIn{
+  color: rgb(138,80, 5);
+  
+}
+
+
 div.amount {
   display: none;
 }
 div#oldList {
   display: none;
 }
+
 /*dropdownList*/
 .dropdown-item {
   color: #f4b031;

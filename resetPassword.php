@@ -32,11 +32,11 @@
     <div class="py-3 px-3 shadow main" id="Login">
       <h2><b>Reset Password</b></h2>
 
-      <form class="align-middle " id="resetPassFrm" novalidate>
+      <form class="align-middle " id="resetPassFrm" action="login.php">
         <div class="form-group col-md-12">
           <div class="form-row ">
 
-            <label for="email" class="">Enter your rigestered Email: </label>
+            <label for="email" class="">Enter your rigestered Email*: </label>
             <input type="email" class="form-control" id="EmailLogin" name="email" placeholder="Email@Email.com" required>
           </div>
 

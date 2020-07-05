@@ -101,7 +101,7 @@ else {
 
 
 <head>
-  <?php require_once('parts/headLinks.php');?>
+    <?php require_once('parts/headLinks.php'); ?>
     <title>Grocery Lists</title>
 
 </head>
@@ -128,9 +128,9 @@ else {
             <div class="alert alert-danger" role="alert">
                 You are not authorized to access the requested page!
             </div>
-        <?php endif;?>
+        <?php endif; ?>
         <?php
-            if (isset($_GET["status"]) && $_GET["status"] == "noProducts") : ?>
+        if (isset($_GET["status"]) && $_GET["status"] == "noProducts") : ?>
             <div class="alert alert-warning" role="alert">
                 The List you chose doesn't have any products
             </div>
@@ -167,12 +167,15 @@ else {
                             <th scope="col"></th>
                         </tr>
                     </thead>
-                    <tbody id="uncheckedRows">
-                        <!--unchecked products will go here-->
-                    </tbody>
-                    <tbody id="checkedRows">
-                        <!--checked products will go here-->
-                    </tbody>
+                        <tbody id="uncheckedRows">
+                            <!--unchecked products will go here-->
+
+                        </tbody>
+
+                        <tbody id="checkedRows">
+                            <!--checked products will go here-->
+                        </tbody>
+                    
                 </table>
             <?php endif; ?>
         </div>
@@ -313,7 +316,7 @@ else {
 
                         </div>
                         <div class="row my-3">
-                            <button type="submit"  class="btn btn-default d-none" id="submitList">Add List</button>
+                            <button type="submit" class="btn btn-default d-none" id="submitList">Add List</button>
                         </div>
 
                     </form>
@@ -321,7 +324,7 @@ else {
 
                 </div>
                 <div class="d-flex justify-content-end modal-footer">
-                <span class="message" id="modalMsgList"></span>
+                    <span class="message" id="modalMsgList"></span>
 
                     <button type="button" class="btn btn-default" id="btnAddList">Add List</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

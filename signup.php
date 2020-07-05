@@ -21,11 +21,7 @@ if(isset($_GET['status']) && $_GET["status"] == "exists"){
     <div class="fixed-top">
       <nav class="navbar navbar-expand-lg navbar-light">
         <?php require "parts/header.php"; ?>
-        <div class="d-flex justify-content-end">
-
-          <a href="login.php"><button class=" btn btn-default">Login</button></a>
-
-        </div>
+        
     </div>
     </nav>
     </div>
@@ -41,6 +37,7 @@ if(isset($_GET['status']) && $_GET["status"] == "exists"){
           <?php endif; ?>
 
       <h2><b>Sign-Up</b></h2>
+      <?php if (!isset($_SESSION['userId'])) : ?>
       <p>Create new account</p>
 
       <form id="SignUpFrm" method="POST" action="setPassword.php">
@@ -80,6 +77,20 @@ if(isset($_GET['status']) && $_GET["status"] == "exists"){
           </div>
         </div>
       </form>
+      <?php endif; ?>
+      <?php if (isset($_SESSION['userId']) && isset($_SESSION['usermail'])) : ?>
+        <div class="loggedIn">
+          <div>You are already logged in with Email: <strong><u><?= $_SESSION['usermail'] ?></strong></u>
+            <br>
+            <strong>Want to logout and create new account?</strong>
+             
+          </div>
+          <div class="d-flex justify-content-between my-2">
+          <a href="logout.php?page=signup"><button class=" btn btn-default">Log Out & Create account</button></a>
+            <a href="index.php"><button class=" btn btn-default">Go back to Lists</button></a>
+          </div>
+        </div>
+      <?php endif; ?>
     </div>
   </div>
 

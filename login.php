@@ -1,13 +1,14 @@
 <?php
-$email=isset($_COOKIE['usermail'])? $_COOKIE['usermail']:"";
-$password=isset($_COOKIE['password'])? $_COOKIE['password']:"";
+session_start();
+$email = isset($_COOKIE['usermail']) ? $_COOKIE['usermail'] : "";
+$password = isset($_COOKIE['password']) ? $_COOKIE['password'] : "";
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-<?php require_once('parts/headLinks.php');?>
+  <?php require_once('parts/headLinks.php'); ?>
 
   <title>Login</title>
 </head>
@@ -31,10 +32,16 @@ $password=isset($_COOKIE['password'])? $_COOKIE['password']:"";
 
     <div class="py-3 px-3 shadow main" id="Login">
       <!-- the user tried to access pages without logging in -->
-    <?php
+      <?php
       if (isset($_GET["status"]) && $_GET["status"] == "showMsg") : ?>
         <div class="alert alert-warning" role="alert">
           Please Login to view the page
+        </div>
+      <?php endif; ?>
+      <?php
+      if (isset($_GET["email"]) ) : ?>
+        <div class="alert alert-info" role="alert">
+          A link to reset your password was sent to the Email:<br><?=$_GET['email']?>
         </div>
       <?php endif; ?>
       <!-- The user finished signing up -->
@@ -45,45 +52,59 @@ $password=isset($_COOKIE['password'])? $_COOKIE['password']:"";
         </div>
       <?php endif; ?>
       <h2><b>Login</b></h2>
-      
-      <form class="align-middle" id="loginFrm" method="POST" action="index.php">
-        <div class="form-group col-md-12">
-          <div class="form-row">
-            <label for="email" class="">Enter Email: </label>
-            <input type="email" class="form-control" id="EmailLogin" name="email" placeholder="Email@Email.com" value="<?=$email?>" required>
-          </div>
-
-          <br>
-          <div class="form-row">
-            <label for="password" class="">Enter Password: </label>
-            <input type="password" class="form-control" id="Password" name="password" placeholder=" Enter Password" value="<?=$password?>" required>
-          </div>
-
-          <div class="form-check form-row">
-            <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="chkRememberMe" id="chkRememberMe" value="remember" checked>
-              Remember Me
-            </label>
-          </div>
-          <br>
-          <?php
-          if (isset($_GET["status"]) && ($_GET["status"] == "wrongpassword" || $_GET["status"] == "wrongemail")) :
-            $MSG = ($_GET["status"] == "wrongpassword") ?  "wrong password" : "wrong email";
-          ?>
-            <div class="alert alert-danger" role="alert">
-              <strong>Login Failed</strong>-<?= $MSG ?>
+      <?php if (!isset($_SESSION['userId'])) : ?>
+        <small> Default Email: admin@admin.com,password:12345</small>
+        <form class="align-middle" id="loginFrm" method="POST" action="index.php">
+          <div class="form-group col-md-12">
+            <div class="form-row">
+              <label for="email" class="">Enter Email: </label>
+              <input type="email" class="form-control" id="EmailLogin" name="email" placeholder="Email@Email.com" value="<?= $email ?>" required>
             </div>
-          <?php endif; ?>
-          <span class="psw"> <a href="resetPassword.php">Forgot password?</a></span>
-          <br>
-          <span class="signup">Dont have an acount? <a href="signup.php">Sing Up</a></span>
 
-          <div class="d-flex justify-content-end">
-            <input type="submit" class="btn btn-default" value="Login">
+            <br>
+            <div class="form-row">
+              <label for="password" class="">Enter Password: </label>
+              <input type="password" class="form-control" id="Password" name="password" placeholder=" Enter Password" value="<?= $password ?>" required>
+            </div>
+
+            <div class="form-check form-row">
+              <label class="form-check-label">
+                <input type="checkbox" class="form-check-input" name="chkRememberMe" id="chkRememberMe" value="remember" checked>
+                Remember Me
+              </label>
+            </div>
+            <br>
+            <?php
+            if (isset($_GET["status"]) && ($_GET["status"] == "wrongpassword" || $_GET["status"] == "wrongemail")) :
+              $MSG = ($_GET["status"] == "wrongpassword") ?  "wrong password" : "wrong email";
+            ?>
+              <div class="alert alert-danger" role="alert">
+                <strong>Login Failed</strong>-<?= $MSG ?>
+              </div>
+            <?php endif; ?>
+            <span class="psw"> <a href="resetPassword.php">Forgot password?</a></span>
+            <br>
+            <span class="signup">Dont have an acount? <a href="signup.php">Sing Up</a></span>
+
+            <div class="d-flex justify-content-end">
+              <input type="submit" class="btn btn-default" value="Login">
+            </div>
+
           </div>
-
+        </form>
+      <?php endif; ?>
+      <?php if (isset($_SESSION['userId']) && isset($_SESSION['usermail'])) : ?>
+        <div class="loggedIn">
+          <div>You are already logged in with Email: <strong><u><?= $_SESSION['usermail'] ?></strong></u>
+            <br><br>
+            <strong>Not you?</strong>
+            <span class="mx-2"> <a href="logout.php"><button class=" btn btn-default">Log Out</button></a></span>
+          </div>
+          <div class="d-flex justify-content-end">
+            <a href="index.php"><button class=" btn btn-default">Go back to Lists</button></a>
+          </div>
         </div>
-      </form>
+      <?php endif; ?>
     </div>
   </div>
 
