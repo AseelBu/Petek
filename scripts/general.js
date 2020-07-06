@@ -47,14 +47,6 @@ let userLists = [
     //current lists
 ];
 
-// var cntr = listProducts.length;
-
-// function resetAddPrdct() {
-//     $('#prdctName').val("");
-//     $('#amountChkBox').prop('checked', false);
-//     $('#prdctAmount').val("");
-//     // $('input').val("");
-// }
 
 function sortByName(a, b) {
     let aName = a.name.toLowerCase();
@@ -68,7 +60,6 @@ function sortByTr(a, b) {
     let bName = $(b).find(".name").text().toLowerCase();
     return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
 }
-
 
 function addProductToTable(product) {
 
@@ -100,83 +91,100 @@ function addProductToTable(product) {
     }
 }
 
-// function initList() {
-//     //  $("table#products tbody").empty();
-
-//     let tempArr = listProducts;
-//     tempArr.sort(sortByName);
-//     var checkedPrdcts = [];
-//     for (const i in tempArr) {
-//         let p = tempArr[i];
-
-//         addProductToTable(p);
-//     }
-//     $("table tr.check input[type=checkbox]").prop("checked", true);
-// }
-
-
-// function reorderList() {
-//     let uncheckedRows = $("table#products tbody tr.uncheck");
-//     uncheckedRows = uncheckedRows.sort(sortByTr);
-//     $(uncheckedRows).remove();
-//     $("table#products tbody#uncheckedRows").append(uncheckedRows);
-// }
-
-
 $(document).ready(function () {
 
-    // resetForm();
 
     /***********password script**********/
-    // $("form#passwordRegFrm").submit(function (e) {
 
-    //     $("span#message").empty();
-    //     validate("input#pwdReg");
-    //     validate("input#conpwdReg");
-    //     const rslt = checkPasswordReg();
-    //     if (rslt === short) {
-    //        // e.preventDefault();
-    //         invalidate("input#pwdReg");
-    //         $("span#message").append("* Password too short, must contain at lest 5 characters");
-    //     }
-    //     else if (rslt === noMatch) {
-    //       //  e.preventDefault();
-    //         invalidate("input#conpwdReg");
-    //         $("span#message").append("* Passwords don't match !");
-
-    //     }
-    //     else {
-    //         resetForm();
-    //         // window.location.href = "login.html";
-
-    //     }
-    // })
     /***************sign up script************/
-    // $("form#SignUpFrm").submit(function (e) {
 
-    //     $("span#signUpValditionMsg").empty();
-    //     validate("input#Email");
-    //     validate("input#Email-confirm");
-    //     validate("input#Nickname");
-
-    //     var usrMAil = document.getElementById("Email").value;
-    //     var usrMAil2 = document.getElementById("Email-confirm").value;
-
-    //     if (usrMAil !== usrMAil2) {
-    //         // e.preventDefault();
-    //         invalidate("input#Email-confirm");
-
-    //         let msg = "* Inserted Emails don't match !";
-    //         $("span#signUpValditionMsg").append(msg);
-    //     }
-    //     // else {
-    //     //     resetForm();
-    //     //     // window.location.href = "setPassword.html";
-    //     // }
-    // });
     /************list script**************/
 
-    // initList();
+    //get the products for the list and refresh table
+    function refreshProducts(listId) {
+
+        $.ajax({
+            type: "GET",
+            url: "api/getListProducts.php",
+            data: {
+                listId: listId
+            },
+            success: function (products) {
+                listProducts = [];
+                if (products.length !== 0) {
+                    $("table#products tbody").html("");
+                    for (item of products) {
+                        product = { "id": item['id'], "name": item['name'], "amount": item['amount'], "isChecked": item['done'] }
+                        addProductToTable(product);
+                        listProducts.push(product);
+                    }
+                    $("table tr.check input[type=checkbox]").prop("checked", true);
+                } else {
+                    //TODO list is empty
+                }
+            },
+            error: function (xhr, ajaxOptions, error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function populateListsDrop(currentListId, userId) {
+        //get the products for the list
+        $.ajax({
+            type: "GET",
+            url: "api/getUserLists.php",
+            data: {
+                userId: userId
+            },
+            success: function (lists) {
+                userLists = [];
+                if (lists.length !== 0) {
+                    $("li div #lists").html("");
+                    for (item of lists) {
+                        list = { "id": item['id'], "name": item['name'] };
+                        userLists.push(list);
+                        ///add list to view
+                        let id = list.id;
+                        let name = list.name;
+
+                        //add Lists to navbar
+                        let link = `<a class="dropdown-item" data-id="${id}" href="index.php?listId=${id}">${name}</a>`;
+                        if (currentListId != id) {
+                            $("div #listsDrop").append(link);
+                        }
+                        //add lists to new list selection
+                        let option = `<option value="${id}">${name}</option>`;
+                        $(option).appendTo("div#oldList select#oldListSelect");
+                    }
+                } else {
+
+                    // lists is empty disable check box
+                    $("input#oldListChkBox").prop('disabled', true);
+                }
+            },
+            error: function (xhr, ajaxOptions, error) {
+                console.log(error);
+            }
+        });
+    }
+
+    //initiate index page data
+    function initIndexPage() {
+        let userId = $("input#userIdIndex");
+        if (userId.length != 0) {
+            userId = userId.val();
+            let listId = $("input#listIdIndex").val();
+            //1- initiate the table
+            refreshProducts(listId);
+
+            //2-populate lists combo box with all user's lists
+            populateListsDrop(listId, userId);
+        }
+    }
+
+    initIndexPage();
+
 
     $(document).on('click', 'input.btnDone', function (e) {
 
@@ -207,7 +215,6 @@ $(document).ready(function () {
                     console.log("error: product Done state wasn't updated");
                 }
             });
-
 
         }
         else {
@@ -255,28 +262,22 @@ $(document).ready(function () {
         $(".remove.modal").modal("hide");
         let listId = $("input#listIdIndex").val();
         rowToRemove.fadeOut(function () {
-            
+
             $.ajax({
                 type: "POST",
                 url: "api/deleteProductList.php",
                 data: {
-                    productId:rowToRemove.data('id'),
-                    listId:listId
+                    productId: rowToRemove.data('id'),
+                    listId: listId
                 },
                 success: function (response) {
-                    //rowToRemove.remove();
+
                     refreshProducts();
-                }, 
+                },
                 error: function (xhr, ajaxOptions, error) {
                     console.log(error);
                 }
-                
             });
-            // for (i in listProducts) {
-            //     if (listProducts[i].id == rowToRemove.data("id")) {
-            //         listProducts.splice(i, 1);
-            //     }
-            // }
         });
     })
 
@@ -300,9 +301,9 @@ $(document).ready(function () {
 
         } else {
             $("div#oldList").hide();
-
         }
     });
+
 
     $("form#addProduct").submit(function (e) {
         e.preventDefault();
@@ -313,7 +314,6 @@ $(document).ready(function () {
         let listId = $("input#listIdIndex").val();
 
         name = name.toLowerCase();
-
 
         //if product already exists in this list
         if (listProducts.some(pr => (pr.name).toLowerCase() === name)) {
@@ -354,21 +354,6 @@ $(document).ready(function () {
     })
 
 
-    // $("form#addList").submit(function (e) {
-    //     console.log("halloooo");
-    //     validate("input#listName");
-    //     $("span#modalMsgList").empty();
-    //     let name = $("#prdctName").val();
-    //     console.log(userLists);
-    //     if (userLists.some(list => list.name === name)) {
-    //         e.preventDefault();
-    //         console.log("list name exists for user");
-    //         invalidate("input#listName");
-    //         $("span#modalMsgList").append("You already have list with this name");
-    //     }
-
-    // });
-
     $(" button#btnAddList").click(function () {
         validate("input#listName");
         $("span#modalMsgList").empty();
@@ -382,216 +367,11 @@ $(document).ready(function () {
             $("#submitList").click();
         }
     })
-    // $("button#btnNewList").click(function () {
 
-    //     window.open('grocery_list.html', '_blank');
-    // })
     /***********login script**********/
-    // $("form#loginFrm").submit(function (e) {
-    //     window.location.href = "grocery_list.html";
-
-    // })
 
 
-    // // Ajax & JSON
-    // function getInitListDetails(userId) {
-    //     $.ajax({
-    //         type: "GET",
-    //         url: "api/listForUser.php",
-    //         data: {
-    //             userId: userId
-    //         },
-    //         success: function (data) {
-    //             return data;
-    //         },
-    //         error: function (xhr, ajaxOptions, error) {
-    //             console.log(error);
-    //         }
-    //     });
-
-    // }
-
-    // function getProductsFromList(listId) {
-    //     $.ajax({
-    //         type: "GET",
-    //         url: "api/getListProducts.php",
-    //         data: {
-    //             listId: listId
-    //         },
-    //         success: function (data) {
-    //             return data;
-    //         },
-    //         error: function (xhr, ajaxOptions, error) {
-    //             console.log(error);
-    //         }
 
 
-    //     });
-    // }
-
-    // function refreshListProducts(products) {
-    //     $("table#products tbody").html("");
-    //     for (item of products) {
-    //         product = { "id": item['id'], "name": item['name'], "amount": item['amount'], "isChecked": item['done'] }
-    //         addProductToTable(product);
-    //     }
-    // }
-
-
-    //get the products for the list and refresh table
-    function refreshProducts(listId) {
-
-        $.ajax({
-            type: "GET",
-            url: "api/getListProducts.php",
-            data: {
-                listId: listId
-            },
-            success: function (products) {
-                listProducts = [];
-                if (products.length !== 0) {
-                    $("table#products tbody").html("");
-                    for (item of products) {
-                        product = { "id": item['id'], "name": item['name'], "amount": item['amount'], "isChecked": item['done'] }
-                        addProductToTable(product);
-                        listProducts.push(product);
-                    }
-                    $("table tr.check input[type=checkbox]").prop("checked", true);
-                } else {
-                    //TODO list is empty
-                }
-            },
-            error: function (xhr, ajaxOptions, error) {
-                console.log(error);
-            }
-        });
-    }
-
-    // //initiate products table
-    // function initProductTable(userId) {
-    //     // get the newest list details
-    //     $.ajax({
-    //         type: "GET",
-    //         url: "api/listForUser.php",
-    //         data: {
-    //             userId: userId
-    //         },
-    //         success: function (list) {
-    //             //TODO if no values returned
-    //             if (!$.isEmptyObject(list)) {
-    //                 let listId = list.id;
-    //                 let listName = list.name;
-
-    //                 // setListName in the title
-    //                 $("span h2 #listName").html("");
-    //                 $("span h2 #listName").append(listName);
-
-    //                 $("input #listIdIndex").val(listId);
-    //                 refreshProducts(listId);
-
-    //             } else {
-    //                 //TODO no lists for user
-    //             }
-
-    //         },
-    //         error: function (xhr, ajaxOptions, error) {
-    //             console.log(error);
-    //         }
-    //     });
-
-    // }
-
-    function populateListsDrop(currentListId, userId) {
-        //get the products for the list
-        $.ajax({
-            type: "GET",
-            url: "api/getUserLists.php",
-            data: {
-                userId: userId
-            },
-            success: function (lists) {
-                userLists = [];
-                if (lists.length !== 0) {
-                    $("li div #lists").html("");
-                    for (item of lists) {
-                        list = { "id": item['id'], "name": item['name'] };
-                        userLists.push(list);
-                        ///add list to view
-                        let id = list.id;
-                        let name = list.name;
-
-                        //add Lists to navbar
-                        let link = `<a class="dropdown-item" data-id="${id}" href="index.php?listId=${id}">${name}</a>`;
-                        if (currentListId != id) {
-                            $("div #listsDrop").append(link);
-                        }
-                        //add lists to new list selection
-                        let option = `<option value="${id}">${name}</option>`;
-                        $(option).appendTo("div#oldList select#oldListSelect");
-                    }
-                } else {
-
-                    //TODO lists is empty disable check box
-                }
-            },
-            error: function (xhr, ajaxOptions, error) {
-                console.log(error);
-            }
-        });
-    }
-
-    //initiate index page data
-    function initIndexPage() {
-        let userId = $("input#userIdIndex");
-        if (userId.length != 0) {
-            userId = userId.val();
-            let listId = $("input#listIdIndex").val();
-            //1- initiate the table
-            refreshProducts(listId);
-
-            //2-populate lists combo box with all user's lists
-            populateListsDrop(listId, userId);
-        }
-    }
-
-    initIndexPage();
-
-    // // $("#btnRefreshTable").click(function(){
-    // let userId = $("input#userIdIndex");
-    // if (userId.length != 0) {
-    //     userId = userId.val();
-
-    //     $.ajax({
-    //         type: "GET",
-    //         url: "api/listForUser.php",
-    //         data: {
-    //             userId: userId
-    //         },
-    //         success: function (data) {
-    //             let listid = data.id;
-    //             let listName = data.name;
-
-    //             $.ajax({
-    //                 type: "GET",
-    //                 url: "api/getListProducts.php",
-    //                 data: {
-    //                     listId: listId
-    //                 },
-    //                 success: function (data) {
-    //                     $("table#customers tbody").html("");
-    //                     for (item of data) {
-    //                         customer = { "firstName": item['first name'], "lastName": item['last name'], "phone": item['phone'] }
-    //                         addProductToTable(product);
-    //                     }
-
-    //                 }
-
-    //             });
-    //         },
-    //         error: function (xhr, ajaxOptions, error) {
-    //             console.log(error);
-    //         }
-    //     });
-    // }
 });
 

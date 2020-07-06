@@ -13,7 +13,7 @@ ORDER BY `list`.`name`
 ";
     $result = $conn->query($sql);
     $lists = array();
-    
+
     while ($row = $result->fetch_assoc()) {
         $lists[] = $row;
     }

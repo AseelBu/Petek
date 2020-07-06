@@ -2,11 +2,19 @@
 session_start();
 require_once('db.php');
 
-$usermail = isset($_SESSION['usermail']) ? $_SESSION['usermail'] :
-    isset($_COOKIE['usermail']) ? $_COOKIE['usermail'] : null;
+$usermail = null;
+if(isset($_SESSION['usermail'])){ 
+    $usermail=  $_SESSION['usermail'];
+}elseif(isset($_COOKIE['usermail'])){
+    $usermail= $_COOKIE['usermail'] ;
+}
 
-$password = isset($_SESSION['password']) ? $_SESSION['password'] :
-    isset($_COOKIE['password']) ? $_COOKIE['password'] : null;
+$password = null;
+if(isset($_SESSION['password'])){ 
+    $password=  $_SESSION['password'];
+}elseif(isset($_COOKIE['password'])){
+    $password= $_COOKIE['password'] ;
+}
 
 $userId = isset($_SESSION['userId']) ? $_SESSION['userId'] : null;
 
@@ -33,6 +41,15 @@ if (isset($_POST["email"])) {
                 //stay logged in for 15 days
                 setcookie('usermail', $usermail, time() + (60 * 60 * 24 * 15));
                 setcookie('password', $password, time() + (60 * 60 * 24 * 15));
+            } else {
+                if (isset($_COOKIE['usermail'])) {
+                    unset($_COOKIE['usermail']);
+                    setcookie('usermail', $usermail, time() - (60 * 60 * 24));
+                }
+                if (isset($_COOKIE['password'])) {
+                    unset($_COOKIE['password']);
+                    setcookie('password', $password, time() - (60 * 60 * 24));
+                }
             }
         } else { //failed to login- wrong password
             header("Location:login.php?status=wrongpassword");
@@ -43,7 +60,8 @@ if (isset($_POST["email"])) {
         exit();
     }
 }
-if (is_null($userId)) {
+
+if (is_null($userId) || !isset($_SESSION['usermail']) || !isset($_SESSION['password'])) {
     header("Location:login.php?status=showMsg");
     exit();
 } else {
@@ -147,12 +165,9 @@ else {
                 <?php endif; ?>
                 <button type="button" data-toggle="modal" data-target="#modalNewList" id="btnNewList" class="btn btn-default mx-1 my-1  col-sm-3"><i class="fas fa-folder-plus"></i> New List
                 </button>
-                <!-- <button type="button" id="btnNewList" class="btn btn-default mx-1 my-1  col-sm-3">
-                    <i class="fas fa-folder-plus"></i> New List
-                </button> -->
+
             </div>
-            <!--<button type="button" id="btnNP" class="btn btn-outline-warning"><i class="fas fa-plus"> New
-                    Product</i></button>-->
+
         </div>
         <br>
 
@@ -167,15 +182,15 @@ else {
                             <th scope="col"></th>
                         </tr>
                     </thead>
-                        <tbody id="uncheckedRows">
-                            <!--unchecked products will go here-->
+                    <tbody id="uncheckedRows">
+                        <!--unchecked products will go here-->
 
-                        </tbody>
+                    </tbody>
 
-                        <tbody id="checkedRows">
-                            <!--checked products will go here-->
-                        </tbody>
-                    
+                    <tbody id="checkedRows">
+                        <!--checked products will go here-->
+                    </tbody>
+
                 </table>
             <?php endif; ?>
         </div>

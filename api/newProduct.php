@@ -9,9 +9,9 @@ if (isset($_POST['listId']) && isset($_POST['productName']) && isset($_POST['amo
     $productName = htmlspecialchars($_POST['productName']);
     $amount = htmlspecialchars($_POST['amount']);
 
-    $productName=strtolower($productName);
-    $productName=ucfirst($productName);
-    
+    $productName = strtolower($productName);
+    $productName = ucfirst($productName);
+
     $productId = null;
 
     // 1- check if product name already exists in DB
@@ -29,8 +29,7 @@ if (isset($_POST['listId']) && isset($_POST['productName']) && isset($_POST['amo
         $sql = "INSERT INTO `product`(`name`) VALUES ('$productName')";
         if ($conn->query($sql) === TRUE) {
             $productId = $conn->insert_id;
-        } 
-        else {
+        } else {
             echo json_encode($conn->error);
         }
     }
@@ -43,15 +42,14 @@ if (isset($_POST['listId']) && isset($_POST['productName']) && isset($_POST['amo
         }
 
         if ($conn->query($sql) === TRUE) {
-           
+
             echo json_encode(TRUE);
-        }
-         else {
+        } else {
             echo json_encode($conn->error);
         }
     } else {
-    
-       echo json_encode(FALSE);
+
+        echo json_encode(FALSE);
     }
 }
 // end of the file

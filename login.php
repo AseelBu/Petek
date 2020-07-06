@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 $email = isset($_COOKIE['usermail']) ? $_COOKIE['usermail'] : "";
 $password = isset($_COOKIE['password']) ? $_COOKIE['password'] : "";
 
@@ -39,9 +40,9 @@ $password = isset($_COOKIE['password']) ? $_COOKIE['password'] : "";
         </div>
       <?php endif; ?>
       <?php
-      if (isset($_GET["email"]) ) : ?>
+      if (isset($_GET["email"])) : ?>
         <div class="alert alert-info" role="alert">
-          A link to reset your password was sent to the Email:<br><?=$_GET['email']?>
+          A link to reset your password was sent to the Email:<br><?= $_GET['email'] ?>
         </div>
       <?php endif; ?>
       <!-- The user finished signing up -->
@@ -52,7 +53,7 @@ $password = isset($_COOKIE['password']) ? $_COOKIE['password'] : "";
         </div>
       <?php endif; ?>
       <h2><b>Login</b></h2>
-      <?php if (!isset($_SESSION['userId'])) : ?>
+      <?php if (!isset($_SESSION['userId']) || !isset($_SESSION['usermail'])) : ?>
         <small> Default Email: admin@admin.com,password:12345</small>
         <form class="align-middle" id="loginFrm" method="POST" action="index.php">
           <div class="form-group col-md-12">
@@ -92,8 +93,9 @@ $password = isset($_COOKIE['password']) ? $_COOKIE['password'] : "";
 
           </div>
         </form>
-      <?php endif; ?>
-      <?php if (isset($_SESSION['userId']) && isset($_SESSION['usermail'])) : ?>
+      <?php endif;
+      if (isset($_SESSION['userId']) && isset($_SESSION['usermail']) && isset($_SESSION['password'])) : ?>
+
         <div class="loggedIn">
           <div>You are already logged in with Email: <strong><u><?= $_SESSION['usermail'] ?></strong></u>
             <br><br>
