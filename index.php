@@ -156,7 +156,7 @@ else {
         <div class="container row d-flex justify-content-between">
 
             <span class="col-sm-6">
-                <h2 id="id=" listName"><?= $listName ?></h2>
+                <h2 id="id=" listName><?= $listName ?></h2>
             </span>
             <div class="container d-flex justify-content-end col-sm-12 ">
                 <?php if (!is_null($listId)) : ?>

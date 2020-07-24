@@ -1,5 +1,5 @@
 <?php
-require("..\db.php");
+require_once("../db.php");
 
 header('Content-Type: application/json');
 if (isset($_POST['listId']) && isset($_POST['productId']) && isset($_POST['done'])) {

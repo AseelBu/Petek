@@ -1,6 +1,6 @@
 <?php
 
-require("..\db.php");
+require_once("../db.php");
 
 if (isset($_POST['listId']) && isset($_POST['productId'])) {
     $listId=$_POST['listId'];

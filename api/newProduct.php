@@ -1,13 +1,17 @@
 <?php
-require_once("..\db.php");
+require_once("../db.php");
 
 header('Content-Type: application/json');
 
-if (isset($_POST['listId']) && isset($_POST['productName']) && isset($_POST['amount'])) {
+if (isset($_POST['listId']) && isset($_POST['productName']) ) {
 
     $listId = htmlspecialchars($_POST['listId']);
     $productName = htmlspecialchars($_POST['productName']);
+    $amount=0;
+    if(isset($_POST['amount'])){
     $amount = htmlspecialchars($_POST['amount']);
+    $amount=$amount>0? $amount:0;
+    }
 
     $productName = strtolower($productName);
     $productName = ucfirst($productName);
