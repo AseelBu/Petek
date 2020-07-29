@@ -7,7 +7,7 @@ $conn = new mysqli($servername, $username, $password);
 // Check connection
 if ($conn->connect_error)
     die("Connection failed: " . $conn->connect_error);
-$dbName = "Petek";
+$dbName = "Petek2";
 if (!mysqli_select_db($conn, $dbName)) { // בודק אם מסד הנתונים לא קיים כבר
     $sql = "CREATE DATABASE $dbName";
     if ($conn->query($sql) === TRUE) {
@@ -26,7 +26,9 @@ if (!$conn->query(($sql))) {
     Email Varchar(50) NOT null UNIQUE CHECK (email like '_%@_%._%'), 
     pswrd varchar(20) not null CHECK (length(pswrd)>=5), 
     Nickname varchar(30), 
-    phone varchar(10))";
+    phone varchar(10),
+    familyId INT(6) REFERENCES Family(id) ON DELETE CASCADE ON UPDATE CASCADE
+    )";
 }
 if ($conn->query($sql) === TRUE) {
     $sql = "INSERT INTO `users`(`Email`,`pswrd`) 
@@ -36,6 +38,70 @@ if ($conn->query($sql) === TRUE) {
     }
 } else {
     //  echo "Error creating table: ".$conn->error;
+}
+
+//family table creation
+$sql = "SELECT id FROM Family";
+if (!$conn->query(($sql))) {
+    //create table if it doesnt exist
+    $sql = "CREATE TABLE Family( id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name Varchar(50) NOT null,
+    adminId int(6)  not null UNIQUE REFERENCES FAdmin(id) ON DELETE CASCADE ON UPDATE CASCADE )";
+}
+if ($conn->query($sql) === TRUE) {
+
+    // echo "Table Family Created successfully ".PHP_EOL;
+} else {
+     //echo json_encode("Error creating table: ".$conn->error);
+}
+
+//family admin table creation
+$sql = "SELECT id FROM FAdmin";
+if (!$conn->query(($sql))) {
+    //create table if it doesnt exist
+    $sql = "CREATE TABLE FAdmin( id INT(6) PRIMARY KEY 
+    REFERENCES Users(id) ON DELETE CASCADE ON UPDATE CASCADE )";
+}
+if ($conn->query($sql) === TRUE) {
+
+    // echo "Table FAdmin Created successfully ".PHP_EOL;
+} else {
+     //echo json_encode("Error creating table: ".$conn->error);
+}
+
+//invites table creation
+$sql = "SELECT senderId FROM invites";
+if (!$conn->query(($sql))) {
+    //create table if it doesnt exist
+    $sql="CREATE TABLE invites( senderId INT(6)REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE, 
+    sendedToId INT(6)REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE, 
+    familyId INT(6)REFERENCES family (id) ON DELETE CASCADE ON UPDATE CASCADE, 
+    PRIMARY KEY(senderId,sendedToId,familyId)
+)";
+}
+if ($conn->query($sql) === TRUE) {
+
+    // echo "Table invites Created successfully ".PHP_EOL;
+} else {
+     //echo json_encode("Error creating table: ".$conn->error);
+}
+
+//request table creation
+$sql = "SELECT id FROM request";
+if (!$conn->query(($sql))) {
+    //create table if it doesnt exist
+    $sql="CREATE TABLE request( id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+    userId INT(6) NOT null UNIQUE REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE, 
+    adminId INT(6) not null REFERENCES fAdmin(id) ON DELETE CASCADE ON UPDATE CASCADE, 
+    approved char(1)NOT null DEFAULT 'W' CHECK (approved IN ('Y','N','W'))
+ 
+)";
+}
+if ($conn->query($sql) === TRUE) {
+
+    // echo "Table request Created successfully ".PHP_EOL;
+} else {
+     //echo json_encode("Error creating table: ".$conn->error);
 }
 
 //list table creation
@@ -50,7 +116,7 @@ if ($conn->query($sql) === TRUE) {
 
     // echo "Table List Created successfully ".PHP_EOL;
 } else {
-    // echo "Error creating table: ".$conn->error;
+     //echo json_encode("Error creating table: ".$conn->error);
 }
 
 // create Users' Lists
@@ -65,7 +131,7 @@ PRIMARY KEY(listId, userId)
 if ($conn->query($sql) === TRUE) {
     // echo "Table ListProducts Created successfully ".PHP_EOL;
 } else {
-    // echo "Error creating table: ".$conn->error;
+     //echo json_encode("Error creating table: ".$conn->error);
 }
 
 
@@ -79,7 +145,7 @@ if (!$conn->query(($sql))) {
 if ($conn->query($sql) === TRUE) {
     //  echo "Table Product Created successfully ".PHP_EOL;
 } else {
-    // echo "Error creating table: ".$conn->error;
+     //echo json_encode("Error creating table: ".$conn->error);
 }
 
 //ListProducts table creation
@@ -96,5 +162,5 @@ PRIMARY KEY(ListId,ProductID)
 if ($conn->query($sql) === TRUE) {
     // echo "Table ListProducts Created successfully ".PHP_EOL;
 } else {
-    // echo "Error creating table: ".$conn->error;
+     //echo json_encode("Error creating table: ".$conn->error);
 }

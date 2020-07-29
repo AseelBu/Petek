@@ -1,8 +1,8 @@
 /***************reset************/
 function resetForm() {
-  $("form input:not(:checkbox):not(:button):not(:submit)").val("");
-  $("input#amountChkBox").prop("checked", false);
-  $("form input[type=number]").val("1");
+	$('form input:not(:checkbox):not(:button):not(:submit)').val('');
+	$('input#amountChkBox').prop('checked', false);
+	$('form input[type=number]').val('1');
 }
 /***********password script**********/
 const short = 0;
@@ -10,64 +10,64 @@ const noMatch = 1;
 const ok = 2;
 
 function checkPasswordReg() {
-  console.log("checking");
-  let pswrd = $("input#pwdReg").val();
-  let repswrd = $("input#conpwdReg").val();
+	console.log('checking');
+	let pswrd = $('input#pwdReg').val();
+	let repswrd = $('input#conpwdReg').val();
 
-  if (pswrd.length < 5) {
-    return short;
-  }
-  if (pswrd !== repswrd) {
-    return noMatch;
-  }
+	if (pswrd.length < 5) {
+		return short;
+	}
+	if (pswrd !== repswrd) {
+		return noMatch;
+	}
 
-  return ok;
+	return ok;
 }
 
 function invalidate(selector) {
-  $(selector).focus();
-  $(selector).addClass("invalid");
+	$(selector).focus();
+	$(selector).addClass('invalid');
 }
 function validate(selector) {
-  if ($(selector).hasClass("invalid")) {
-    $(selector).removeClass("invalid");
-  }
+	if ($(selector).hasClass('invalid')) {
+		$(selector).removeClass('invalid');
+	}
 }
 
 /**********grocery_list script*********/
 
 let listProducts = [
-  //current products in the list
+	//current products in the list
 ];
 
 let userLists = [
-  //current lists
+	//current lists
 ];
 
 function sortByName(a, b) {
-  let aName = a.name.toLowerCase();
-  let bName = b.name.toLowerCase();
-  return aName < bName ? -1 : aName > bName ? 1 : 0;
+	let aName = a.name.toLowerCase();
+	let bName = b.name.toLowerCase();
+	return aName < bName ? -1 : aName > bName ? 1 : 0;
 }
 
 function sortByTr(a, b) {
-  let aName = $(a).find(".name").text().toLowerCase();
-  let bName = $(b).find(".name").text().toLowerCase();
-  return aName < bName ? -1 : aName > bName ? 1 : 0;
+	let aName = $(a).find('.name').text().toLowerCase();
+	let bName = $(b).find('.name').text().toLowerCase();
+	return aName < bName ? -1 : aName > bName ? 1 : 0;
 }
 
 function addProductToTable(product) {
-  let id = product.id;
-  let name = product.name;
-  let amount = product.amount;
-  let isChecked = product.isChecked;
+	let id = product.id;
+	let name = product.name;
+	let amount = product.amount;
+	let isChecked = product.isChecked;
 
-  console.log("amount="+amount);
-  console.log("amount==0?"+ (amount==0));
-  amount = amount == 0 ? "---" : amount;
-  isChecked = isChecked === "Y" ? "check" : "uncheck";
+	console.log('amount=' + amount);
+	console.log('amount==0?' + (amount == 0));
+	amount = amount == 0 ? '---' : amount;
+	isChecked = isChecked === 'Y' ? 'check' : 'uncheck';
 
-  let tr = `<tr class="${isChecked}" data-id="${id}"> <td class="btnDone">
+	let tr = `<tr class="${isChecked}" data-id="${id}"> <td class="btnDone">
           <input type="checkbox" class="btnDone"></td>
           <td class="name"> ${name}</td>
           <td class="amount">${amount}</td>
@@ -78,288 +78,324 @@ function addProductToTable(product) {
           </td>
           </tr>`;
 
-  if (isChecked === "check") {
-    $("table#products tbody#checkedRows").append(tr);
-  } else if (isChecked === "uncheck") {
-    $("table#products tbody#uncheckedRows").append(tr);
-  }
+	if (isChecked === 'check') {
+		$('table#products tbody#checkedRows').append(tr);
+	} else if (isChecked === 'uncheck') {
+		$('table#products tbody#uncheckedRows').append(tr);
+	}
 }
 
 $(document).ready(function () {
-  /***********password script**********/
+	/***********password script**********/
 
-  /***************sign up script************/
+	/***************sign up script************/
 
-  /************list script**************/
+	/************list script**************/
 
-  //get the products for the list and refresh table
-  function refreshProducts(listId) {
-    $.ajax({ 
-      type: "GET",
-      url: "api/getListProducts.php",
-      data: {
-        listId: listId,
-      },
-      success: function (products) {
-        
-        listProducts = [];
-        if (products.length > 0) {
-          $("table#products tbody").html("");
-          for (item of products) {
-            product = {
-              id: item["id"],
-              name: item["name"],
-              amount: item["amount"],
-              isChecked: item["done"],
-            };
-           
-;            addProductToTable(product);
-            listProducts.push(product);
-          }
-          $("table tr.check input[type=checkbox]").prop("checked", true);
-        } else {
-          //TODO list is empty
-          console.log("list doesn't contain any products yet");
-        }
-      },
-      error: function (xhr, ajaxOptions, error) {
-        console.log(error);
-      },
-    });
-  }
+	//get the products for the list and refresh table
+	function refreshProducts(listId) {
+		$.ajax({
+			type: 'GET',
+			url: 'api/getListProducts.php',
+			data: {
+				listId: listId,
+			},
+			success: function (products) {
+				listProducts = [];
+				if (products.length > 0) {
+					$('table#products tbody').html('');
+					for (item of products) {
+						product = {
+							id: item['id'],
+							name: item['name'],
+							amount: item['amount'],
+							isChecked: item['done'],
+						};
 
-  function populateListsDrop(currentListId, userId) {
-    //get the products for the list
-    $.ajax({
-      type: "GET",
-      url: "api/getUserLists.php",
-      data: {
-        userId: userId,
-      },
-      success: function (lists) {
-        userLists = [];
-        if (lists.length !== 0) {
-          $("li div #lists").html("");
-          for (item of lists) {
-            list = { id: item["id"], name: item["name"] };
-            userLists.push(list);
-            ///add list to view
-            let id = list.id;
-            let name = list.name;
+						addProductToTable(product);
+						listProducts.push(product);
+					}
+					$('table tr.check input[type=checkbox]').prop('checked', true);
+				} else {
+					//TODO list is empty
+					console.log("list doesn't contain any products yet");
+				}
+			},
+			error: function (xhr, ajaxOptions, error) {
+				console.log(error);
+			},
+		});
+	}
 
-            //add Lists to navbar
-            let link = `<a class="dropdown-item" data-id="${id}" href="index.php?listId=${id}">${name}</a>`;
-            if (currentListId != id) {
-              $("div #listsDrop").append(link);
-            }
-            //add lists to new list selection
-            let option = `<option value="${id}">${name}</option>`;
-            $(option).appendTo("div#oldList select#oldListSelect");
-          }
-        } else {
-          // lists is empty disable check box
-          $("input#oldListChkBox").prop("disabled", true);
-        }
-      },
-      error: function (xhr, ajaxOptions, error) {
-        console.log(error);
-      },
-    });
-  }
+	function populateListsDrop(currentListId, userId) {
+		//get the products for the list
+		$.ajax({
+			type: 'GET',
+			url: 'api/getUserLists.php',
+			data: {
+				userId: userId,
+			},
+			success: function (lists) {
+				userLists = [];
+				if (lists.length !== 0) {
+					$('li div #lists').html('');
+					for (item of lists) {
+						list = { id: item['id'], name: item['name'] };
+						userLists.push(list);
+						///add list to view
+						let id = list.id;
+						let name = list.name;
 
-  //initiate index page data
-  function initIndexPage() {
-    let userId = $("input#userIdIndex");
-    if (userId.length != 0) {
-      userId = userId.val();
-      let listId = $("input#listIdIndex");
-      if (listId.length != 0) {
-        listId = listId.val();
-        //1- initiate the table
-        refreshProducts(listId);
+						//add Lists to navbar
+						let link = `<a class="dropdown-item" data-id="${id}" href="index.php?listId=${id}">${name}</a>`;
+						if (currentListId != id) {
+							$('div #listsDrop').append(link);
+						}
+						//add lists to new list selection
+						let option = `<option value="${id}">${name}</option>`;
+						$(option).appendTo('div#oldList select#oldListSelect');
+					}
+				} else {
+					// lists is empty disable check box
+					$('input#oldListChkBox').prop('disabled', true);
+				}
+			},
+			error: function (xhr, ajaxOptions, error) {
+				console.log(error);
+			},
+		});
+	}
 
-        //2-populate lists combo boxes with all user's lists
-        populateListsDrop(listId, userId);
-      }else{
-          console.log("error getting the list id");
-      }
-    }else{
-        console.log("error getting the user id");
-    }
-  }
+	//initiate index page data
+	function initIndexPage() {
+		let userId = $('input#userIdIndex');
+		if (userId.length != 0) {
+			userId = userId.val();
+			let listId = $('input#listIdIndex');
+			if (listId.length != 0) {
+				listId = listId.val();
+				//1- initiate the table
+				refreshProducts(listId);
 
-  initIndexPage();
+				//2-populate lists combo boxes with all user's lists
+				populateListsDrop(listId, userId);
+			} else {
+				console.log('error getting the list id');
+			}
+		} else {
+			console.log('error getting the user id');
+		}
+	}
 
-  $(document).on("click", "input.btnDone", function (e) {
-    let dataId = $(this).parents("tr").attr("data-id");
-    const name = $(this).parents("tr").find(".name").text();
-    const amount = $(this).parents("tr").find(".amount").text();
+	initIndexPage();
 
-    let listId = $("input#listIdIndex").val();
-    if ($(this).is(":checked")) {
-      $(this).parents("tr").addClass("check");
-      $(this).parents("tr").removeClass("uncheck");
+	$(document).on('click', 'input.btnDone', function (e) {
+		let dataId = $(this).parents('tr').attr('data-id');
+		const name = $(this).parents('tr').find('.name').text();
+		const amount = $(this).parents('tr').find('.amount').text();
 
-      //change done property for product in DB to 'Y'
-      $.ajax({
-        type: "POST",
-        url: "api/updateDoneProduct.php",
-        data: {
-          listId: listId,
-          productId: dataId,
-          done: "Y",
-        },
+		let listId = $('input#listIdIndex').val();
+		if ($(this).is(':checked')) {
+			$(this).parents('tr').addClass('check');
+			$(this).parents('tr').removeClass('uncheck');
 
-        success: function (response) {
-          refreshProducts(listId);
-        },
-        error: function (xhr, ajaxOptions, error) {
-          console.log("error: product Done state wasn't updated");
-        },
-      });
-    } else {
-      $(this).parents("tr").addClass("uncheck");
-      $(this).parents("tr").removeClass("check");
+			//change done property for product in DB to 'Y'
+			$.ajax({
+				type: 'POST',
+				url: 'api/updateDoneProduct.php',
+				data: {
+					listId: listId,
+					productId: dataId,
+					done: 'Y',
+				},
 
-      //change done property for product in DB to 'N'
-      $.ajax({
-        type: "POST",
-        url: "api/updateDoneProduct.php",
-        data: {
-          listId: listId,
-          productId: dataId,
-          done: "N",
-        },
-        success: function (response) {
-          refreshProducts(listId);
-        },
-        error: function (xhr, ajaxOptions, error) {
-          console.log("error: product Done state wasn't updated");
-        },
-      });
-    }
-  });
+				success: function (response) {
+					refreshProducts(listId);
+				},
+				error: function (xhr, ajaxOptions, error) {
+					console.log("error: product Done state wasn't updated");
+				},
+			});
+		} else {
+			$(this).parents('tr').addClass('uncheck');
+			$(this).parents('tr').removeClass('check');
 
-  //removing product
-  $(".remove.modal").modal({
-    backdrop: "static",
-    show: false,
-  });
-  let rowToRemove = "";
+			//change done property for product in DB to 'N'
+			$.ajax({
+				type: 'POST',
+				url: 'api/updateDoneProduct.php',
+				data: {
+					listId: listId,
+					productId: dataId,
+					done: 'N',
+				},
+				success: function (response) {
+					refreshProducts(listId);
+				},
+				error: function (xhr, ajaxOptions, error) {
+					console.log("error: product Done state wasn't updated");
+				},
+			});
+		}
+	});
 
-  $(document).on("click", ".btnRemove", function () {
-    $(".remove.modal").modal("show");
-    rowToRemove = $(this).parents("tr");
-    const productName = $(this).parents("tr").find(".name").text();
+	//removing product
+	$('.remove.modal').modal({
+		backdrop: 'static',
+		show: false,
+	});
+	let rowToRemove = '';
 
-    $(".remove.modal .modal-body p").html(
-      `You are about to delete <i>${productName}</i>`
-    );
-  });
+	$(document).on('click', '.btnRemove', function () {
+		$('.remove.modal').modal('show');
+		rowToRemove = $(this).parents('tr');
+		const productName = $(this).parents('tr').find('.name').text();
 
-  $(".btnRemoveConfirm").click(function () {
-    $(".remove.modal").modal("hide");
-    let listId = $("input#listIdIndex").val();
-    rowToRemove.fadeOut(function () {
-      $.ajax({
-        type: "POST",
-        url: "api/deleteProductList.php",
-        data: {
-          productId: rowToRemove.data("id"),
-          listId: listId,
-        },
-        success: function (response) {
-            listProducts=$.grep( listProducts,function(value){
-                return value.id != rowToRemove.data("id");
-            });
-          refreshProducts();
-        },
-        error: function (xhr, ajaxOptions, error) {
-          console.log(error);
-        },
-      });
-    });
-  });
+		$('.remove.modal .modal-body p').html(`You are about to delete <i>${productName}</i>`);
+	});
 
-  //product amount check box
-  $(document).on("click", "#amountChkBox", function () {
-    if ($(this).is(":checked")) {
-      $("div.amount").show();
-    } else {
-      $("div.amount").hide();
-    }
-  });
+	$('.btnRemoveConfirm').click(function () {
+		$('.remove.modal').modal('hide');
+		let listId = $('input#listIdIndex').val();
+		rowToRemove.fadeOut(function () {
+			$.ajax({
+				type: 'POST',
+				url: 'api/deleteProductList.php',
+				data: {
+					productId: rowToRemove.data('id'),
+					listId: listId,
+				},
+				success: function (response) {
+					listProducts = $.grep(listProducts, function (value) {
+						return value.id != rowToRemove.data('id');
+					});
+					refreshProducts();
+				},
+				error: function (xhr, ajaxOptions, error) {
+					console.log(error);
+				},
+			});
+		});
+	});
 
-  //products from previous list check box
-  $(document).on("click", "#oldListChkBox", function () {
-    if ($(this).is(":checked")) {
-      $("div#oldList").show();
-    } else {
-      $("div#oldList").hide();
-    }
-  });
+	//product amount check box
+	$(document).on('click', '#amountChkBox', function () {
+		if ($(this).is(':checked')) {
+			$('div.amount').show();
+		} else {
+			$('div.amount').hide();
+		}
+	});
 
-  $("form#addProduct").submit(function (e) {
-    e.preventDefault();
-    $("span#modalMsg").empty();
-    $("span#modalGoodMsg").empty();
-    let name = $("#prdctName").val();
-    let amount = null;
-    let listId = $("input#listIdIndex").val();
+	//products from previous list check box
+	$(document).on('click', '#oldListChkBox', function () {
+		if ($(this).is(':checked')) {
+			$('div#oldList').show();
+		} else {
+			$('div#oldList').hide();
+		}
+	});
 
-    name = name.toLowerCase();
+	$('form#addProduct').submit(function (e) {
+		e.preventDefault();
+		$('span#modalMsg').empty();
+		$('span#modalGoodMsg').empty();
+		let name = $('#prdctName').val();
+		let amount = null;
+		let listId = $('input#listIdIndex').val();
 
-    //if product already exists in this list
-    if (listProducts.some((pr) => pr.name.toLowerCase() === name)) {
-      $("span#modalMsg").append("Product already exists in your list!");
-      return;
-    }
+		name = name.toLowerCase();
 
-    if ($("#amountChkBox").is(":checked")) {
-      amount = $("#prdctAmount").val();
-    }
+		//if product already exists in this list
+		if (listProducts.some((pr) => pr.name.toLowerCase() === name)) {
+			$('span#modalMsg').append('Product already exists in your list!');
+			return;
+		}
 
-    $.ajax({
-      type: "POST",
-      url: "api/newProduct.php",
-      data: {
-        listId: listId,
-        productName: name,
-        amount: amount,
-      },
+		if ($('#amountChkBox').is(':checked')) {
+			amount = $('#prdctAmount').val();
+		}
 
-      success: function (response) {
-        if (response === true) {
-          refreshProducts(listId);
-          $("span#modalGoodMsg").append(
-            "Product was added to list successfuly !"
-          );
-          $("form#addProduct input#prdctName").val("");
-          $("form#addProduct input#prdctAmount").val("1");
-        }
-      },
-      error: function (xhr, ajaxOptions, error) {
-        console.log(error);
-      },
-    });
-  });
+		$.ajax({
+			type: 'POST',
+			url: 'api/newProduct.php',
+			data: {
+				listId: listId,
+				productName: name,
+				amount: amount,
+			},
 
-  $(" #modalAddProduct").click(function () {
-    $("#submitProduct").click();
-  });
+			success: function (response) {
+				if (response === true) {
+					refreshProducts(listId);
+					$('span#modalGoodMsg').append('Product was added to list successfuly !');
+					$('form#addProduct input#prdctName').val('');
+					$('form#addProduct input#prdctAmount').val('1');
+				}
+			},
+			error: function (xhr, ajaxOptions, error) {
+				console.log(error);
+			},
+		});
+	});
 
-  $(" button#btnAddList").click(function () {
-    validate("input#listName");
-    $("span#modalMsgList").empty();
-    let name = $("input#listName").val();
-    if (userLists.some((list) => list.name === name)) {
-      console.log("list name exists for user");
-      invalidate("input#listName");
-      $("span#modalMsgList").append("You already have list with this name");
-    } else {
-      $("#submitList").click();
-    }
-  });
+	$(' #modalAddProduct').click(function () {
+		$('#submitProduct').click();
+	});
 
-  /***********login script**********/
+	$(' button#btnAddList').click(function () {
+		validate('input#listName');
+		$('span#modalMsgList').empty();
+		let name = $('input#listName').val();
+		if (userLists.some((list) => list.name === name)) {
+			console.log('list name exists for user');
+			invalidate('input#listName');
+			$('span#modalMsgList').append('You already have list with this name');
+		} else {
+			$('#submitList').click();
+		}
+	});
+
+	/***********login script**********/
+	/***********invite script**********/
+
+	$('#invitedInfo')
+		.autocomplete({
+			source: function (request, response) {
+				$.ajax({
+					url: 'api/getUsersByEmail.php',
+					type: 'GET',
+					data: { term: request.term },
+					success: function (data) {
+						// users = [];
+						// $(data).each(function (i, user) {
+						// 	users.push(user['Email']);
+						// });
+						response(
+							$.map(data, function (item) {
+								
+								return {
+									label: item['Email'],
+									value: item['Email'],
+									id: item['id']
+								};
+							})
+						);
+					},
+					error: function (result) {
+						console.log('getUsersByEmail autocomplete Error');
+					},
+				});
+			},
+			select: function (event, ui) {
+				// console.log(ui.item.value);
+				$("input#invitedId").val(ui.item.id);  // ui.item.value contains the id of the selected label
+			},
+
+			appendTo: '#usersByMail',
+			minLength: 1,
+		})
+		.focus(function () {
+			$(this).autocomplete('search', $(this).val());
+		});
 });

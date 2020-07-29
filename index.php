@@ -1,26 +1,26 @@
 <?php
 session_start();
-require_once('db.php');
+require_once 'db.php';
 
 $usermail = null;
-if(isset($_SESSION['usermail'])){ 
-    $usermail=  $_SESSION['usermail'];
-}elseif(isset($_COOKIE['usermail'])){
-    $usermail= $_COOKIE['usermail'] ;
+if (isset($_SESSION['usermail'])) {
+    $usermail = $_SESSION['usermail'];
+} elseif (isset($_COOKIE['usermail'])) {
+    $usermail = $_COOKIE['usermail'];
 }
 
 $password = null;
-if(isset($_SESSION['password'])){ 
-    $password=  $_SESSION['password'];
-}elseif(isset($_COOKIE['password'])){
-    $password= $_COOKIE['password'] ;
+if (isset($_SESSION['password'])) {
+    $password = $_SESSION['password'];
+} elseif (isset($_COOKIE['password'])) {
+    $password = $_COOKIE['password'];
 }
 
 $userId = isset($_SESSION['userId']) ? $_SESSION['userId'] : null;
 
 $listId = null;
 
-if (isset($_POST["email"])) {
+if (isset($_POST['email'])) {
     $usermail = htmlspecialchars($_POST['email']);
     $password = htmlspecialchars($_POST['password']);
 
@@ -39,30 +39,36 @@ if (isset($_POST["email"])) {
             $userId = $row['id'];
             if ($_POST['chkRememberMe'] == 'remember') {
                 //stay logged in for 15 days
-                setcookie('usermail', $usermail, time() + (60 * 60 * 24 * 15));
-                setcookie('password', $password, time() + (60 * 60 * 24 * 15));
+                setcookie('usermail', $usermail, time() + 60 * 60 * 24 * 15);
+                setcookie('password', $password, time() + 60 * 60 * 24 * 15);
             } else {
                 if (isset($_COOKIE['usermail'])) {
                     unset($_COOKIE['usermail']);
-                    setcookie('usermail', $usermail, time() - (60 * 60 * 24));
+                    setcookie('usermail', $usermail, time() - 60 * 60 * 24);
                 }
                 if (isset($_COOKIE['password'])) {
                     unset($_COOKIE['password']);
-                    setcookie('password', $password, time() - (60 * 60 * 24));
+                    setcookie('password', $password, time() - 60 * 60 * 24);
                 }
             }
-        } else { //failed to login- wrong password
-            header("Location:login.php?status=wrongpassword");
+        } else {
+            //failed to login- wrong password
+            header('Location:login.php?status=wrongpassword');
             exit();
         }
-    } else { //failed to login-wrong email
-        header("Location:login.php?status=wrongemail");
+    } else {
+        //failed to login-wrong email
+        header('Location:login.php?status=wrongemail');
         exit();
     }
 }
 
-if (is_null($userId) || !isset($_SESSION['usermail']) || !isset($_SESSION['password'])) {
-    header("Location:login.php?status=showMsg");
+if (
+    is_null($userId) ||
+    !isset($_SESSION['usermail']) ||
+    !isset($_SESSION['password'])
+) {
+    header('Location:login.php?status=showMsg');
     exit();
 } else {
     if (isset($_GET['listId'])) {
@@ -72,15 +78,16 @@ if (is_null($userId) || !isset($_SESSION['usermail']) || !isset($_SESSION['passw
         $result = $conn->query($sql);
         //this list doesn't belong to user
         if ($result->num_rows <= 0) {
-
-            header("Location:index.php?status=noAccess");
+            header('Location:index.php?status=noAccess');
             exit();
         } else {
-
             setcookie('listId', $listId);
         }
-    } elseif (isset($_COOKIE['listId']) && isset($_GET['status']) && $_GET['status'] == 'noAccess') {
-
+    } elseif (
+        isset($_COOKIE['listId']) &&
+        isset($_GET['status']) &&
+        $_GET['status'] == 'noAccess'
+    ) {
         $listId = $_COOKIE['listId'];
     } else {
         //get details of most recent list for user
@@ -104,7 +111,8 @@ if (is_null($userId) || !isset($_SESSION['usermail']) || !isset($_SESSION['passw
 
 if (is_null($listId)) {
     $listName = "You don't have lists yet!";
-} //user chose to view old list
+}
+//user chose to view old list
 else {
     $sql = "SELECT `name` FROM `list` where `id`=$listId";
     $result = $conn->query($sql);
@@ -119,7 +127,7 @@ else {
 
 
 <head>
-    <?php require_once('parts/headLinks.php'); ?>
+    <?php require_once 'parts/headLinks.php'; ?>
     <title>Grocery Lists</title>
 
 </head>
@@ -129,7 +137,7 @@ else {
     <header>
         <div class="fixed-top">
             <nav class="navbar navbar-expand-lg navbar-light sticky-top">
-                <?php require "parts/header.php"; ?>
+                <?php require 'parts/header.php'; ?>
 
                 <div class="d-flex justify-content-end">
                     <a href="logout.php"><button class=" btn btn-default">Log Out</button></a>
@@ -141,14 +149,12 @@ else {
     </header>
 
     <div class="container my-5 px-4 py-4 overflow-auto">
-        <?php
-        if (isset($_GET["status"]) && $_GET["status"] == "noAccess") : ?>
+        <?php if (isset($_GET['status']) && $_GET['status'] == 'noAccess'): ?>
             <div class="alert alert-danger" role="alert">
                 You are not authorized to access the requested page!
             </div>
         <?php endif; ?>
-        <?php
-        if (isset($_GET["status"]) && $_GET["status"] == "noProducts") : ?>
+        <?php if (isset($_GET['status']) && $_GET['status'] == 'noProducts'): ?>
             <div class="alert alert-warning" role="alert">
                 The List you chose doesn't have any products
             </div>
@@ -159,7 +165,7 @@ else {
                 <h2 id="id=" listName><?= $listName ?></h2>
             </span>
             <div class="container d-flex justify-content-end col-sm-12 ">
-                <?php if (!is_null($listId)) : ?>
+                <?php if (!is_null($listId)): ?>
                     <button type="button" data-toggle="modal" data-target="#modalNewProduct" id="btnNP" class="btn btn-default mx-1 col-sm-3 my-1"><i class="fas fa-plus"></i> New
                         Product </button>
                 <?php endif; ?>
@@ -172,7 +178,7 @@ else {
         <br>
 
         <div class="table-responsive">
-            <?php if (!is_null($listId)) : ?>
+            <?php if (!is_null($listId)): ?>
                 <table class="table table-hover text-center shadow rounded" id="products">
                     <thead>
                         <tr>
@@ -199,7 +205,7 @@ else {
     <input type="hidden" id="userIdIndex" name="userIdIndex" value="<?= $userId ?>">
     <input type="hidden" id="listIdIndex" name="listIdIndex" value="<?= $listId ?>">
 
-    <?php require "parts/footer.php"; ?>
+    <?php require 'parts/footer.php'; ?>
 
     <div class="modal fade remove " tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-centered " role="document">

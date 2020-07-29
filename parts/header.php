@@ -9,37 +9,57 @@
 </button>
 
 <div class="collapse navbar-collapse " id="navbarSupportedContent">
-<?php
-function active($currect_page){
-  $url_array =  explode('/', $_SERVER['REQUEST_URI']) ;
-  $url = end($url_array);  
-  if(strpos($url,'?')){
-  $url_array =  explode('?', $url) ;
-  $url=$url_array[0];
-  }
-  if($currect_page == $url){
-      echo 'active'; //class name in css 
-  } 
-}
-?>
+<?php function active($currect_page)
+{
+    $url_array = explode('/', $_SERVER['REQUEST_URI']);
+    $url = end($url_array);
+    if (strpos($url, '?')) {
+        $url_array = explode('?', $url);
+        $url = $url_array[0];
+    }
+    if ($currect_page == $url) {
+        echo 'active'; //class name in css
+    }
+} ?>
     <ul class="navbar-nav mr-auto">
         <li class="nav-item ">
-            <a class="nav-link <?php active('index.php');?>" href="index.php">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link <?php active(
+                'index.php'
+            ); ?>" href="index.php">Home <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link <?php active('login.php');?>" href="login.php">Login</a>
+            <a class="nav-link <?php active(
+                'login.php'
+            ); ?>" href="login.php">Login</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link <?php active('signup.php');?>" href="signup.php">Sign Up</a>
+            <a class="nav-link <?php active(
+                'signup.php'
+            ); ?>" href="signup.php">Sign Up</a>
         </li>
-        <?php if (isset($usermail)) : ?>
+        <?php if (isset($usermail) || isset($userId)): ?>
 
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle <?php active('index.php');?>" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle <?php active(
+                    'index.php'
+                ); ?>" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Lists
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="listsDrop">
                     <!-- user Lists-->
+                </div>
+            </li>
+       
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle <?php active(
+                    'invite.php'
+                ); ?>" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Family
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="FamilyDrop">
+                    <!-- Family Actions-->
+                    <a class="dropdown-item" href="ViewMembers.php">View members</a>
+                    <a class="dropdown-item" href="invite.php">Invite user to family</a>
                 </div>
             </li>
         <?php endif; ?>
