@@ -36,6 +36,7 @@ body::after{
 .navbar-light .navbar-nav .nav-link {
   color: rgba(126, 98, 7, 0.651);
 }
+
 /*tables*/
 
 table {
@@ -92,6 +93,7 @@ div#oldList {
 .dropdown-item {
   color: #f4b031;
 }
+
 .dropdown-item:focus,
 .dropdown-item:hover {
   color: rgb(117, 90, 0);

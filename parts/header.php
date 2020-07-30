@@ -58,8 +58,12 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="FamilyDrop">
                     <!-- Family Actions-->
-                    <a class="dropdown-item" href="ViewMembers.php">View members</a>
-                    <a class="dropdown-item" href="invite.php">Invite user to family</a>
+                    <!--TODO check if the member is already part of family-->
+                    <a class="dropdown-item" href="createFamily.php">| New family</a>
+                    <a class="dropdown-item" href="familyMembers.php">| View members</a>
+                    <a class="dropdown-item" href="invite.php">| Invite user to family</a>
+                    <a class="dropdown-item" href="requests.php">| Join requests</a>
+                    
                 </div>
             </li>
         <?php endif; ?>
