@@ -95,7 +95,8 @@ div#oldList {
 }
 
 .dropdown-item:focus,
-.dropdown-item:hover {
+.dropdown-item:hover, 
+.dropdown-item.active {
   color: rgb(117, 90, 0);
   text-decoration: none;
   background-color: #f8f9fa;

@@ -9,7 +9,7 @@ if (
     $userId = htmlspecialchars($_POST['userId']);
     $familyId = htmlspecialchars($_POST['familyId']);
     $invitedId = htmlspecialchars($_POST['invitedId']);
-    if($invitedId===0){
+    if(strlen($invitedId)==0){
         header('Location:../invite.php?sent=no');
         exit();
     }

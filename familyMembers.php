@@ -40,6 +40,7 @@ if (is_null($familyId)) {
 
 
         <div class="container my-5 px-4 py-4 overflow-auto">
+            <div><h2>Family Members</h2></div>
             <div class="table-responsive mt-4">
             
                     <table class="table table-hover text-center shadow rounded" id="products">
@@ -60,7 +61,7 @@ if (is_null($familyId)) {
                                 
                         </tbody>
                     </table>
-            
+                    <input type="hidden" id="userId" name="userId" value="<?= $userId ?>">
             </div>
         </div>
 

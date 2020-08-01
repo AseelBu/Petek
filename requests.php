@@ -38,6 +38,7 @@ if (!$conn->query($sql)) {
     </header>
 
     <div class="container my-5 px-4 py-4 overflow-auto">
+   <div> <h2>Join Requests</h2></div>
     <div class="table-responsive">
            
                 <table class="table table-hover text-center shadow rounded" id="products">
@@ -51,12 +52,17 @@ if (!$conn->query($sql)) {
                     </thead>
                     <tbody>
                         <!--requests will show here-->
-
+                        <tr v-for="request in requests" {{request.id}}>
+                            <td>{{request.email}}</td>
+                            <td>{{request.date}}</td>
+                            <td><span><a><button type="button" class="btn btn-success"><i class="fas fa-user-plus"></i> Approve</button></a></span> 
+                            <span class="ml-3"><a><button type="button" class="btn btn-danger"> <i class="fas fa-user-times"></i> Decline</button></a></span></td>
+                        </tr>
                     </tbody>
 
 
                 </table>
-           
+                <input type="hidden" id="userId" name="userId" value="<?= $userId ?>">
         </div>
     </div>
 
@@ -73,6 +79,67 @@ if (!$conn->query($sql)) {
  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="scripts/general.js"></script>
 
+<script>
+    new Vue({
+      el: "#app",
+    //   data() {
+    //     return {
+    //       user: {
+    //         firstName: "",
+    //         lastName: "",
+    //         bio: "",
+    //         favColor: "",
+    //         githubURL: "",
+    //         hobbies: [],
+    //         birthday: ""
+    //       },
+    //       hobbies: ["Running", "Gaming", "Surffing", "Watch TV", "Books"],
+    //       searchedHobbie: "",
+    //     }
+    //   },
+    //   computed: {
+    //     filterdHobbies() {
+    //       if (this.searchedHobbie) {
+    //         let filteredHobbies = this.hobbies.filter((hobbie) => {
+    //           return hobbie.toLowerCase().includes(this.searchedHobbie.toLowerCase());
+    //         })
+    //         return filteredHobbies;
+    //       }
+    //       else
+    //         return this.hobbies;
+    //     },
+    //     fixedGitHubURL() {
+    //       if (!this.user.githubURL.startsWith("http://") && !this.user.githubURL.startsWith("https://"))
+    //         return "https://" + this.user.githubURL;
+    //       else
+    //         return this.user.githubURL;
+    //     },
+    //     fullName(){
+    //       return `${this.user.firstName} ${this.user.lastName}`;
+    //     },
+    //     calculateAge() { // birthday is a date
+    //       birthdayDate = new Date(this.user.birthday);
+    //       let ageDifMs = Date.now() - birthdayDate.getTime();
+    //       let ageDate = new Date(ageDifMs); // miliseconds from epoch
+    //       return Math.abs(ageDate.getUTCFullYear() - 1970);
+    //     }
+    //   },
+      methods: {
+    //     getRequests() {
+    //       console.log(JSON.stringify(this.user));
+    //     }
+    //     ,
+    //     clearHobbies() {
+    //       this.user.hobbies = [];
+    //     },
+      },
+    //   filters: {
+    //     capitalize: function (value) {
+    //       return nameCapitalized = value.charAt(0).toUpperCase() + value.slice(1)
+    //     },
+    //   }
+    // });
+  </script>
 </body>
 <?php $conn->close(); ?>
 </html>

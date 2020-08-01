@@ -42,6 +42,11 @@ require_once 'parts/sessionCheck.php';
             <i class="fas fa-check"></i> Your invitation sent successfully
             </div>
         <?php endif; ?>
+        <?php if (isset($_GET['sent']) && $_GET['sent'] == 'no'): ?>
+            <div class="alert alert-danger" role="alert">
+            <i class="far fa-times-circle"></i> Your invitation failed to send because the inserted Email was invalid
+            </div>
+        <?php endif; ?>
 
       <h2><b>Invite User to your family</b></h2>
 
@@ -49,12 +54,13 @@ require_once 'parts/sessionCheck.php';
         <div class="form-group col-md-12">
           <div class="form-row ">
 
-            <label for="invitedInfo" class="">Who would you like to invite : </label>
+            <label for="invitedInfo" class="">Who would you like to invite** : </label>
             <input type="text" class="form-control" id="invitedInfo" name="invitedInfo" title="Start typing user's mail" placeholder="Email@Email.com" required>
             <div id="usersByMail" style="position:relative; width: auto;">
              <!--List of suggested users-->
             </div>
 
+           <span> **People in: your family/has family/already been invited to your family,<br> can't be invited again</span>
             <input type="hidden" id="userId" name="userId" value="<?= $userId ?>">
             <input type="hidden" name="familyId" value="<?= $familyId ?>">
             <input type="hidden" id="invitedId" name="invitedId" value="">

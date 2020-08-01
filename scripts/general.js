@@ -378,7 +378,7 @@ $(document).ready(function () {
 			
 			source: function (request, response) {
 				$.ajax({
-					url: 'api/getUsersByEmail.php',
+					url: 'api/getUsersForInvite.php',
 					type: 'GET',
 					data: { 
 						term: request.term,
@@ -400,7 +400,7 @@ $(document).ready(function () {
 						);
 					},
 					error: function (result) {
-						console.log('getUsersByEmail autocomplete Error');
+						console.log('getUsersForInvite autocomplete Error');
 					},
 				});
 			},
@@ -422,6 +422,7 @@ $(document).ready(function () {
 			let invitedEmail = $('input#invitedInfo').val();
 			let userId = $('input#userId').val();
 
+			//if mail is empty
 			if(invitedEmail.length<1){
 				$('span#inviteMsg').append('Please enter the Email of the invited user');
 				return;
@@ -429,7 +430,7 @@ $(document).ready(function () {
 			
 			$.ajax({
 				type: 'GET',
-				url: 'api/getUsersByEmail.php',
+				url: 'api/getUsersForInvite.php',
 				data: {
 					term: invitedEmail,
 					userId: userId
@@ -448,26 +449,6 @@ $(document).ready(function () {
 					console.log(error);
 				},
 			});
-			
-			
-			// $('span#modalMsg').empty();
-			// $('span#modalGoodMsg').empty();
-			// let name = $('#prdctName').val();
-			// let amount = null;
-			// let listId = $('input#listIdIndex').val();
-	
-			// name = name.toLowerCase();
-	
-			// //if product already exists in this list
-			// if (listProducts.some((pr) => pr.name.toLowerCase() === name)) {
-			// 	$('span#modalMsg').append('Product already exists in your list!');
-			// 	return;
-			// }
-	
-			// if ($('#amountChkBox').is(':checked')) {
-			// 	amount = $('#prdctAmount').val();
-			// }
-	
 			
 		});
 });
