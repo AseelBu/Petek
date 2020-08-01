@@ -2,8 +2,14 @@
 session_start();
 require_once 'db.php';
 
-$userId = isset($_SESSION['userId']) ? $_SESSION['userId'] : null;
-$familyId = isset($_SESSION['familyId']) ? $_SESSION['familyId'] : null;
+require_once 'parts/sessionCheck.php';
+
+//is the user an admin
+$sql = "SELECT `id` FROM `fadmin` WHERE `id`=$userId";
+if (!$conn->query($sql)) {
+    header('Location:../index.php?status=notAdmin');
+    exit();
+} 
 ?>
 <!DOCTYPE html>
 <html lang="en">

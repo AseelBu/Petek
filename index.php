@@ -138,6 +138,15 @@ if(isset($_SESSION['userId'])){
     }else{
       //TODO user id not set in session??
     }
+
+    $_SESSION['isAdmin']=FALSE;
+    $sql = "SELECT `id` FROM `fadmin` WHERE `id`=$userId";
+if ($conn->query($sql)) {
+    $_SESSION['isAdmin']=TRUE;
+}
+
+$familyId = isset($_SESSION['familyId']) ? $_SESSION['familyId'] : null;
+$isAdmin=isset($_SESSION['isAdmin']) ? $_SESSION['isAdmin'] : null;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -219,7 +228,7 @@ if(isset($_SESSION['userId'])){
         </div>
     </div>
     <!-- hidden input -->
-    <input type="hidden" id="userIdIndex" name="userIdIndex" value="<?= $userId ?>">
+    <input type="hidden" id="userId" name="userId" value="<?= $userId ?>">
     <input type="hidden" id="listIdIndex" name="listIdIndex" value="<?= $listId ?>">
 
     <?php require 'parts/footer.php'; ?>

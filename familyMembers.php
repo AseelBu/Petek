@@ -2,8 +2,17 @@
 session_start();
 require_once 'db.php';
 
-$userId = isset($_SESSION['userId']) ? $_SESSION['userId'] : null;
-$familyId = isset($_SESSION['familyId']) ? $_SESSION['familyId'] : null;
+require_once 'parts/sessionCheck.php';
+
+// $isAdmin = false;
+if (is_null($familyId)) {
+    header('Location:../index.php?status=noFamily');
+    exit();
+}
+// $sql = "SELECT `id` FROM `fadmin` WHERE `id`=$userId";
+// if ($conn->query($sql)) {
+//     $isAdmin = true;
+// }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,7 +52,12 @@ $familyId = isset($_SESSION['familyId']) ? $_SESSION['familyId'] : null;
                         </thead>
                         <tbody>
                             <!--requests will show here-->
-
+                            <tr>
+                                <td>e@e.com</td>
+                                <td>5/5/20</td>
+                                <td><span class="mx-3"><i class="fas fa-user-check"></i></span><span><i class="fas fa-user-times"></i></span></td> 
+                            </tr>
+                                
                         </tbody>
                     </table>
             

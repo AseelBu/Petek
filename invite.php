@@ -2,9 +2,7 @@
 session_start();
 require_once 'db.php';
 
-$userId = isset($_SESSION['userId']) ? $_SESSION['userId'] : null;
-$familyId = isset($_SESSION['familyId']) ? $_SESSION['familyId'] : null;
-
+require_once 'parts/sessionCheck.php';
 ?>
 
 <!DOCTYPE html>
@@ -32,32 +30,44 @@ $familyId = isset($_SESSION['familyId']) ? $_SESSION['familyId'] : null;
   <div class="container  my-5 px-4 py-4 d-flex justify-content-center overflow-auto">
 
     <div class="py-3 px-3 shadow main" id="newUser">
+    
+    <?php if (isset($_GET['status']) && $_GET['status'] == 'newFamily'): ?>
+            <div class="alert alert-info" role="alert">
+            <i class="fas fa-info-circle"></i> Invite people to join your new family !
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_GET['sent']) && $_GET['sent'] == 'yes'): ?>
+            <div class="alert alert-success" role="alert">
+            <i class="fas fa-check"></i> Your invitation sent successfully
+            </div>
+        <?php endif; ?>
+
       <h2><b>Invite User to your family</b></h2>
 
-      <form class="align-middle " id="newUserFrm" method="POST" action="api/newInvite.php" >
+      <form class="align-middle " id="invite" method="POST" action="api/newInvite.php" >
         <div class="form-group col-md-12">
           <div class="form-row ">
 
             <label for="invitedInfo" class="">Who would you like to invite : </label>
-            <input type="invitedInfo" class="form-control" id="invitedInfo" name="invitedInfo" title="Start typing user's mail" placeholder="Email@Email.com" required>
+            <input type="text" class="form-control" id="invitedInfo" name="invitedInfo" title="Start typing user's mail" placeholder="Email@Email.com" required>
             <div id="usersByMail" style="position:relative; width: auto;">
              <!--List of suggested users-->
             </div>
 
-            <input type="hidden" id="userIdIndex" name="senderId" value="<?= $userId ?>">
+            <input type="hidden" id="userId" name="userId" value="<?= $userId ?>">
             <input type="hidden" name="familyId" value="<?= $familyId ?>">
             <input type="hidden" id="invitedId" name="invitedId" value="">
 
           </div>
 
-
-          <div class="d-flex justify-content-end my-2">
-            <input type="submit" class="btn btn-default" id="btnSendReset" value="Send">
+          
+          <div class="d-flex justify-content-between my-2">
+          <span class="message" id="inviteMsg"></span>
+            <input type="button" class="btn btn-default" id="btnSendInvite" value="Send">
+            
           </div>
-
-
-
-
+          <input type="submit" class="btn btn-default d-none" id="submitInvite" value="Send">
         </div>
       </form>
     </div>

@@ -128,6 +128,7 @@ $(document).ready(function () {
 	}
 
 	function populateListsDrop(currentListId, userId) {
+		
 		//get the products for the list
 		$.ajax({
 			type: 'GET',
@@ -148,16 +149,20 @@ $(document).ready(function () {
 
 						//add Lists to navbar
 						let link = `<a class="dropdown-item" data-id="${id}" href="index.php?listId=${id}">${name}</a>`;
-						if (currentListId != id) {
+						if (currentListId===null || currentListId != id) {
 							$('div #listsDrop').append(link);
 						}
+						if(currentListId !== null ){
 						//add lists to new list selection
 						let option = `<option value="${id}">${name}</option>`;
 						$(option).appendTo('div#oldList select#oldListSelect');
+						}
 					}
 				} else {
+					if(currentListId !== null ){
 					// lists is empty disable check box
 					$('input#oldListChkBox').prop('disabled', true);
+					}
 				}
 			},
 			error: function (xhr, ajaxOptions, error) {
@@ -168,7 +173,8 @@ $(document).ready(function () {
 
 	//initiate index page data
 	function initIndexPage() {
-		let userId = $('input#userIdIndex');
+		
+		let userId = $('input#userId');
 		if (userId.length != 0) {
 			userId = userId.val();
 			let listId = $('input#listIdIndex');
@@ -187,7 +193,12 @@ $(document).ready(function () {
 		}
 	}
 
+	if($('input#listIdIndex').length !== 0){
 	initIndexPage();
+	}else if( $('input#userId').length !== 0){
+		let userId=  $('input#userId').val();
+		populateListsDrop(null, userId);
+	}
 
 	$(document).on('click', 'input.btnDone', function (e) {
 		let dataId = $(this).parents('tr').attr('data-id');
@@ -358,14 +369,20 @@ $(document).ready(function () {
 
 	/***********login script**********/
 	/***********invite script**********/
-
-	$('#invitedInfo')
+	let userId;
+	if($('input#userId').length !== 0){
+	 userId= $('input#userId').val();
+	}
+	$('input#invitedInfo')
 		.autocomplete({
+			
 			source: function (request, response) {
 				$.ajax({
 					url: 'api/getUsersByEmail.php',
 					type: 'GET',
-					data: { term: request.term },
+					data: { 
+						term: request.term,
+						userId:  userId},
 					success: function (data) {
 						// users = [];
 						// $(data).each(function (i, user) {
@@ -397,5 +414,60 @@ $(document).ready(function () {
 		})
 		.focus(function () {
 			$(this).autocomplete('search', $(this).val());
+			$('span#inviteMsg').empty();
+		});
+
+		$('input#btnSendInvite').click(function (e) {
+			$('span#inviteMsg').empty();
+			let invitedEmail = $('input#invitedInfo').val();
+			let userId = $('input#userId').val();
+
+			if(invitedEmail.length<1){
+				$('span#inviteMsg').append('Please enter the Email of the invited user');
+				return;
+			}
+			
+			$.ajax({
+				type: 'GET',
+				url: 'api/getUsersByEmail.php',
+				data: {
+					term: invitedEmail,
+					userId: userId
+				},
+	
+				success: function (response) {
+					
+					if (response.length < 1) {
+						
+						$('span#inviteMsg').append('Please Choose user from the suggested list only');
+					}else{
+						$('#submitInvite').click();
+					}
+				},
+				error: function (xhr, ajaxOptions, error) {
+					console.log(error);
+				},
+			});
+			
+			
+			// $('span#modalMsg').empty();
+			// $('span#modalGoodMsg').empty();
+			// let name = $('#prdctName').val();
+			// let amount = null;
+			// let listId = $('input#listIdIndex').val();
+	
+			// name = name.toLowerCase();
+	
+			// //if product already exists in this list
+			// if (listProducts.some((pr) => pr.name.toLowerCase() === name)) {
+			// 	$('span#modalMsg').append('Product already exists in your list!');
+			// 	return;
+			// }
+	
+			// if ($('#amountChkBox').is(':checked')) {
+			// 	amount = $('#prdctAmount').val();
+			// }
+	
+			
 		});
 });

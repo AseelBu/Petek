@@ -59,10 +59,22 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="FamilyDrop">
                     <!-- Family Actions-->
                     <!--TODO check if the member is already part of family-->
+
+                   <?php //if user doesn't belong to family
+            
+                   if (is_null($familyId)): ?>
                     <a class="dropdown-item" href="createFamily.php">| New family</a>
+                   <?php endif;
+                   //if user belongs to family
+                   if (!is_null($familyId)): ?>
                     <a class="dropdown-item" href="familyMembers.php">| View members</a>
                     <a class="dropdown-item" href="invite.php">| Invite user to family</a>
+                    <?php //if user is admin to family
+                       if (!is_null($isAdmin) && $isAdmin): ?>
                     <a class="dropdown-item" href="requests.php">| Join requests</a>
+                   <?php endif;
+                   endif;
+                   ?>
                     
                 </div>
             </li>
