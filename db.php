@@ -7,7 +7,7 @@ $conn = new mysqli($servername, $username, $password);
 // Check connection
 if ($conn->connect_error)
     die("Connection failed: " . $conn->connect_error);
-$dbName = "Petek2";
+$dbName = "Petek";
 if (!mysqli_select_db($conn, $dbName)) { // בודק אם מסד הנתונים לא קיים כבר
     $sql = "CREATE DATABASE $dbName";
     if ($conn->query($sql) === TRUE) {
@@ -29,7 +29,7 @@ if (!$conn->query(($sql))) {
     phone varchar(10),
     lostKeyPass varchar(8) Unique,
     familyId INT(6) REFERENCES Family(id) ON DELETE CASCADE ON UPDATE CASCADE
-   
+
     )";
 }
 if ($conn->query($sql) === TRUE) {
@@ -77,7 +77,8 @@ if (!$conn->query(($sql))) {
     //create table if it doesnt exist
     $sql="CREATE TABLE invites( senderId INT(6)REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE, 
     sendedToId INT(6)REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE, 
-    familyId INT(6)REFERENCES family (id) ON DELETE CASCADE ON UPDATE CASCADE, 
+    familyId INT(6)REFERENCES family (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    approved char(1)NOT null DEFAULT 'W' CHECK (approved IN ('Y','N','W')) , 
     PRIMARY KEY(senderId,sendedToId,familyId)
 )";
 }
@@ -95,9 +96,8 @@ if (!$conn->query(($sql))) {
     $sql="CREATE TABLE request( id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
     userId INT(6) NOT null UNIQUE REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE, 
     adminId INT(6) not null REFERENCES fAdmin(id) ON DELETE CASCADE ON UPDATE CASCADE, 
-    approved char(1)NOT null DEFAULT 'W' CHECK (approved IN ('Y','N','W'))
- 
-)";
+    approved char(1)NOT null DEFAULT 'W' CHECK (approved IN ('Y','N','W')),
+    date datetime NOT null  DEFAULT CURRENT_TIMESTAMP)";
 }
 if ($conn->query($sql) === TRUE) {
 

@@ -27,7 +27,6 @@ if(!is_null($familyId)){
         <?php require 'parts/header.php'; ?>
         <div class="d-flex justify-content-end">
             <a href="logout.php"><button class=" btn btn-default">Log Out</button></a>
-
          </div>
     </div>
     </nav>

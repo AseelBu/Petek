@@ -10,17 +10,17 @@ if (
     $familyId = htmlspecialchars($_POST['familyId']);
     $invitedId = htmlspecialchars($_POST['invitedId']);
     if(strlen($invitedId)==0){
-        header('Location:../invite.php?sent=no');
+        header('Location:../invites.php?sent=no');
         exit();
     }
 
     $sql = "INSERT INTO `invites`(`senderId`, `sendedToId`, `familyId`) 
     VALUES ('$userId','$invitedId','$familyId')";
     if ($conn->query($sql) === true) {
-        header('Location:../invite.php?sent=yes');
+        header('Location:../invites.php?sent=yes');
         exit();
     } else {
-        // header('Location:../invite.php?sent=no');
+        // header('Location:../invites.php?sent=no');
         // exit();
         echo $conn->error;
     }

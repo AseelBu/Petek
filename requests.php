@@ -52,17 +52,24 @@ if (!$conn->query($sql)) {
                     </thead>
                     <tbody>
                         <!--requests will show here-->
-                        <tr v-for="request in requests" {{request.id}}>
+                        <tr v-for="request in requests" data-id="{{request.id}}">
                             <td>{{request.email}}</td>
                             <td>{{request.date}}</td>
-                            <td><span><a><button type="button" class="btn btn-success"><i class="fas fa-user-plus"></i> Approve</button></a></span> 
-                            <span class="ml-3"><a><button type="button" class="btn btn-danger"> <i class="fas fa-user-times"></i> Decline</button></a></span></td>
+                            <td>
+                                <span>
+                                <a><button type="button" class="btn btn-success approveBtn"><i class="fas fa-user-plus"></i> Approve</button></a>
+                                </span> 
+                                <span class="ml-3">
+                                <a><button type="button" class="btn btn-danger declineBtn"> <i class="fas fa-user-times"></i> Decline</button></a>
+                                </span>
+                            </td>
                         </tr>
                     </tbody>
 
 
                 </table>
                 <input type="hidden" id="userId" name="userId" value="<?= $userId ?>">
+                <input type="hidden" id="familyId" name="familyId" value="<?= $familyId ?>">
         </div>
     </div>
 
@@ -82,8 +89,8 @@ if (!$conn->query($sql)) {
 <script>
     new Vue({
       el: "#app",
-    //   data() {
-    //     return {
+      data() {
+        return {
     //       user: {
     //         firstName: "",
     //         lastName: "",
@@ -95,9 +102,9 @@ if (!$conn->query($sql)) {
     //       },
     //       hobbies: ["Running", "Gaming", "Surffing", "Watch TV", "Books"],
     //       searchedHobbie: "",
-    //     }
-    //   },
-    //   computed: {
+        }
+      },
+      computed: {
     //     filterdHobbies() {
     //       if (this.searchedHobbie) {
     //         let filteredHobbies = this.hobbies.filter((hobbie) => {
@@ -123,7 +130,7 @@ if (!$conn->query($sql)) {
     //       let ageDate = new Date(ageDifMs); // miliseconds from epoch
     //       return Math.abs(ageDate.getUTCFullYear() - 1970);
     //     }
-    //   },
+      },
       methods: {
     //     getRequests() {
     //       console.log(JSON.stringify(this.user));
@@ -133,12 +140,12 @@ if (!$conn->query($sql)) {
     //       this.user.hobbies = [];
     //     },
       },
-    //   filters: {
+      filters: {
     //     capitalize: function (value) {
     //       return nameCapitalized = value.charAt(0).toUpperCase() + value.slice(1)
     //     },
     //   }
-    // });
+    });
   </script>
 </body>
 <?php $conn->close(); ?>

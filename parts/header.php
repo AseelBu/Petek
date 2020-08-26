@@ -27,6 +27,7 @@
                 'index.php'
             ); ?>" href="index.php">Home <span class="sr-only">(current)</span></a>
         </li>
+        <?php if (!isset($_SESSION['userId'])): ?>
         <li class="nav-item">
             <a class="nav-link <?php active(
                 'login.php'
@@ -37,11 +38,12 @@
                 'signup.php'
             ); ?>" href="signup.php">Sign Up</a>
         </li>
+        <?php endif; ?>
         <?php if (isset($usermail) || isset($userId)): ?>
 
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle <?php active('index.php'); ?>
-                    " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle <?php active('index.php'); ?>" 
+                href="#" id="navbarlists" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Lists
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="listsDrop">
@@ -51,7 +53,7 @@
        
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle <?php active(
-                    'invite.php'
+                    'invites.php'
                 ); ?>" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Family
                 </a>
@@ -63,11 +65,13 @@
             
                    if (is_null($familyId)): ?>
                     <a class="dropdown-item" href="createFamily.php">| New family</a>
+                    <a class="dropdown-item" href="requests.php">| Request to join family</a>
+                    <a class="dropdown-item" href="invites.php">| View family invitations </a>
                    <?php endif;
                    //if user belongs to family
                    if (!is_null($familyId)): ?>
                     <a class="dropdown-item <?php active('familyMembers.php'); ?>" href="familyMembers.php">| View members</a>
-                    <a class="dropdown-item <?php active('invite.php'); ?>" href="invite.php">| Invite user to family</a>
+                    <a class="dropdown-item <?php active('invites.php'); ?>" href="invites.php">| Invite user to family</a>
                     <?php //if user is admin to family
                      if (!is_null($isAdmin) && $isAdmin): ?>
                     <a class="dropdown-item <?php active('requests.php'); ?>" href="requests.php">| Join requests</a>

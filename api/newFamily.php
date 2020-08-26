@@ -15,16 +15,19 @@ if (isset($_POST['userId']) && isset($_POST['familyName'])) {
             $sql = "UPDATE `users` SET `familyId`=$familyId WHERE `id`=$userId";
             if ($conn->query($sql) === true) {
             
-                header('Location:../invite.php?status=newFamily');
+                header('Location:../invites.php?status=newFamily');
                 exit();
             } else {
+                // error updating family Id for user
                  echo $conn->error;
             }
         } else {
+            //error inserting family 
              echo $conn->error;
         }
         
     } else {
+        // error inserting family admin
          echo $conn->error;
     }
 }

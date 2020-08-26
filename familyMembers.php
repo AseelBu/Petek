@@ -54,8 +54,8 @@ if (is_null($familyId)) {
                         <tbody>
                             <!--requests will show here-->
                             <tr>
-                                <td>e@e.com</td>
-                                <td>5/5/20</td>
+                                <td>{{e@e.com}}</td>
+                                <td>{{5/5/20}}</td>
                                 <td><span class="mx-3"><i class="fas fa-user-check"></i></span><span><i class="fas fa-user-times"></i></span></td> 
                             </tr>
                                 

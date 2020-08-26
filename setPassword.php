@@ -86,8 +86,11 @@ $conn->close();
             if (isset($_GET["status"]) && $_GET["status"] == "nopswrd") :
                 $MSG = "<strong>Insert password in order to continue</strong>";
             ?>
-                <div class="alert alert-danger" role="alert">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <?= $MSG ?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
                 </div>
 
             <?php endif; ?>
@@ -113,8 +116,11 @@ $conn->close();
                     if (isset($_GET["status"]) && ($_GET["status"] == "misMatch" || $_GET["status"] == "shortPass")) :
                         $MSG = ($_GET["status"] == "misMatch") ?  "Inserted Passwords are not identical" : "<strong>Password too short.</strong> <br>It must contain at lest 5 characters";
                     ?>
-                        <div class="alert alert-danger" role="alert">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             <?= $MSG ?>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
                         </div>
 
                     <?php endif; ?>

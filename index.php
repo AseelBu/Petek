@@ -122,31 +122,7 @@ else {
     }
 }
 
-if(isset($_SESSION['userId'])){
-    $sql = "SELECT `familyId` 
-    FROM `users` 
-    WHERE `id`=$userId";
-    
-      $result = $conn->query($sql);
-      if ($result->num_rows > 0) {
-          $row = $result->fetch_assoc();
-         
-          $_SESSION['familyId'] = $row['familyId'];
-      }else{
-        echo ("error finding user's family or user doesn't have family");
-      }
-    }else{
-      //TODO user id not set in session??
-    }
 
-    $_SESSION['isAdmin']=FALSE;
-    $sql = "SELECT `id` FROM `fadmin` WHERE `id`=$userId";
-if ($conn->query($sql)) {
-    $_SESSION['isAdmin']=TRUE;
-}
-
-$familyId = isset($_SESSION['familyId']) ? $_SESSION['familyId'] : null;
-$isAdmin=isset($_SESSION['isAdmin']) ? $_SESSION['isAdmin'] : null;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -176,13 +152,19 @@ $isAdmin=isset($_SESSION['isAdmin']) ? $_SESSION['isAdmin'] : null;
 
     <div class="container my-5 px-4 py-4 overflow-auto">
         <?php if (isset($_GET['status']) && $_GET['status'] == 'noAccess'): ?>
-            <div class="alert alert-danger" role="alert">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 You are not authorized to access the requested page!
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
         <?php endif; ?>
         <?php if (isset($_GET['status']) && $_GET['status'] == 'noProducts'): ?>
-            <div class="alert alert-warning" role="alert">
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 The List you chose doesn't have any products
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
         <?php endif; ?>
         <div class="container row d-flex justify-content-between">

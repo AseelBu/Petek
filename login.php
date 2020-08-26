@@ -35,21 +35,30 @@ $password = isset($_COOKIE['password']) ? $_COOKIE['password'] : "";
       <!-- the user tried to access pages without logging in -->
       <?php
       if (isset($_GET["status"]) && $_GET["status"] == "showMsg") : ?>
-        <div class="alert alert-warning" role="alert">
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
           Please Login to view the page
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
         </div>
       <?php endif; ?>
       <?php
       if (isset($_GET["email"])) : ?>
-        <div class="alert alert-info" role="alert">
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
           A link to reset your password was sent to the Email:<br><?= $_GET['email'] ?>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
         </div>
       <?php endif; ?>
       <!-- The user finished signing up -->
       <?php
       if (isset($_GET["status"]) && $_GET["status"] == "signUp") : ?>
-        <div class="alert alert-success" role="alert">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
           <strong>Thanks for signing up! </strong><br>Login to get started
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
         </div>
       <?php endif; ?>
       <h2><b>Login</b></h2>
@@ -79,8 +88,11 @@ $password = isset($_COOKIE['password']) ? $_COOKIE['password'] : "";
             if (isset($_GET["status"]) && ($_GET["status"] == "wrongpassword" || $_GET["status"] == "wrongemail")) :
               $MSG = ($_GET["status"] == "wrongpassword") ?  "wrong password" : "wrong email";
             ?>
-              <div class="alert alert-danger" role="alert">
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong>Login Failed</strong>-<?= $MSG ?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
               </div>
             <?php endif; ?>
             <span class="psw"> <a href="resetPassword.php">Forgot password?</a></span>

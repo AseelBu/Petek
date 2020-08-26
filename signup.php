@@ -30,8 +30,11 @@ if (isset($_GET['status']) && $_GET["status"] == "exists") {
     <div class="py-3 px-3 shadow main" id="signUp">
       <?php
       if (isset($_GET["status"]) && ($_GET["status"] == "requireMail")) : ?>
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
           <strong>An Email is required for signing up</strong>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
         </div>
 
       <?php endif; ?>
@@ -72,8 +75,11 @@ if (isset($_GET['status']) && $_GET["status"] == "exists") {
                 $MSG = "Incorrect phone format";
               }
             ?>
-              <div class="alert alert-danger" role="alert">
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong><?= $MSG ?></strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
               </div>
 
             <?php endif; ?>
