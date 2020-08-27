@@ -9,7 +9,7 @@ $sql = "SELECT `id` FROM `fadmin` WHERE `id`=$userId";
 if (!$conn->query($sql)) {
     header('Location:../index.php?status=notAdmin');
     exit();
-} 
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,20 +28,16 @@ if (!$conn->query($sql)) {
             <nav class="navbar navbar-expand-lg navbar-light sticky-top">
                 <?php require 'parts/header.php'; ?>
 
-                <div class="d-flex justify-content-end">
-                    <a href="logout.php"><button class=" btn btn-default">Log Out</button></a>
-
-                </div>
         </div>
         </nav>
         </div>
     </header>
-
-    <div class="container my-5 px-4 py-4 overflow-auto">
+<div id="app">
+    <div class="container my-5 px-4 py-4  overflow-auto">
    <div> <h2>Join Requests</h2></div>
     <div class="table-responsive">
            
-                <table class="table table-hover text-center shadow rounded" id="products">
+                <table class="table table-hover text-center shadow rounded" id="requests">
                     <thead>
                         <tr>
                             <th scope="col">Email</th>
@@ -51,8 +47,8 @@ if (!$conn->query($sql)) {
                         </tr>
                     </thead>
                     <tbody>
-                        <!--requests will show here-->
-                        <tr v-for="request in requests" data-id="{{request.id}}">
+                        <!-- requests will show here--->
+                      <!---  <tr v-for="request in requests" data-id="{{request.id}}">
                             <td>{{request.email}}</td>
                             <td>{{request.date}}</td>
                             <td>
@@ -63,15 +59,22 @@ if (!$conn->query($sql)) {
                                 <a><button type="button" class="btn btn-danger declineBtn"> <i class="fas fa-user-times"></i> Decline</button></a>
                                 </span>
                             </td>
-                        </tr>
+                        </tr> -->
                     </tbody>
 
 
                 </table>
+                
+        </div>
+        <div class="d-none d-flex justify-content-center" id="msgNoRequests">
+            <div class="shadow main text-center px-5 py-5">
+            <h4>You don't have new requests<h4>
+</div>
+        </div>
                 <input type="hidden" id="userId" name="userId" value="<?= $userId ?>">
                 <input type="hidden" id="familyId" name="familyId" value="<?= $familyId ?>">
-        </div>
     </div>
+</div>
 
     <?php require_once 'parts/footer.php'; ?>
 
@@ -91,20 +94,20 @@ if (!$conn->query($sql)) {
       el: "#app",
       data() {
         return {
-    //       user: {
-    //         firstName: "",
+          user: {
+            // firstName: $userId,
     //         lastName: "",
     //         bio: "",
     //         favColor: "",
     //         githubURL: "",
     //         hobbies: [],
     //         birthday: ""
-    //       },
+          },
     //       hobbies: ["Running", "Gaming", "Surffing", "Watch TV", "Books"],
     //       searchedHobbie: "",
         }
       },
-      computed: {
+      computed:{
     //     filterdHobbies() {
     //       if (this.searchedHobbie) {
     //         let filteredHobbies = this.hobbies.filter((hobbie) => {
@@ -144,7 +147,7 @@ if (!$conn->query($sql)) {
     //     capitalize: function (value) {
     //       return nameCapitalized = value.charAt(0).toUpperCase() + value.slice(1)
     //     },
-    //   }
+      }
     });
   </script>
 </body>

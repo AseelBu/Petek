@@ -18,7 +18,7 @@ require_once 'parts/sessionCheck.php';
     <div class="fixed-top">
       <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <?php require 'parts/header.php'; ?>
-        
+       
     </div>
     </nav>
     </div>
@@ -58,25 +58,9 @@ require_once 'parts/sessionCheck.php';
                 </div>
                 <?php endif; ?>
 
-                <!-- tabs  -->
-                <!-- <ul class="nav nav-tabs" id="inviteTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link active" id="send-tab" data-toggle="tab" href="#sendInvite" role="tab" aria-controls="send" aria-selected="true">
-                        New Invite
-                        </a>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="view-tab" data-toggle="tab" href="#viewInvite" role="tab" aria-controls="view" aria-selected="false">
-                        View Invites
-                        </a>
-                    </li>
-                    
-                </ul> -->
-                <!-- <div class="tab-content" id="inviteTabContent">
-                    <div class="tab-pane fade show active py-3 px-2 border border-top-0" id="sendInvite" role="tabpanel" aria-labelledby="send-tab"> -->
-                   <?php if (!is_null($familyId)): ?>
-                    <h2><b>Invite User to your family</b></h2><br>
-                        <form class="align-middle " id="invite" method="POST" action="api/newInvite.php" >
+                   <?php if (is_null($familyId)): ?>
+                    <h2><b>Request to join family</b></h2><br>
+                        <form class="align-middle " id="sendRequest" method="POST" action="api/newRequest.php" >
                             <div class="form-group col-md-12">
                             <div class="form-row ">
 
@@ -102,63 +86,12 @@ require_once 'parts/sessionCheck.php';
                             <input type="submit" class="btn btn-default d-none" id="submitInvite" value="Send">
                             </div>
                         </form>
-                    <!-- </div> -->
-                    <?php else :?>
-                    <!-- View Invites if user doesn't have family-->
-                    <!-- <div class="tab-pane fade" id="viewInvite" role="tabpanel" aria-labelledby="view-tab"> -->
-                    <h2><b>Family Invitations</b></h2><br>
+                 </div>
+                   <?php else: ?>
 
-                    <input type="hidden" id="userId" name="userId" value="<?= $userId ?>">
-                               
-
-                        <div class="table-responsive" id="viewInvites">
-                
-                            <table class="table table-hover text-center shadow rounded" id="invites">
-                                <thead>
-                                    <tr>
-                                        <th scope="col"><big>Sender</big></th>
-                                        <th scope="col" class="ml-3"><big>Family name</big></th>
-                                        <th scope="col" class="ml-3"><big>Actions</big></th>
-                                        
-                                    </tr>
-                                </thead>
-                                <tbody >
-                                    <!--invites will go here-->
-                                    
-                                </tbody>
-
-
-                            </table>
-                            <div class="d-none" id="msgNoInvites">
-                                <h4>You don't have any invitations<h4>
-                            </div>
-                        </div>
-                    
-                    <!-- </div> -->
-
-                </div>
-                    
                     <?php endif; ?>
                 
-            
-                    
-                <!-- <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link active" href="#">Active</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-            </li>
-                </ul> -->
-    
-    
-        <!-- </div> -->
+        
         
     </div>
 

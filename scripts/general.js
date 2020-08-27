@@ -86,6 +86,7 @@ function addProductToTable(product) {
         $('table#products tbody#uncheckedRows').append(tr);
     }
 }
+
 function addInviteToTable(invite) {
     let familyId = invite.familyId;
     let familyName = invite.familyName;
@@ -113,6 +114,54 @@ function addInviteToTable(invite) {
                     </td>
             </tr>`;
     $('table#invites tbody').append(tr);
+
+}
+
+// add request to the view requests table/
+function addRequestToTable(request) {
+    let requestId = request.requestId;
+    let senderId = request.senderId;
+    let senderEmail = request.senderEmail;
+    let date = request.date;
+
+
+    let tr = `<tr data-id="${requestId}">
+                <td class="sender" data-id="${senderId}"><b>${senderEmail}</b></td>
+                <td class="date ml-3" ><b>${date}</b></td>
+                <td class="actions ml-3">
+                
+                    <span>
+                        <a><button type="button" class="btn btn-success approveBtn"><i class="fas fa-user-plus"></i> Approve</button></a>
+                    </span> 
+                    <span class="mt-md-5">
+                        <a><button type="button" class="btn btn-danger declineBtn"> <i class="fas fa-user-times"></i> Decline</button></a>
+                    </span>
+
+                    </td>
+            </tr>`;
+    $('table#requests tbody').append(tr);
+
+}
+
+function addMemberToTable(member) {
+    let id = member.id;
+    let Email = member.email;
+    let Nickname = member.Nickname;
+
+    let tr = `<tr data-id="${id}">
+                <td class="email"><b>${Email}</b></td>
+                <td class="nickname ml-3" ><b>${Nickname}</b></td>
+                <td class="actions ml-3">
+                
+                    <span>
+                        <a>
+                        <button type="button" class="btn btn-danger btnRemoveMember"> <i class="fas fa-user-times"></i> Remove from family</button>
+                        </a>
+                    </span>
+                    
+                    </td>
+            </tr>`;
+    $('table#members tbody').append(tr);
 
 }
 
@@ -409,150 +458,153 @@ $(document).ready(function () {
 
     /***********login script**********/
     /***********invite script**********/
-    let userId;
-    if ($('input#userId').length !== 0) {
-        userId = $('input#userId').val();
-    }
+    // ********************send invite *********/
+    if (document.URL.includes("invites.php")) {
 
-    $('input#invitedInfo').autocomplete({
-
-        source: function (request, response) {
-            $.ajax({
-                url: 'api/getUsersForInvite.php',
-                type: 'GET',
-                data: {
-                    term: request.term,
-                    userId: userId
-                },
-                success: function (data) {
-                    // users = [];
-                    // $(data).each(function (i, user) {
-                    // users.push(user['Email']);
-                    // });
-                    response($.map(data, function (item) {
-
-                        return {label: item['Email'], value: item['Email'], id: item['id']};
-                    }));
-                },
-                error: function (result) {
-                    console.log('getUsersForInvite autocomplete Error');
-                }
-            });
-        },
-        select: function (event, ui) { // console.log(ui.item.value);
-            $("input#invitedId").val(ui.item.id); // ui.item.value contains the id of the selected label
-        },
-
-        appendTo: '#usersByMail',
-        minLength: 1
-    }).focus(function () {
-        $(this).autocomplete('search', $(this).val());
-        $('span#inviteMsg').empty();
-    });
-
-    $('input#btnSendInvite').click(function (e) {
-        $('span#inviteMsg').empty();
-        let invitedEmail = $('input#invitedInfo').val();
-        let userId = $('input#userId').val();
-
-        // if mail is empty
-        if (invitedEmail.length < 1) {
-            $('span#inviteMsg').append('Please enter the Email of the invited user');
-            return;
+        let userId = null;
+        if ($('input#userId').length !== 0) {
+            userId = $('input#userId').val();
         }
 
+        $('input#invitedInfo').autocomplete({
 
-        $.ajax({
-            type: 'GET',
-            url: 'api/getUsersForInvite.php',
-            data: {
-                term: invitedEmail,
-                userId: userId
+            source: function (request, response) {
+                $.ajax({
+                    url: 'api/getUsersForInvite.php',
+                    type: 'GET',
+                    data: {
+                        term: request.term,
+                        userId: userId
+                    },
+                    success: function (data) {
+                        // users = [];
+                        // $(data).each(function (i, user) {
+                        // users.push(user['Email']);
+                        // });
+                        response($.map(data, function (item) {
+
+                            return {label: item['Email'], value: item['Email'], id: item['id']};
+                        }));
+                    },
+                    error: function (result) {
+                        console.log('getUsersForInvite autocomplete Error');
+                    }
+                });
+            },
+            select: function (event, ui) { // console.log(ui.item.value);
+                $("input#invitedId").val(ui.item.id); // ui.item.value contains the id of the selected label
             },
 
-            success: function (response) {
-
-                if (response.length < 1) {
-
-                    $('span#inviteMsg').append('Please Choose user from the suggested list only');
-                } else {
-                    $('#submitInvite').click();
-                }
-            },
-            error: function (xhr, ajaxOptions, error) {
-                console.log(error);
-            }
+            appendTo: '#usersByMail',
+            minLength: 1
+        }).focus(function () {
+            $(this).autocomplete('search', $(this).val());
+            $('span#inviteMsg').empty();
         });
 
-    });
+        $('input#btnSendInvite').click(function (e) {
+            $('span#inviteMsg').empty();
+            let invitedEmail = $('input#invitedInfo').val();
+            let userId = $('input#userId').val();
 
-    // ********* view invites ***********/
-    function getInvites() {
-        let userId = $('input#userId').val();
-        $('table#invites tbody').html('');
-        $.ajax({
-            type: "GET",
-            url: "api/getInvites.php",
-            data: {
-                userId: userId
-            },
-            success: function (invites) {
-                if (invites.length > 0) {
-                    $('div#msgNoInvites').addClass("d-none");
-                    if ($('table#invites ').hasClass("d-none")) {
-                        $('table#invites ').removeClass("d-none")
-                    }
-
-                    for (item of invites) {
-                        invite = {
-                            senderId: item['senderId'],
-                            senderEmail: item['Email'],
-                            familyId: item['familyId'],
-                            familyName: item['name']
-
-                        };
-                      
-                        addInviteToTable(invite);
-                        // listProducts.push(product);
-                    }
-                } else { // no new invitations
-                   
-                    $('table#invites ').addClass("d-none");
-                    if ($('div#msgNoInvites').hasClass("d-none")) {
-                        $('div#msgNoInvites').removeClass("d-none")
-                    }
-                }
-            },
-            error: function (xhr, ajaxOptions, error) {
-                console.log(error);
+            // if mail is empty
+            if (invitedEmail.length < 1) {
+                $('span#inviteMsg').append('Please enter the Email of the invited user');
+                return;
             }
+
+
+            $.ajax({
+                type: 'GET',
+                url: 'api/getUsersForInvite.php',
+                data: {
+                    term: invitedEmail,
+                    userId: userId
+                },
+
+                success: function (response) {
+
+                    if (response.length < 1) {
+
+                        $('span#inviteMsg').append('Please Choose user from the suggested list only');
+                    } else {
+                        $('#submitInvite').click();
+                    }
+                },
+                error: function (xhr, ajaxOptions, error) {
+                    console.log(error);
+                }
+            });
+
         });
-    };
-    getInvites();
 
-    $(document).on('click', 'button.btnRequestJoin', function (e) {
+        // ********* view invites ***********/
+        function getInvites() {
+            let userId = $('input#userId').val();
+            $('table#invites tbody').html('');
+            $.ajax({
+                type: "GET",
+                url: "api/getInvites.php",
+                data: {
+                    userId: userId
+                },
+                success: function (invites) {
+                    if (invites.length > 0) {
+                        $('div#msgNoInvites').addClass("d-none");
+                        if ($('table#invites ').hasClass("d-none")) {
+                            $('table#invites ').removeClass("d-none")
+                        }
+
+                        for (item of invites) {
+                            invite = {
+                                senderId: item['senderId'],
+                                senderEmail: item['Email'],
+                                familyId: item['familyId'],
+                                familyName: item['name']
+
+                            };
+
+                            addInviteToTable(invite);
+                            // listProducts.push(product);
+                        }
+                    } else { // no new invitations
+
+                        $('table#invites ').addClass("d-none");
+                        if ($('div#msgNoInvites').hasClass("d-none")) {
+                            $('div#msgNoInvites').removeClass("d-none")
+                        }
+                    }
+                },
+                error: function (xhr, ajaxOptions, error) {
+                    console.log(error);
+                }
+            });
+        };
+        getInvites();
 
 
-        let familyId = $(this).parents('tr').attr('data-id');
-        let userId = $('input#userId').val();
-        let senderId = $(this).parents('tr').find('.sender').attr('data-id');
+        $(document).on('click', 'button.btnRequestJoin', function (e) {
 
-        
 
-        $.ajax({
-            type: "POST",
-            url: "api/updateInvite.php",
-            data: {
-                senderId : senderId,
-                sendedTo : userId,
-                familyId : familyId,
-                approved : 'Y'
+            let familyId = $(this).parents('tr').attr('data-id');
+            let userId = $('input#userId').val();
+            let senderId = $(this).parents('tr').find('.sender').attr('data-id');
 
-            },
 
-            success: function (response) {
-                // console.log(response);
-                // if (response == "updated") {
+            $.ajax({
+                type: "POST",
+                url: "api/updateInvite.php",
+                data: {
+                    senderId: senderId,
+                    sendedTo: userId,
+                    familyId: familyId,
+                    approved: 'Y'
+
+                },
+
+                success: function (response) {
+                    // console.log(response);
+                    // if (response == "updated") {
                     $.ajax({
                         type: 'POST',
                         url: 'api/newRequest.php',
@@ -561,87 +613,191 @@ $(document).ready(function () {
                             userId: userId
                         },
                         success: function (response) {
-                          
+
                             getInvites();
                         },
                         error: function (xhr, ajaxOptions, error) {
                             console.log(error);
                         }
                     });
-                // }
-            },
-            error: function (xhr, ajaxOptions, error) {
-                console.log(error);
-            }
+                    // }
+                },
+                error: function (xhr, ajaxOptions, error) {
+                    console.log(error);
+                }
+            });
+
+
         });
 
 
-    });
+        $(document).on('click', 'button.btnDeclineInvite', function (e) {
 
+            let familyId = $(this).parents('tr').attr('data-id');
+            let userId = $('input#userId').val();
+            let senderId = $(this).parents('tr').find('.sender').attr('data-id');
+            $.ajax({
+                type: "POST",
+                url: "api/updateInvite.php",
+                data: {
+                    senderId: senderId,
+                    sendedTo: userId,
+                    familyId: familyId,
+                    approved: 'N'
+                },
+                success: function (response) {
+                    console.log(response);
+                    getInvites();
+                },
+                error: function (xhr, ajaxOptions, error) {
+                    console.log(error);
+                }
+            });
 
-$(document).on('click', 'button.btnDeclineInvite', function (e) {
-    
-        let familyId = $(this).parents('tr').attr('data-id');
-        let userId = $('input#userId').val();
-        let senderId = $(this).parents('tr').find('.sender').attr('data-id');
-        $.ajax({
-            type: "POST",
-            url: "api/updateInvite.php",
-            data: {
-                senderId : senderId,
-                sendedTo : userId,
-                familyId : familyId,
-                approved : 'N'
-            },
-            success: function (response) {
-                console.log(response);
-                getInvites();
-            },
-            error: function (xhr, ajaxOptions, error) {
-                console.log(error);
-            }
         });
 
-    });
-
-
+    }
     // ********* join requests *******/
-    $(document).on('click', 'button.approveBtn', function (e) {
+    // *****view requests*****/
+    if (document.URL.includes("requests.php")) {
 
-        let requestId = $(this).parents('tr').attr('data-id');
-        let reqStatus = 'Y';
-        let userId = $('input#userId').val();
-        let familyId = $('input#familyId').val();;
-    });
+        function getRequests() {
+            let adminId = $('input#userId').val();
+            $('table#requests tbody').html('');
+            $.ajax({
+                type: "GET",
+                url: "api/getRequests.php",
+                data: {
 
-    $(document).on('click', 'button.declineBtn', function (e) {
+                    adminId: adminId
+                },
 
-        let requestId = $(this).parents('tr').attr('data-id');
-        let reqStatus = 'N';
-        let userId = $('input#userId').val();
-        let familyId = $('input#familyId').val();;
-        updateRequest(requestId, reqStatus, userId, familyId)
+                success: function (requests) {
+                    if (requests.length > 0) {
+                        $('div#msgNoRequests').addClass("d-none");
+                        if ($('table#requests ').hasClass("d-none")) {
+                            $('table#requests ').removeClass("d-none")
+                        }
 
-    });
+                        for (item of requests) {
+                            
+                            request = {
+                                requestId: item['id'],
+                                senderId: item['userId'],
+                                senderEmail: item['Email'],
+                                date: item["date"]
 
-    function updateRequest(requestId, reqStatus, userId, familyId) {
-        $.ajax({
-            type: "POST",
-            url: "api/insertFamilyMember.php",
-            data: {
-                requestId: requestId,
-                reqStatus: reqStatus,
-                userId: userId,
-                familyId: familyId
-            },
+                            };
 
-            success: function (response) {
-                // remove request row from requests list
-                // TODO
-            },
-            error: function (xhr, ajaxOptions, error) {
-                console.log(error);
-            }
+                            addRequestToTable(request);
+
+                        }
+                    } else { // no new requests
+
+                        $('table#requests ').addClass("d-none");
+                        if ($('div#msgNoRequests').hasClass("d-none")) {
+                            $('div#msgNoRequests').removeClass("d-none")
+                        }
+                    }
+                },
+                error: function (xhr, ajaxOptions, error) {
+                    console.log(error);
+                }
+            });
+        }
+        getRequests();
+
+        $(document).on('click', 'button.approveBtn', function (e) {
+
+            let requestId = $(this).parents('tr').attr('data-id');
+            let reqStatus = 'Y';
+            let senderId = $(this).parents('tr').find('.sender').attr('data-id');
+            let familyId = $('input#familyId').val();
+            updateRequest(requestId, reqStatus, senderId, familyId)
         });
+
+        $(document).on('click', 'button.declineBtn', function (e) {
+
+            let requestId = $(this).parents('tr').attr('data-id');
+            let reqStatus = 'N';
+            let senderId = $(this).parents('tr').find('.sender').attr('data-id');
+            let familyId = $('input#familyId').val();
+            updateRequest(requestId, reqStatus, senderId, familyId)
+
+        });
+
+        function updateRequest(requestId, reqStatus, userId, familyId) {
+            $.ajax({
+                type: "POST",
+                url: "api/handleRequest.php",
+                data: {
+                    requestId: requestId,
+                    reqStatus: reqStatus,
+                    userId: userId,
+                    familyId: familyId
+                },
+
+                success: function (response) {
+                    getRequests();
+                    // remove request row from requests list
+                    // TODO
+                },
+                error: function (xhr, ajaxOptions, error) {
+                    console.log(error);
+                }
+            });
+        }
+    }
+
+    // ********send request***********/
+    if (document.URL.includes("sendRequest.php")) {
+
+    }
+    // ****** view family members *****/
+    if (document.URL.includes("familyMembers.php")) {
+        function getFamilyMembers() {
+            let familyId = $('input#familyId').val();
+            $('table#members tbody').html('');
+            $.ajax({
+                type: "GET",
+                url: "api/getFamilyMembers.php",
+                data: {
+
+                    familyId: familyId
+                },
+
+                success: function (members) {
+                    if (members.length > 0) {
+                        $('div#msgNoMembers').addClass("d-none");
+                        if ($('table#members ').hasClass("d-none")) {
+                            $('table#members ').removeClass("d-none")
+                        }
+
+                        for (item of members) {
+                            Nickname = item['Nickname'] === null ? "---" : item['Nickname'];
+                            member = {
+                                id: item['id'],
+                                email: item['Email'],
+                                Nickname: Nickname
+
+                            };
+
+                            addMemberToTable(member);
+
+                        }
+                    } else { // no new members
+
+                        $('table#members ').addClass("d-none");
+                        if ($('div#msgNoMembers').hasClass("d-none")) {
+                            $('div#msgNoMembers').removeClass("d-none")
+                        }
+                    }
+                },
+                error: function (xhr, ajaxOptions, error) {
+                    console.log(error);
+                }
+            });
+        }
+        getFamilyMembers();
     }
 });

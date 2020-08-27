@@ -29,10 +29,7 @@ if (is_null($familyId)) {
     <div class="fixed-top">
       <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <?php require 'parts/header.php'; ?>
-        <div class="d-flex justify-content-end">
-                    <a href="logout.php"><button class=" btn btn-default">Log Out</button></a>
-
-         </div>
+       
     </div>
     </nav>
     </div>
@@ -40,28 +37,33 @@ if (is_null($familyId)) {
 
 
         <div class="container my-5 px-4 py-4 overflow-auto">
-            <div><h2>Family Members</h2></div>
+            <div class="my-5"><h2>Family Members</h2></div>
             <div class="table-responsive mt-4">
             
-                    <table class="table table-hover text-center shadow rounded" id="products">
+                    <table class="table table-hover text-center shadow rounded" id="members">
                         <thead>
                             <tr>
                                 <th scope="col">Email</th>
-                                <th scope="col">Joining Date</th>
+                                <th scope="col">Nickname</th>
+                                <!-- <th scope="col">Joining Date</th> -->
                                 <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <!--requests will show here-->
-                            <tr>
+                            <!-- <tr>
                                 <td>{{e@e.com}}</td>
                                 <td>{{5/5/20}}</td>
                                 <td><span class="mx-3"><i class="fas fa-user-check"></i></span><span><i class="fas fa-user-times"></i></span></td> 
-                            </tr>
+                            </tr> -->
                                 
                         </tbody>
                     </table>
+                    <div class="d-none" id="msgNoMembers">
+                                <h4>Your family doesn't have any members yet<h4>
+                    </div>
                     <input type="hidden" id="userId" name="userId" value="<?= $userId ?>">
+                    <input type="hidden" id="familyId" name="familyId" value="<?= $familyId ?>">
             </div>
         </div>
 

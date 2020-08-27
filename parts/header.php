@@ -83,7 +83,16 @@
         <?php endif; ?>
     </ul>
 
+    <?php if (isset($_SESSION['userId'])): ?>
+        <span class="px-3">
+            <a href="#"> <?=  $_SESSION['usermail'] ; ?> </a>
+        </span>
+                
+        <div class="d-flex justify-content-end">
+            <a href="logout.php"><button class=" btn btn-default">Log Out</button></a>
 
+        </div>
+    <?php endif; ?>
     <!-- <div class="d-flex justify-content-end">
 
                         <a href="login.php"><button class=" btn btn-default">Log Out</button></a>

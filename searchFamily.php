@@ -19,10 +19,7 @@ require_once 'parts/sessionCheck.php';
     <div class="fixed-top">
       <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <?php require 'parts/header.php'; ?>
-        <div class="d-flex justify-content-end">
-                    <a href="logout.php"><button class=" btn btn-default">Log Out</button></a>
-
-         </div>
+        
     </div>
     </nav>
     </div>

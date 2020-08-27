@@ -6,9 +6,10 @@ header('Content-Type: application/json');
 if (isset($_GET['adminId'])) {
     $adminId = $_GET['adminId'];
     // get the most recent list for user
-    $sql = "SELECT `request`.`id`, `users`.`Email`,`request`.`date`
+    $sql = "SELECT `request`.`id`, `request`.`userId`,`users`.`Email`,Date_format(`request`.`date`,'%d/%m/%y') as date
     FROM `request` INNER JOIN `users` ON `request`.`userId`=`users`.`id`
-    WHERE `approved`='W' AND `adminId`=$adminId  ";
+    WHERE `approved`='W' AND `adminId`=$adminId
+    ORDER BY `request`.`date` DESC";
     $result = $conn->query($sql);
     $requests = array();
 
