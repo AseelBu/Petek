@@ -3,7 +3,7 @@
             <nav class="navbar navbar-expand-lg navbar-light sticky-top"> -->
 
 <a class="navbar-brand" href="index.php">
-    <img src="images/post-it.png" class="img-fluid rounded mx-auto" width="30" height="30" alt="Sticky Note Icon">Petek</a>
+    <img src="images/post-it.png" class="img-fluid rounded mx-auto" width="30" height="30" alt="Petek">Petek</a>
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
 </button>
@@ -65,7 +65,7 @@
             
                    if (is_null($familyId)): ?>
                     <a class="dropdown-item" href="createFamily.php">| New family</a>
-                    <a class="dropdown-item" href="requests.php">| Request to join family</a>
+                    <a class="dropdown-item" href="sendRequest.php">| Request to join family</a>
                     <a class="dropdown-item" href="invites.php">| View family invitations </a>
                    <?php endif;
                    //if user belongs to family
@@ -73,7 +73,7 @@
                     <a class="dropdown-item <?php active('familyMembers.php'); ?>" href="familyMembers.php">| View members</a>
                     <a class="dropdown-item <?php active('invites.php'); ?>" href="invites.php">| Invite user to family</a>
                     <?php //if user is admin to family
-                     if (!is_null($isAdmin) && $isAdmin): ?>
+                     if (!is_null($isAdmin) && $isAdmin===TRUE): ?>
                     <a class="dropdown-item <?php active('requests.php'); ?>" href="requests.php">| Join requests</a>
                    <?php endif;endif;
                    ?>

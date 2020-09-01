@@ -4,7 +4,7 @@ require_once '../db.php';
 if (
     isset($_POST['userId']) &&
     isset($_POST['familyId']) 
-) {
+){
     $userId = htmlspecialchars($_POST['userId']);
     $familyId = htmlspecialchars($_POST['familyId']);
 
@@ -18,7 +18,7 @@ if (
         // create new request
         $sql = "INSERT INTO `request`( `userId`, `adminId`) VALUES ($userId,$adminId)";
         if ($conn->query($sql) === true) {
-        header('Location:../invites.php?sent=yes');
+        header('Location:../sendRequest.php?sent=yes');
         exit();
         } else {
         // header('Location:../invites.php?sent=no');
@@ -27,7 +27,7 @@ if (
          }
     }
     else{
-        header('Location:../invites.php?sent=no');
+        header('Location:../sendRequest.php?sent=no');
         exit();
         //something wrong there is no admin for the family
         // echo $conn->error;

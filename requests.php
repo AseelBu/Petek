@@ -6,8 +6,9 @@ require_once 'parts/sessionCheck.php';
 
 //is the user an admin
 $sql = "SELECT `id` FROM `fadmin` WHERE `id`=$userId";
-if (!$conn->query($sql)) {
-    header('Location:../index.php?status=notAdmin');
+$result = $conn->query($sql);
+if ($result->num_rows <1) {
+    header('Location:index.php?status=notAdmin');
     exit();
 }
 ?>
@@ -66,11 +67,12 @@ if (!$conn->query($sql)) {
                 </table>
                 
         </div>
-        <div class="d-none d-flex justify-content-center" id="msgNoRequests">
-            <div class="shadow main text-center px-5 py-5">
+        <div class="d-none d-flex justify-content-center" >
+            <div class="shadow main text-center px-5 py-5 d-none" id="msgNoRequests">
             <h4>You don't have new requests<h4>
-</div>
+            </div>
         </div>
+        <div>
                 <input type="hidden" id="userId" name="userId" value="<?= $userId ?>">
                 <input type="hidden" id="familyId" name="familyId" value="<?= $familyId ?>">
     </div>

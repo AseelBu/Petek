@@ -147,10 +147,12 @@ function addMemberToTable(member) {
     let id = member.id;
     let Email = member.email;
     let Nickname = member.Nickname;
+    
 
     let tr = `<tr data-id="${id}">
                 <td class="email"><b>${Email}</b></td>
                 <td class="nickname ml-3" ><b>${Nickname}</b></td>
+                <?php if (!is_null($isAdmin) && $isAdmin): ?>
                 <td class="actions ml-3">
                 
                     <span>
@@ -160,6 +162,7 @@ function addMemberToTable(member) {
                     </span>
                     
                     </td>
+                    <?php endif; ?>
             </tr>`;
     $('table#members tbody').append(tr);
 
@@ -729,7 +732,7 @@ $(document).ready(function () {
         function updateRequest(requestId, reqStatus, userId, familyId) {
             $.ajax({
                 type: "POST",
-                url: "api/handleRequest.php",
+                url: "api/updateRequest.php",
                 data: {
                     requestId: requestId,
                     reqStatus: reqStatus,
@@ -751,7 +754,81 @@ $(document).ready(function () {
 
     // ********send request***********/
     if (document.URL.includes("sendRequest.php")) {
+        let userId = $('input#userId').val();
 
+        $('input#familyName').autocomplete({
+
+            source: function (request, response) {
+                $.ajax({
+                    url: 'api/getFamiliesByName.php',
+                    type: 'GET',
+                    data: {
+                        term: request.term,
+                        userId: userId
+                    },
+                    success: function (data) {
+                        // users = [];
+                        // $(data).each(function (i, user) {
+                        // users.push(user['Email']);
+                        // });
+                        response($.map(data, function (item) {
+
+                            return {label: item['name'], value: item['name'], id: item['id']};
+                        }));
+                    },
+                    error: function (result) {
+                        console.log('getFamilyNames autocomplete Error');
+                    }
+                });
+            },
+            select: function (event, ui) { // console.log(ui.item.value);
+                $("input#familyId").val(ui.item.id); // ui.item.value contains the id of the selected label
+            },
+
+            appendTo: '#familySuggest',
+            minLength: 1
+        }).focus(function () {
+            $(this).autocomplete('search', $(this).val());
+            $('span#requestMsg').empty();
+        });
+
+
+        $('input#btnSendRequest').click(function (e) {
+            console.log("i'm clicking");
+            $('span#requestMsg').empty();
+            let familyName = $('input#familyName').val();
+          
+
+            // if family name is empty
+            if (familyName.length < 1) {
+                $('span#requestMsg').append('Please choose family you would like to join');
+                return;
+            }
+
+            $.ajax({
+                type: 'GET',
+                url: 'api/getFamiliesByName.php',
+                data: {
+                    term: familyName,
+                    userId: userId
+                },
+
+                success: function (response) {
+                    
+                    if (response.length < 1) {
+
+                        $('span#requestMsg').append('Please Choose family from the suggested list only');
+                    } else {
+                        $('#submitRequest').click();
+                    }
+                },
+                error: function (xhr, ajaxOptions, error) {
+                    console.log(error);
+                }
+            });
+
+        });
+        
     }
     // ****** view family members *****/
     if (document.URL.includes("familyMembers.php")) {

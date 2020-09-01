@@ -3,6 +3,7 @@ session_start();
 require_once 'db.php';
 
 require_once 'parts/sessionCheck.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -10,7 +11,7 @@ require_once 'parts/sessionCheck.php';
 
 <head>
   <?php require_once 'parts/headLinks.php'; ?>
-  <title>Invite New User To Family</title>
+  <title>Send Request To join Family</title>
 </head>
 
 <body>
@@ -31,10 +32,10 @@ require_once 'parts/sessionCheck.php';
 
             <?php if (
                 isset($_GET['status']) &&
-                $_GET['status'] == 'newFamily'
+                $_GET['status'] == 'newUser'
             ): ?>
                 <div class="alert alert-info alert-dismissible fade show" role="alert">
-                <i class="fas fa-info-circle"></i> Invite people to join your new family !
+                <i class="fas fa-info-circle"></i> Request to join family
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -43,7 +44,7 @@ require_once 'parts/sessionCheck.php';
 
             <?php if (isset($_GET['sent']) && $_GET['sent'] == 'yes'): ?>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="fas fa-check"></i> Your invitation sent successfully
+                <i class="fas fa-check"></i> Your request sent successfully
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -51,9 +52,9 @@ require_once 'parts/sessionCheck.php';
             <?php endif; ?>
             <?php if (isset($_GET['sent']) && $_GET['sent'] == 'no'): ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="far fa-times-circle"></i> Your invitation failed to send because the inserted Email was invalid
+                <i class="far fa-times-circle"></i> Your request failed to send because the family Name was invalid
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true">&times;</span>e
                 </button>
                 </div>
                 <?php endif; ?>
@@ -62,33 +63,37 @@ require_once 'parts/sessionCheck.php';
                     <h2><b>Request to join family</b></h2><br>
                         <form class="align-middle " id="sendRequest" method="POST" action="api/newRequest.php" >
                             <div class="form-group col-md-12">
-                            <div class="form-row ">
-
-                                <label for="invitedInfo" class="">Who would you like to invite** : </label><br>
-                                <input type="text" class="form-control " id="invitedInfo" name="invitedInfo" title="Start typing user's mail" placeholder="Email@Email.com" required>
-                                <div id="usersByMail" style="position:relative; width: auto;">
-                                <!--List of suggested users-->
+                            <div class="form-row">
+                                
+                                <label for="familyName" class="">Type family name you would like to join : </label>
+                                <input type="text" class="form-control " id="familyName" name="familyName" title="Start typing family name" placeholder="Family Name" required>
+                                <div id="familySuggest" style="position:relative; width: auto;">
+                                <!--List of suggested families-->
                                 </div>
 
-                            <span class="mt-2"> **People in: your family/has family/already been invited to your family,<br> can't be invited again</span>
+                            <!-- <span class="mt-2"> **People in: your family/has family/already been invited to your family,<br> can't be invited again</span> -->
                                 <input type="hidden" id="userId" name="userId" value="<?= $userId ?>">
-                                <input type="hidden" name="familyId" value="<?= $familyId ?>">
-                                <input type="hidden" id="invitedId" name="invitedId" value="">
+                               
+                                <input type="hidden" id="familyId" name="familyId" value="">
 
                             </div>
 
                             
                             <div class="d-flex justify-content-between my-2 ">
-                            <span class="message" id="inviteMsg"></span>
-                                <input type="button" class="btn btn-default" id="btnSendInvite" value="Send">
-                                
-                            </div>
-                            <input type="submit" class="btn btn-default d-none" id="submitInvite" value="Send">
+                            <span class="message" id="requestMsg"></span>
+                            <span>
+                                <input type="button" class="btn btn-default" id="btnSendRequest" value="Send">
+                                <?php if(isset($_GET['status']) && $_GET['status'] == 'newUser'): ?>
+                           <a class="text-muted ml-3" href="index.php"> Skip </a>
+                           <?php endif; ?>
+                                </span>
+                            </div>                         
+                            <input type="submit" class="btn btn-default d-none" id="submitRequest" value="Send">                       
                             </div>
                         </form>
                  </div>
                    <?php else: ?>
-
+                        // TODO
                     <?php endif; ?>
                 
         

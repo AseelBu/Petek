@@ -46,7 +46,9 @@ if (is_null($familyId)) {
                                 <th scope="col">Email</th>
                                 <th scope="col">Nickname</th>
                                 <!-- <th scope="col">Joining Date</th> -->
+                               <?php if (!is_null($isAdmin) && $isAdmin): ?>
                                 <th scope="col">Actions</th>
+                               <?php endif;?>
                             </tr>
                         </thead>
                         <tbody>

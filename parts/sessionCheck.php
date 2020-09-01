@@ -22,7 +22,8 @@ if(isset($_SESSION['userId'])){
 
     $_SESSION['isAdmin']=FALSE;
     $sql = "SELECT `id` FROM `fadmin` WHERE `id`=$userId";
-if ($conn->query($sql)) {
+    $result = $conn->query($sql);
+if ($result->num_rows >0) {
     $_SESSION['isAdmin']=TRUE;
 }
    
