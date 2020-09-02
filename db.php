@@ -27,7 +27,7 @@ if (!$conn->query(($sql))) {
     pswrd varchar(20) not null CHECK (length(pswrd)>=5), 
     Nickname varchar(30), 
     phone varchar(10),
-    lostKeyPass varchar(8) Unique,
+    lostKeyPass varchar(10) Unique,
     familyId INT(6) REFERENCES Family(id) ON DELETE CASCADE ON UPDATE CASCADE,
     lastLogin datetime DEFAULT current_timestamp() 	
 

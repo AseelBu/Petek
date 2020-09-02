@@ -11,4 +11,5 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
     <!--font-->
     <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles/stylesheet.css">
+    <!-- <link rel="stylesheet" href="styles/stylesheet.css">--> 
+    <link rel="stylesheet" href="css/main.css">

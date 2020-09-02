@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" data-theme="light">
 <head>
   <?php require_once('parts/headLinks.php'); ?>
 
@@ -34,12 +33,15 @@
           <div class="form-row ">
 
             <label for="email" class="">Enter your rigestered Email*: </label>
-            <input type="email" class="form-control" id="EmailLogin" name="email" placeholder="Email@Email.com" required>
+            <input type="email"  class="form-control" id="EmailLogin" name="email" placeholder="Email@Email.com" required>
           </div>
 
 
           <div class="d-flex justify-content-end my-2">
-            <input type="submit" class="btn btn-default" id="btnSendReset" value="Send">
+            <input type="submit"  onclick="sendEmail()"  class="btn btn-default" id="btnSendReset" value="Send">
+
+     
+           
           </div>
 
 
@@ -49,6 +51,48 @@
       </form>
     </div>
   </div>
+
+   
+  <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        function sendEmail() {
+           
+            var email = $("#EmailLogin");
+        
+
+            if ( isNotEmpty(email) ) {
+                $.ajax({
+                   url: 'sendMail.php',
+                   method: 'POST',
+                   dataType: 'json',
+                   data: {
+                       
+                       email: email.val(),
+                      
+                   }, success: function (response) {
+                        if (response.status == "success")
+                            alert('Email Has Been Sent!');
+                        else {
+                            alert('Please Try Again!');
+                            console.log(response);
+                        }
+                   }
+                });
+            }
+        }
+
+        function isNotEmpty(caller) {
+            if (caller.val() == "") {
+                caller.css('border', '1px solid red');
+                return false;
+            } else
+                caller.css('border', '');
+
+            return true;
+        }
+    </script>
+
+
 
   <?php require('parts/footer.php'); ?>
 

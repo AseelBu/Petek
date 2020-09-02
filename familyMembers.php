@@ -15,8 +15,7 @@ if (is_null($familyId)) {
 // }
 ?>
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" data-theme="light">
 
     <head>
         <?php require_once 'parts/headLinks.php'; ?>

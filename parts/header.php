@@ -87,6 +87,68 @@
         <?php endif; ?>
     </ul>
 
+
+
+    <div class="toggle-container">
+        <h10>Light / Dark Mode</h10>
+        <input type="checkbox" id="switch" name="theme" /><label for="switch">Toggle</label>
+    </div>
+
+    <script>
+        var checkbox = document.querySelector('input[name=theme]');
+
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                trans()
+                document.documentElement.setAttribute('data-theme', 'dark')
+            } else {
+                trans()
+                document.documentElement.setAttribute('data-theme', 'light')
+            }
+        })
+
+        let trans = () => {
+            document.documentElement.classList.add('transition');
+            window.setTimeout(() => {
+                document.documentElement.classList.remove('transition')
+            }, 1000)
+        }
+    </script>
+
+
+
+    <script>
+        // dark mode switch
+        var setTheme = function(theme) {
+            if (theme === 'dark') {
+                // dark
+                $("body").removeClass("standard");
+                $("body").addClass("dark");
+                $(".inner-switch").text("ON");
+                setCookie('Theme', 'dark', 30);
+            } else {
+                $("body").removeClass("dark");
+                $("body").addClass("standard");
+                $(".inner-switch").text("OFF");
+                setCookie('Theme', 'standard', 30);
+            }
+        };
+
+        currentTheme = getCookie('Theme');
+        setTheme(currentTheme);
+
+        $(".inner-switch").on("click", function() {
+            if ($("body").hasClass("dark")) {
+                // standard
+                setTheme('standard');
+            } else {
+                // dark mode
+                setTheme('dark');
+            }
+        })
+    </script>
+
+
     <?php if (isset($_SESSION['userId'])): ?>
         <span class="px-3">
             <a href="#"> <?=  $_SESSION['usermail'] ; ?> </a>
@@ -97,6 +159,9 @@
 
         </div>
     <?php endif; ?>
+
+
+    
     <!-- <div class="d-flex justify-content-end">
 
                         <a href="login.php"><button class=" btn btn-default">Log Out</button></a>
