@@ -6,8 +6,7 @@ $password = isset($_COOKIE['password']) ? $_COOKIE['password'] : "";
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" data-theme="light">
 <head>
   <?php require_once('parts/headLinks.php'); ?>
 
@@ -61,6 +60,16 @@ $password = isset($_COOKIE['password']) ? $_COOKIE['password'] : "";
                 </button>
         </div>
       <?php endif; ?>
+
+
+      <?php
+      if (isset($_GET["status"]) && $_GET["status"] == "passwordChanged") : ?>
+        <div class="alert alert-success" role="alert">
+          <strong>Password changed successfully! </strong><br>Login to get started
+        </div>
+      <?php endif; ?>
+
+
       <h2><b>Login</b></h2>
       <?php if (!isset($_SESSION['userId']) || !isset($_SESSION['usermail'])) : ?>
         <small> Default Email: admin@admin.com,password:12345</small>

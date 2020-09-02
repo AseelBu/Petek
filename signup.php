@@ -9,8 +9,7 @@ if (isset($_GET['status']) && $_GET["status"] == "exists") {
 }
 ?>
 <!doctype html>
-<html lang="en">
-
+<html lang="en" data-theme="light">
 <head>
   <?php require_once('parts/headLinks.php'); ?>
   <title>Sign-up !</title>

@@ -95,8 +95,7 @@ div#oldList {
 }
 
 .dropdown-item:focus,
-.dropdown-item:hover, 
-.dropdown-item.active {
+.dropdown-item:hover {
   color: rgb(117, 90, 0);
   text-decoration: none;
   background-color: #f8f9fa;
@@ -212,3 +211,5 @@ footer {
   max-height: 200px;
   overflow-y: auto;
 }
+
+

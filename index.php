@@ -126,8 +126,7 @@ else {
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" data-theme="light">
 
 <head>
     <?php require_once 'parts/headLinks.php'; ?>
