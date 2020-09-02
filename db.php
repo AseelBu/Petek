@@ -28,7 +28,8 @@ if (!$conn->query(($sql))) {
     Nickname varchar(30), 
     phone varchar(10),
     lostKeyPass varchar(8) Unique,
-    familyId INT(6) REFERENCES Family(id) ON DELETE CASCADE ON UPDATE CASCADE
+    familyId INT(6) REFERENCES Family(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    lastLogin datetime DEFAULT current_timestamp() 	
 
     )";
 }

@@ -7,8 +7,9 @@ require_once 'parts/sessionCheck.php';
 //is the user an admin
 $sql = "SELECT `id` FROM `fadmin` WHERE `id`=$userId";
 $result = $conn->query($sql);
+//if not admin
 if ($result->num_rows <1) {
-    header('Location:index.php?status=notAdmin');
+    header('Location:index.php?status=noAccess');
     exit();
 }
 ?>
@@ -91,67 +92,67 @@ if ($result->num_rows <1) {
  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="scripts/general.js"></script>
 
-<script>
-    new Vue({
-      el: "#app",
-      data() {
-        return {
-          user: {
-            // firstName: $userId,
-    //         lastName: "",
-    //         bio: "",
-    //         favColor: "",
-    //         githubURL: "",
-    //         hobbies: [],
-    //         birthday: ""
-          },
-    //       hobbies: ["Running", "Gaming", "Surffing", "Watch TV", "Books"],
-    //       searchedHobbie: "",
-        }
-      },
-      computed:{
-    //     filterdHobbies() {
-    //       if (this.searchedHobbie) {
-    //         let filteredHobbies = this.hobbies.filter((hobbie) => {
-    //           return hobbie.toLowerCase().includes(this.searchedHobbie.toLowerCase());
-    //         })
-    //         return filteredHobbies;
-    //       }
-    //       else
-    //         return this.hobbies;
-    //     },
-    //     fixedGitHubURL() {
-    //       if (!this.user.githubURL.startsWith("http://") && !this.user.githubURL.startsWith("https://"))
-    //         return "https://" + this.user.githubURL;
-    //       else
-    //         return this.user.githubURL;
-    //     },
-    //     fullName(){
-    //       return `${this.user.firstName} ${this.user.lastName}`;
-    //     },
-    //     calculateAge() { // birthday is a date
-    //       birthdayDate = new Date(this.user.birthday);
-    //       let ageDifMs = Date.now() - birthdayDate.getTime();
-    //       let ageDate = new Date(ageDifMs); // miliseconds from epoch
-    //       return Math.abs(ageDate.getUTCFullYear() - 1970);
+<!-- <script> -->
+    // new Vue({
+    //   el: "#app",
+    //   data() {
+    //     return {
+    //       user: {
+    //         // firstName: $userId,
+    // //         lastName: "",
+    // //         bio: "",
+    // //         favColor: "",
+    // //         githubURL: "",
+    // //         hobbies: [],
+    // //         birthday: ""
+    //       },
+    // //       hobbies: ["Running", "Gaming", "Surffing", "Watch TV", "Books"],
+    // //       searchedHobbie: "",
     //     }
-      },
-      methods: {
-    //     getRequests() {
-    //       console.log(JSON.stringify(this.user));
-    //     }
-    //     ,
-    //     clearHobbies() {
-    //       this.user.hobbies = [];
-    //     },
-      },
-      filters: {
-    //     capitalize: function (value) {
-    //       return nameCapitalized = value.charAt(0).toUpperCase() + value.slice(1)
-    //     },
-      }
-    });
-  </script>
+    //   },
+    //   computed:{
+    // //     filterdHobbies() {
+    // //       if (this.searchedHobbie) {
+    // //         let filteredHobbies = this.hobbies.filter((hobbie) => {
+    // //           return hobbie.toLowerCase().includes(this.searchedHobbie.toLowerCase());
+    // //         })
+    // //         return filteredHobbies;
+    // //       }
+    // //       else
+    // //         return this.hobbies;
+    // //     },
+    // //     fixedGitHubURL() {
+    // //       if (!this.user.githubURL.startsWith("http://") && !this.user.githubURL.startsWith("https://"))
+    // //         return "https://" + this.user.githubURL;
+    // //       else
+    // //         return this.user.githubURL;
+    // //     },
+    // //     fullName(){
+    // //       return `${this.user.firstName} ${this.user.lastName}`;
+    // //     },
+    // //     calculateAge() { // birthday is a date
+    // //       birthdayDate = new Date(this.user.birthday);
+    // //       let ageDifMs = Date.now() - birthdayDate.getTime();
+    // //       let ageDate = new Date(ageDifMs); // miliseconds from epoch
+    // //       return Math.abs(ageDate.getUTCFullYear() - 1970);
+    // //     }
+    //   },
+    //   methods: {
+    // //     getRequests() {
+    // //       console.log(JSON.stringify(this.user));
+    // //     }
+    // //     ,
+    // //     clearHobbies() {
+    // //       this.user.hobbies = [];
+    // //     },
+    //   },
+    //   filters: {
+    // //     capitalize: function (value) {
+    // //       return nameCapitalized = value.charAt(0).toUpperCase() + value.slice(1)
+    // //     },
+    //   }
+    // });
+  <!-- </script> -->
 </body>
 <?php $conn->close(); ?>
 </html>

@@ -50,7 +50,11 @@
                     <!-- user Lists-->
                 </div>
             </li>
-       
+            <li class="nav-item">
+            <a class="nav-link <?php active(
+                'productsList.php'
+            ); ?>" href="productsList.php">Products</a>
+        </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle <?php active(
                     'invites.php'

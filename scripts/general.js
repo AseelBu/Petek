@@ -62,10 +62,10 @@ function addProductToTable(product) {
     let amount = product.amount;
     let isChecked = product.isChecked;
 
-    console.log('amount=' + amount);
-    console.log('amount==0?' + (
-        amount == 0
-    ));
+    // console.log('amount=' + amount);
+    // console.log('amount==0?' + (
+    //     amount == 0
+    // ));
     amount = amount == 0 ? '---' : amount;
     isChecked = isChecked === 'Y' ? 'check' : 'uncheck';
 
@@ -85,6 +85,25 @@ function addProductToTable(product) {
     } else if (isChecked === 'uncheck') {
         $('table#products tbody#uncheckedRows').append(tr);
     }
+}
+function addAllProducts(product) {
+    let id = product.id;
+    let name = product.name;
+   
+
+    let tr = `<tr  data-id="${id}"> 
+          <td class="name d-flex justify-content-center"> ${name}</td>
+         
+          <td class="actions ">
+              <a href="#" class="btnRemoveProduct">
+              <i class="fas fa-times fa-lg"></i>
+              </a>
+          </td>
+          </tr>`;
+
+  
+        $('table#products tbody').append(tr);
+    
 }
 
 function addInviteToTable(invite) {
@@ -147,23 +166,25 @@ function addMemberToTable(member) {
     let id = member.id;
     let Email = member.email;
     let Nickname = member.Nickname;
+    let isAdmin = $("input#isAdmin").val();
     
 
     let tr = `<tr data-id="${id}">
                 <td class="email"><b>${Email}</b></td>
-                <td class="nickname ml-3" ><b>${Nickname}</b></td>
-                <?php if (!is_null($isAdmin) && $isAdmin): ?>
-                <td class="actions ml-3">
+                <td class="nickname ml-3" ><b>${Nickname}</b></td>`;
+            if(isAdmin){
+                tr +=`<td class="actions ml-3">
                 
-                    <span>
-                        <a>
-                        <button type="button" class="btn btn-danger btnRemoveMember"> <i class="fas fa-user-times"></i> Remove from family</button>
-                        </a>
-                    </span>
-                    
-                    </td>
-                    <?php endif; ?>
-            </tr>`;
+                <span>
+                    <a>
+                    <button type="button" class="btn btn-danger btnRemoveMember"> <i class="fas fa-user-times"></i> Remove from family</button>
+                    </a>
+                </span>
+                
+                </td>`;
+            }
+            tr += `</tr>`;
+
     $('table#members tbody').append(tr);
 
 }
@@ -460,6 +481,7 @@ $(document).ready(function () {
     });
 
     /***********login script**********/
+    
     /***********invite script**********/
     // ********************send invite *********/
     if (document.URL.includes("invites.php")) {
@@ -794,7 +816,7 @@ $(document).ready(function () {
 
 
         $('input#btnSendRequest').click(function (e) {
-            console.log("i'm clicking");
+           
             $('span#requestMsg').empty();
             let familyName = $('input#familyName').val();
           
@@ -876,5 +898,97 @@ $(document).ready(function () {
             });
         }
         getFamilyMembers();
+    }
+
+
+    //************products list***********/
+    if (document.URL.includes("productsList.php")) {
+        function getAllProducts() {
+           
+            $('table#products tbody').html('');
+            $.ajax({
+                type: "GET",
+                url: "api/getAllProducts.php",
+
+                success: function (products) {
+                    if (products.length > 0) {
+                        $('div#msgNoProducts').addClass("d-none");
+                        if ($('table#products ').hasClass("d-none")) {
+                            $('table#products').removeClass("d-none")
+                        }
+
+                        for (item of products) {
+                        
+                            product = {
+                                id: item['id'],
+                                name: item['name'],
+                                
+
+                            };
+
+                            addAllProducts(product);
+
+                        }
+                    } else { // no new members
+
+                        $('table#products ').addClass("d-none");
+                        if ($('div#msgNoProducts').hasClass("d-none")) {
+                            $('div#msgNoProducts').removeClass("d-none")
+                        }
+                    }
+                },
+                error: function (xhr, ajaxOptions, error) {
+                    console.log(error);
+                }
+            });
+        }
+        getAllProducts();
+
+        $(document).on("dblclick","table#products td.name",function (e) {
+            e.stopPropagation();      
+            let currentEle = $(this);
+            let value = $(this).html();
+            
+            updateVal(currentEle, value);
+        });
+        
+        function updateVal(currentEle, value) {
+            $(currentEle).html('<input class="thVal form-control col-6 py-3 text-center" type="text" value="' + value + '" />');
+            let thVal = $(".thVal");
+            let id=$(currentEle).parents('tr').attr('data-id');
+            thVal.focus();
+            thVal.keyup(function (event) {
+                if (event.keyCode == 13) {
+                    $(currentEle).html(thVal.val());
+                    
+                    save(id,thVal.val());
+                }
+            });
+        
+            thVal.focusout(function () {
+                let id=$(this).parents('tr').attr('data-id');
+                $(currentEle).html(thVal.val().trim());
+                return save(id,thVal.val()); 
+            });
+        
+        }
+        
+        function save(id,value) {
+            $.ajax({
+                type: "POST",
+                url: "api/updateProductName.php",
+                data: {
+                    id : id,
+                    newName:value
+                },
+                
+                success: function (response) {
+                    getAllProducts();
+                },
+                error: function (xhr, ajaxOptions, error) {
+                    console.log(error);
+                }
+            });
+        }
     }
 });

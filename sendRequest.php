@@ -92,9 +92,10 @@ require_once 'parts/sessionCheck.php';
                             </div>
                         </form>
                  </div>
-                   <?php else: ?>
-                        // TODO
-                    <?php endif; ?>
+                   <?php else : 
+                        header('Location:index.php?status=noAccess');
+                        exit();
+                    endif; ?>
                 
         
         

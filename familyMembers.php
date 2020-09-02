@@ -40,7 +40,7 @@ if (is_null($familyId)) {
             <div class="my-5"><h2>Family Members</h2></div>
             <div class="table-responsive mt-4">
             
-                    <table class="table table-hover text-center shadow rounded" id="members">
+                    <table class="table table-hover  text-center shadow rounded" id="members">
                         <thead>
                             <tr>
                                 <th scope="col">Email</th>
@@ -65,6 +65,7 @@ if (is_null($familyId)) {
                                 <h4>Your family doesn't have any members yet<h4>
                     </div>
                     <input type="hidden" id="userId" name="userId" value="<?= $userId ?>">
+                    <input type="hidden" id="isAdmin" name="isAdmin" value="<?= $isAdmin ?>">
                     <input type="hidden" id="familyId" name="familyId" value="<?= $familyId ?>">
             </div>
         </div>

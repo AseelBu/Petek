@@ -61,6 +61,12 @@ if (isset($_POST['email'])) {
         header('Location:login.php?status=wrongemail');
         exit();
     }
+
+    // update login date
+    $sql="UPDATE `users` SET `lastLogin`=now()  WHERE `id`= $userId ";
+    $conn->query($sql);
+
+    
 }
 
 if (
