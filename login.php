@@ -6,7 +6,7 @@ $password = isset($_COOKIE['password']) ? $_COOKIE['password'] : "";
 
 ?>
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="<?=$theme?>">
 <head>
   <?php require_once('parts/headLinks.php'); ?>
 
