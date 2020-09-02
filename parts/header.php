@@ -90,7 +90,7 @@
 
 
     <div class="toggle-container">
-        <h10>Light / Dark Mode</h10>
+        <h10><i class="fas fa-adjust" title="Light/Dark"></i></h10>
         <input type="checkbox" id="switch" name="theme" /><label for="switch">Toggle</label>
     </div>
 

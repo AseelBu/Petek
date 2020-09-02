@@ -18,7 +18,7 @@ body::after{
   
 }
 h2{
-  color: rgb(140, 63, 16);
+  color: rgb(140, 63, 16) ;
 }
 /*navigation bar*/
 .navbar-light {

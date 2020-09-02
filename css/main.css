@@ -19,6 +19,9 @@ body::after {
   display: block;
   height: 400px;
 }
+h2{
+  color: rgb(140, 63, 16) ;
+}
 
 /*navigation bar*/
 .navbar-light {
