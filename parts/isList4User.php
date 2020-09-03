@@ -1,7 +1,7 @@
 <?php
 $listId = $_GET['listId'];
         //check if this list is for this user
-        if(isset($familyId) && is_null($familyId)){
+        if( is_null($familyId)){
         $sql = "SELECT `userId` FROM `userlists` WHERE `userId`=$userId AND `listId`=$listId";
         }else{
             $sql = "SELECT * 

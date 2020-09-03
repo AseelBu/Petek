@@ -1,3 +1,84 @@
+let listTable = new Vue({
+    el: '#listTable',
+    data: {
+        id: 0,
+        name : "",
+        amount : "",
+        isChecked:"",
+        uncheckedrows:[],
+        checkedrows:[],
+        titles:['Done','Name','Amount','']
+    },
+    methods:{
+        addRow(id, name, amount, isChecked){
+            amount = amount == 0 ? '---' : amount;
+    isChecked = isChecked === 'Y' ? 'check' : 'uncheck';
+          let product = {
+            id: id,
+            name : name,
+            amount : amount,
+            isChecked:isChecked,
+          };
+          if(isChecked === 'check'){
+          this.checkedrows.push(product);
+          }else if(isChecked === 'uncheck'){
+            this.uncheckedrows.push(product);
+          }
+
+        //   this.ID = 0;
+        //   this.Name = "";
+        //   this.Quantity = "";
+        //   Purchase1 = "";
+        //   Purchase2 = null;
+        },
+    //     removeRow(ID){
+    //         for (let i = 0; i < this.rows.length; i++) {
+    //             if(this.rows[i].ID == ID){
+    //                 this.rows.splice(i, 1);
+    //                 return;
+    //             }
+    //         }
+    //       }
+      }
+});
+// let RequestTable = new Vue({
+//     el: '#Table',
+//     data: {
+//         ID: 0,
+//         Name : "",
+//         Quantity : "",
+//         Purchase1 : "",
+//         Purchase2 : null,
+//         rows:[]
+//     },
+//     methods:{
+//         addRow(ID1, Name1, Quantity1, Purchase11, Purchase22){
+//           var my_object = {
+//             ID: ID1,
+//             Name: Name1,
+//             Quantity: Quantity1,
+//             Purchase1: Purchase11,
+//             Purchase2: Purchase22,
+//           };
+//           this.rows.push(my_object);
+
+//           this.ID = 0;
+//           this.Name = "";
+//           this.Quantity = "";
+//           Purchase1 = "";
+//           Purchase2 = null;
+//         },
+//         removeRow(ID){
+//             for (let i = 0; i < this.rows.length; i++) {
+//                 if(this.rows[i].ID == ID){
+//                     this.rows.splice(i, 1);
+//                     return;
+//                 }
+//             }
+//           }
+//       }
+// });
+
 /***************reset************/
 function resetForm() {
     $('form input:not(:checkbox):not(:button):not(:submit)').val('');
@@ -96,7 +177,7 @@ function addAllProducts(product) {
 
 
     let tr = `<tr  data-id="${id}"> 
-          <td class="name d-flex justify-content-center" title="Double click to edit"> ${name}</td>
+          <td class="name d-flex justify-content-center" title="Double click to edit">{{${name}}}</td>
          
           <td class="actions ">
               <a href="#" class="btnRemoveProduct">
@@ -220,7 +301,7 @@ $(document).ready(function () {
                             isChecked: item['done']
                         };
 
-                        addProductToTable(product);
+                        listTable.addRow(item['id'], item['name'],item['amount'],item['done']);
                         listProducts.push(product);
                     }
                     $('table tr.check input[type=checkbox]').prop('checked', true);
@@ -346,7 +427,7 @@ $(document).ready(function () {
 
         let userId = $('input#userId');
         let familyId = $('input#familyId');
-        if (familyId.length == 0) {
+        if (familyId.val().length == 0) {
             familyId = null;
         }
         if (userId.length != 0) {
@@ -372,7 +453,7 @@ $(document).ready(function () {
     } else if ($('input#userId').length !== 0) {
         let userId = $('input#userId').val();
         let familyId = $('input#familyId');
-        if (familyId.length == 0) {
+        if (familyId.val().length == 0) {
             familyId = null;
         }
         populateListsDrop(null, userId,familyId);

@@ -80,7 +80,7 @@ if (
     if (isset($_GET['listId'])) {
 
       require_once 'parts/isList4User.php';
-      
+
     } elseif (
         isset($_COOKIE['listId']) &&
         isset($_GET['status']) &&
@@ -164,30 +164,50 @@ else {
 
         </div>
         <br>
-
+        <div id="listTable">
         <div class="table-responsive">
             <?php if (!is_null($listId)): ?>
                 <table class="table table-hover text-center shadow rounded" id="products">
                     <thead>
                         <tr>
-                            <th scope="col">Done</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Amount</th>
-                            <th scope="col"></th>
+                            <th v-for="title in titles" scope="col">{{title}}</th>
+                            
                         </tr>
                     </thead>
                     <tbody id="uncheckedRows">
                         <!--unchecked products will go here-->
-
+                        <tr v-for="product in uncheckedrows" class="unchecked" v-bind:data-id="product.id"> 
+                            <td class="btnDone"></td>
+                            <input type="checkbox" class="btnDone"></td>
+                            <td class="name"> {{product.name}}</td>
+                            <td class="amount">{{product.amount}}</td>
+                            <td>
+                                <a href="#" class="btnRemove">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </td>
+                            </tr>
                     </tbody>
 
                     <tbody id="checkedRows">
                         <!--checked products will go here-->
+                        <tr v-for="product in checkedrows" class="checked" v-bind:data-id="product.id"> 
+                            <td class="btnDone"></td>
+                            <input type="checkbox" class="btnDone"></td>
+                            <td class="name"> {{product.name}}</td>
+                            <td class="amount">{{product.amount}}</td>
+                            <td>
+                                <a href="#" class="btnRemove">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </td>
+                            </tr>
                     </tbody>
 
                 </table>
             <?php endif; ?>
         </div>
+            </div>
     </div>
     <!-- hidden input -->
     <input  type="hidden" id="userId" name="userId" value="<?= $userId ?>">
@@ -380,7 +400,8 @@ else {
       el: "#app",
       data() {
         return {
-            familyId: ""
+            
+            
         //   user: {
     //         // firstName: $userId,
     // //         lastName: "",
