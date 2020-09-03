@@ -1,12 +1,15 @@
 <?php
-require_once("../db.php");
 session_start();
+require_once("../db.php");
+// require_once("../parts/sessionCheck.php");
 
 
-if (isset($_SESSION['userId']) && isset($_POST['listName'])) {
+if (isset($_SESSION['userId']) && isset($_SESSION['familyId']) && isset($_POST['listName'])) {
 
     $userId = $_SESSION['userId'];
+    $familyId = $_SESSION['familyId'];
     $listName = htmlspecialchars($_POST['listName']);
+    
     if (isset($_POST['oldListChkBox'])) {
         $listChkBox = $_POST['oldListChkBox'];
     }
@@ -14,12 +17,28 @@ if (isset($_SESSION['userId']) && isset($_POST['listName'])) {
         $copyListId = htmlspecialchars($_POST['oldListSelect']);
     }
 
+    $privacy = 'P';
+    if(isset($_POST['privacy'])){
+        $privacy = htmlspecialchars($_POST['privacy']);
+        $privacy = strcmp($privacy,"private")=== 0? 'P':'F';
+    }
+    
+
     //1- create new list in DB
-    $sql = "INSERT INTO `list`(`name`) VALUES ('$listName')";
+    $sql = "INSERT INTO `list`(`name`,`privacy`) VALUES ('$listName','$privacy')";
     if ($conn->query($sql) === TRUE) {
         $listId = $conn->insert_id;
-        //2- insert list for user in db
+
+        //if the list is private for user
+        if(strcmp($privacy,"P")===0){
+        //2a- insert list for user in db
         $sql = "INSERT INTO `userlists` (`listId`, `userId`) VALUES ('$listId', '$userId')";
+        }
+        // if list is shared with family
+        if(strcmp($privacy,"F")===0){
+            //2b- insert list for family in db
+        $sql = "INSERT INTO `familyLists` (`listId`, `familyId`) VALUES ('$listId', '$familyId')";
+        }
         if ($conn->query($sql) === TRUE) {
             //if user chose to import products from list
 

@@ -113,6 +113,7 @@ if (!$conn->query(($sql))) {
     //create table if it doesnt exist
     $sql = "CREATE TABLE List( id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name Varchar(50) NOT null ,
+    privacy char(1) not null CHECK (privacy IN ('P','F')),
     creteTime datetime NOT null  DEFAULT CURRENT_TIMESTAMP)";
 }
 if ($conn->query($sql) === TRUE) {
@@ -133,6 +134,20 @@ PRIMARY KEY(listId, userId)
 }
 if ($conn->query($sql) === TRUE) {
     // echo "Table ListProducts Created successfully ".PHP_EOL;
+} else {
+     //echo json_encode("Error creating table: ".$conn->error);
+}
+// create families' Lists
+$sql = "SELECT listId FROM familyLists";
+if (!$conn->query(($sql))) {
+    //create table if it doesnt exist
+    $sql = "CREATE TABLE familyLists( listId INT(6) NOT null REFERENCES List(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    familyId INT(6) NOT null REFERENCES family(id) ON DELETE CASCADE ON UPDATE CASCADE,
+PRIMARY KEY(listId, familyId)                          
+)";
+}
+if ($conn->query($sql) === TRUE) {
+    // echo "Table familyLists Created successfully ".PHP_EOL;
 } else {
      //echo json_encode("Error creating table: ".$conn->error);
 }

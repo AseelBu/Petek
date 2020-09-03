@@ -92,7 +92,7 @@ function addAllProducts(product) {
    
 
     let tr = `<tr  data-id="${id}"> 
-          <td class="name d-flex justify-content-center"> ${name}</td>
+          <td class="name d-flex justify-content-center" title="Double click to edit> ${name}</td>
          
           <td class="actions ">
               <a href="#" class="btnRemoveProduct">

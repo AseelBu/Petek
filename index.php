@@ -320,14 +320,28 @@ else {
                 <div class="modal-body">
                     <form id="addList" method="POST" action="api/newList.php">
                         <div class="form-group">
-                            <div class="row">
+                            <div class="form-group">
                                 <div class="col-md-12">
-                                    <label for="listName" class="">List Name*: </label><br>
-                                    <input type="text" name="listName" id="listName" class="form-control" placeholder="List Name" aria-describedby="helpId" required>
+                                    <label for="listName" class="">List Name*: </label>
+                                    <input type="text" name="listName" id="listName" class="form-control " placeholder="List Name" aria-describedby="helpId" required>
                                 </div>
                             </div>
-                            <br>
-                            <div class="row ">
+                            <div class="form-group ">
+                                <div class="col-md-12">
+                                <div class="form-check form-check-inline ">
+                                    <input type="radio" id="privateChk" class="form-check-input" name="privacy" value="private" title="Choose this if you want to keep list private" checked>
+                                    <label for="privateChk" class="form-check-label" >
+                                        Private list</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" id="familyChk" class="form-check-input" name="privacy" value="family" title="Choose this if you want to share list with family">
+                                    <label for="familyChk" class="form-check-label" >
+                                        Family list</label>
+                                </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group ">
                                 <div class="col-md-12">
 
                                     <div class="form-check">
@@ -338,7 +352,7 @@ else {
                                     </div>
                                 </div>
 
-                                <div class="col-md-12" id="oldList">
+                                <div class="col-md-12 form-group" id="oldList">
                                     <br>
                                     <label for="oldListSelect" class="">Choose list to import products: </label><br>
                                     <select class="form-control" id="oldListSelect" name="oldListSelect"></select>

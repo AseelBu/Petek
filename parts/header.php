@@ -134,6 +134,11 @@
             }
         };
 
+        // if (isset($_COOKIE['Theme'])){
+        //     currentTheme=$_COOKIE['Theme'];
+        // }else{
+        //     //current theme =light
+        // }
         currentTheme = getCookie('Theme');
         setTheme(currentTheme);
 
