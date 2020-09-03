@@ -10,9 +10,9 @@ let listTable = new Vue({
         titles:['Done','Name','Amount','']
     },
     methods:{
-        addRow:function(id, name, amount, isChecked){
+        addRow(id, name, amount, isChecked){
             amount = amount == 0 ? '---' : amount;
-    isChecked = isChecked === 'Y' ? 'check' : 'uncheck';
+            isChecked = isChecked === 'Y' ? 'check' : 'uncheck';
           let product = {
             id: id,
             name : name,
@@ -30,7 +30,7 @@ let listTable = new Vue({
           this.amount = "";
           this.isChecked="";
           
-        },
+        }
     //     removeRow(ID){
     //         for (let i = 0; i < this.rows.length; i++) {
     //             if(this.rows[i].ID == ID){
@@ -41,43 +41,7 @@ let listTable = new Vue({
     //       }
       }
 });
-// let RequestTable = new Vue({
-//     el: '#Table',
-//     data: {
-//         ID: 0,
-//         Name : "",
-//         Quantity : "",
-//         Purchase1 : "",
-//         Purchase2 : null,
-//         rows:[]
-//     },
-//     methods:{
-//         addRow(ID1, Name1, Quantity1, Purchase11, Purchase22){
-//           var my_object = {
-//             ID: ID1,
-//             Name: Name1,
-//             Quantity: Quantity1,
-//             Purchase1: Purchase11,
-//             Purchase2: Purchase22,
-//           };
-//           this.rows.push(my_object);
 
-//           this.ID = 0;
-//           this.Name = "";
-//           this.Quantity = "";
-//           Purchase1 = "";
-//           Purchase2 = null;
-//         },
-//         removeRow(ID){
-//             for (let i = 0; i < this.rows.length; i++) {
-//                 if(this.rows[i].ID == ID){
-//                     this.rows.splice(i, 1);
-//                     return;
-//                 }
-//             }
-//           }
-//       }
-// });
 
 /***************reset************/
 function resetForm() {

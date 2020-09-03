@@ -5,9 +5,15 @@ $listId = $_GET['listId'];
         $sql = "SELECT `userId` FROM `userlists` WHERE `userId`=$userId AND `listId`=$listId";
         }else{
             $sql = "SELECT * 
-            FROM `userlists` ,`familyLists` 
-            WHERE (`userId`=$userId and `userlists`.`listId`=$listId) 
-            OR ( `familyId`=$familyId AND `familylists`.`listId`=$listId ) ";
+            FROM `userlists` LEFT OUTER JOIN `familyLists` on `userlists`.`listId`=`familylists`.`listId`
+            WHERE (`userId`=1 and `userlists`.`listId`=16) 
+            OR ( `familyId`=2 AND `familylists`.`listId`=16 )
+            
+            UNION
+            SELECT * 
+            FROM `userlists` RIGHT OUTER JOIN `familyLists` on `userlists`.`listId`=`familylists`.`listId`
+            WHERE (`userId`=1 and `userlists`.`listId`=16) 
+            OR ( `familyId`=2 AND `familylists`.`listId`=16 ) ";
         }
 
         $result = $conn->query($sql);
