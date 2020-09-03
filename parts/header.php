@@ -95,17 +95,36 @@
     </div>
 
     <script>
-        var checkbox = document.querySelector('input[name=theme]');
 
+        function getCookie(name) {
+            alert('getting '+name)
+            // var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+            // return v ? v[2] : null;
+            return 'dark';
+        }
+            
+        function setCookie(name, value, days) {
+                alert('setting '+name)
+            var d = new Date;
+            d.setTime(d.getTime() + 24 * 60 * 60 * 1000 * days);
+            document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
+        }
+
+        var checkbox = document.querySelector('input[name=theme]');
+        loadTheme();
         checkbox.addEventListener('change', function() {
+            trans()
             if (this.checked) {
-                trans()
-                document.documentElement.setAttribute('data-theme', 'dark')
+                changeTheme('dark')
             } else {
-                trans()
-                document.documentElement.setAttribute('data-theme', 'light')
+                changeTheme( 'light')
             }
         })
+        window.setTimeout(() => {
+            alert('changing theme')
+            changeTheme('dark');
+            }, 1000)
+
 
         let trans = () => {
             document.documentElement.classList.add('transition');
@@ -113,12 +132,27 @@
                 document.documentElement.classList.remove('transition')
             }, 1000)
         }
+
+        function changeTheme(theme)
+        {
+            document.documentElement.setAttribute('data-theme', theme)
+           
+            setCookie('Theme',theme,null);
+        }
+
+        function loadTheme()
+        {
+            currentTheme = getCookie('Theme');
+            changeTheme(currentTheme)
+        }
+
+        
     </script>
 
 
 
-    <script>
-        // dark mode switch
+    <!-- <script>
+        // dark mode switch 2
         var setTheme = function(theme) {
             if (theme === 'dark') {
                 // dark
@@ -146,7 +180,7 @@
                 setTheme('dark');
             }
         })
-    </script>
+    </script> -->
 
 
     <?php if (isset($_SESSION['userId'])): ?>
