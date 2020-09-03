@@ -190,7 +190,7 @@ else {
                     <tbody id="uncheckedRows">
                         <!--unchecked products will go here-->
                         <tr v-for="product in uncheckedrows" class="unchecked" v-bind:data-id="product.id"> 
-                            <td class="btnDone"></td>
+                            <td class="btnDone">
                             <input type="checkbox" class="btnDone"></td>
                             <td class="name"> {{product.name}}</td>
                             <td class="amount">{{product.amount}}</td>
@@ -205,7 +205,7 @@ else {
                     <tbody id="checkedRows">
                         <!--checked products will go here-->
                         <tr v-for="product in checkedrows" class="checked" v-bind:data-id="product.id"> 
-                            <td class="btnDone"></td>
+                            <td class="btnDone">
                             <input type="checkbox" class="btnDone"></td>
                             <td class="name"> {{product.name}}</td>
                             <td class="amount">{{product.amount}}</td>

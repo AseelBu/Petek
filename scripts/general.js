@@ -10,7 +10,7 @@ let listTable = new Vue({
         titles:['Done','Name','Amount','']
     },
     methods:{
-        addRow(id, name, amount, isChecked){
+        addRow:function(id, name, amount, isChecked){
             amount = amount == 0 ? '---' : amount;
     isChecked = isChecked === 'Y' ? 'check' : 'uncheck';
           let product = {
@@ -25,11 +25,11 @@ let listTable = new Vue({
             this.uncheckedrows.push(product);
           }
 
-        //   this.ID = 0;
-        //   this.Name = "";
-        //   this.Quantity = "";
-        //   Purchase1 = "";
-        //   Purchase2 = null;
+          this.id = 0;
+          this.name = "";
+          this.amount = "";
+          this.isChecked="";
+          
         },
     //     removeRow(ID){
     //         for (let i = 0; i < this.rows.length; i++) {

@@ -46,7 +46,7 @@ if(!is_null($familyId)){
             </div>
 
             <input type="hidden" id="userId" name="userId" value="<?= $userId ?>">
-            <input type="hidden" id="familyId" name="userId" value="<?= $familyId ?>">
+            <input type="hidden" id="familyId" name="familyId" value="<?= $familyId ?>">
             <input type="hidden" id="invitedId" name="invitedId" value="">
 
           </div>

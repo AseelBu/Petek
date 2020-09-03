@@ -19,6 +19,7 @@ if (isset($_POST['userId']) && isset($_POST['familyName'])) {
                 exit();
             } else {
                 // error updating family Id for user
+                echo ('here');
                  echo $conn->error;
             }
         } else {
