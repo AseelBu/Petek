@@ -6,14 +6,14 @@ $listId = $_GET['listId'];
         }else{
             $sql = "SELECT * 
             FROM `userlists` LEFT OUTER JOIN `familyLists` on `userlists`.`listId`=`familylists`.`listId`
-            WHERE (`userId`=1 and `userlists`.`listId`=16) 
-            OR ( `familyId`=2 AND `familylists`.`listId`=16 )
+            WHERE (`userId`=$userId and `userlists`.`listId`=$listId) 
+            OR ( `familyId`=$familyId AND `familylists`.`listId`=$listId )
             
             UNION
             SELECT * 
             FROM `userlists` RIGHT OUTER JOIN `familyLists` on `userlists`.`listId`=`familylists`.`listId`
-            WHERE (`userId`=1 and `userlists`.`listId`=16) 
-            OR ( `familyId`=2 AND `familylists`.`listId`=16 ) ";
+            WHERE (`userId`=$userId and `userlists`.`listId`=$listId) 
+            OR ( `familyId`=$familyId AND `familylists`.`listId`=$listId ) ";
         }
 
         $result = $conn->query($sql);
