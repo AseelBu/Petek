@@ -93,10 +93,10 @@ function addProductToTable(product) {
 function addAllProducts(product) {
     let id = product.id;
     let name = product.name;
-   
+
 
     let tr = `<tr  data-id="${id}"> 
-          <td class="name d-flex justify-content-center" title="Double click to edit> ${name}</td>
+          <td class="name d-flex justify-content-center" title="Double click to edit"> ${name}</td>
          
           <td class="actions ">
               <a href="#" class="btnRemoveProduct">
@@ -105,9 +105,9 @@ function addAllProducts(product) {
           </td>
           </tr>`;
 
-  
-        $('table#products tbody').append(tr);
-    
+
+    $('table#products tbody').append(tr);
+
 }
 
 function addInviteToTable(invite) {
@@ -171,13 +171,13 @@ function addMemberToTable(member) {
     let Email = member.email;
     let Nickname = member.Nickname;
     let isAdmin = $("input#isAdmin").val();
-    
+
 
     let tr = `<tr data-id="${id}">
                 <td class="email"><b>${Email}</b></td>
                 <td class="nickname ml-3" ><b>${Nickname}</b></td>`;
-            if(isAdmin){
-                tr +=`<td class="actions ml-3">
+    if (isAdmin) {
+        tr += `<td class="actions ml-3">
                 
                 <span>
                     <a>
@@ -186,8 +186,8 @@ function addMemberToTable(member) {
                 </span>
                 
                 </td>`;
-            }
-            tr += `</tr>`;
+    }
+    tr += `</tr>`;
 
     $('table#members tbody').append(tr);
 
@@ -234,7 +234,7 @@ $(document).ready(function () {
         });
     }
 
-    function populateListsDrop(currentListId, userId,familyId) { // get the products for the list
+    function populateListsDrop(currentListId, userId, familyId) { // get the products for the list
         $.ajax({
             type: 'GET',
             url: 'api/getUserLists.php',
@@ -244,8 +244,7 @@ $(document).ready(function () {
             success: function (lists) {
                 userLists = [];
                 $('li div #listsDrop div #userLists').html('');
-                if (lists.length !== 0) {
-                    // $('div #listsDrop div#familyLists').html('');
+                if (lists.length !== 0) { // $('div #listsDrop div#familyLists').html('');
                     for (item of lists) {
                         let list = {
                             id: item['id'],
@@ -263,17 +262,7 @@ $(document).ready(function () {
                             $('div #listsDrop div#userLists').append(link);
                         }
 
-                        // else {
-                        //     //if the only list is the displayed list
-                        //     $('a #navbarlists').click(function(e){
-                        //         e.preventDefault();
-                        //         if($(this).hasClass("active")){
-                        //             $(this).removeClass("active");
-                        //         }
-                        //         $(this).addClass("disabled");
-                        //     });
-
-                        // }
+                        
 
                         if (currentListId !== null) { // add lists to new list selection
                             let option = `<option value="${id}">${name}</option>`;
@@ -281,78 +270,75 @@ $(document).ready(function () {
                         }
                     }
                 } else {
-                   
-                    if (currentListId !== null) { 
-                        
-                    
-                    // $('a#navbarlists').addClass('disabled'); you don't have this type of lists
-                    let msg=`<span class=" dropdown-item-text text-danger px-3">No Lists where found</span>`;
-                    $('div #listsDrop div#userLists').append(msg);
+
+                    if (currentListId !== null) { // $('a#navbarlists').addClass('disabled'); you don't have this type of lists
+                        let msg = `<span class=" dropdown-item-text text-danger px-3">No Lists where found</span>`;
+                        $('div #listsDrop div#userLists').append(msg);
                     }
-                    
+
                 }
-                if(familyId !== null){
-                //get family lists
-                $.ajax({
-                    type: "GET",
-                    url: "api/getFamilyLists.php",
-                    data: {
-                        familyId:familyId
-                    },
-                   
-                    success: function (lists) {
-                        $('li div #listsDrop div #familyLists').html('');
-                        if (lists.length !== 0) {
-                            
-                            for (item of lists) {
-                               let list = {
-                                    id: item['id'],
-                                    name: item['name']
-                                };
-                                familyLists.push(list);
-                                // /add list to view
-                                let id = list.id;
-                                let name = list.name;
-        
-                                // add family Lists to navbar
-                                let link = `<a class="dropdown-item" data-id="${id}" href="index.php?listId=${id}">${name}</a>`;
-                                if (currentListId === null || currentListId != id) {
-                                    $('div #listsDrop div#familyLists').append(link);
+                console.log(familyId);
+                if (familyId !== null) { // get family lists
+                    familyId=$(familyId).val();
+                    $.ajax({
+                        type: "GET",
+                        url: "api/getFamilyLists.php",
+                        data: {
+                            familyId: familyId
+                        },
+
+                        success: function (lists) {
+                            $('li div #listsDrop div #familyLists').html('');
+                            if (lists.length !== 0) {
+
+                                for (item of lists) {
+                                    let list = {
+                                        id: item['id'],
+                                        name: item['name']
+                                    };
+                                    familyLists.push(list);
+                                    // /add list to view
+                                    let id = list.id;
+                                    let name = list.name;
+
+                                    // add family Lists to navbar
+                                    let link = `<a class="dropdown-item" data-id="${id}" href="index.php?listId=${id}">${name}</a>`;
+                                    if (currentListId === null || currentListId != id) {
+                                        $('div #listsDrop div#familyLists').append(link);
+                                    }
+
+                                    if (currentListId !== null) { // add lists to new list selection
+                                        let option = `<option value="${id}">${name}</option>`;
+                                        $(option).appendTo('div#oldList select#oldListSelect');
+                                    }
                                 }
-        
-                                if (currentListId !== null) { // add lists to new list selection
-                                    let option = `<option value="${id}">${name}</option>`;
-                                    $(option).appendTo('div#oldList select#oldListSelect');
+                            } else {
+                                if (currentListId !== null) {
+                                    let msg = `<span class="dropdown-item-text text-danger px-3">No Lists where found</span>`;
+                                    $('div #listsDrop div#familyLists').append(msg);
                                 }
                             }
-                        }else{
-                            if (currentListId !== null) {
-                            let msg=`<span class="dropdown-item-text text-danger px-3">No Lists where found</span>`;
-                            $('div #listsDrop div#familyLists').append(msg);
+                            if ($('select#oldListSelect option').length == 0) {
+                                $('input#oldListChkBox').prop('disabled', true);
                             }
+                        },
+                        error: function (xhr, ajaxOptions, error) {
+                            console.log(error);
                         }
-                        if($('select#oldListSelect option').length == 0){
-                            $('input#oldListChkBox').prop('disabled', true);
-                        }
-                    },
-                    error: function (xhr, ajaxOptions, error) {
-                        console.log(error);
+                    });
+                } else {
+                    if ($('select#oldListSelect option').length == 0) {
+                        $('input#oldListChkBox').prop('disabled', true);
                     }
-                });
-            }else{
-                if($('select#oldListSelect option').length == 0){
-                    $('input#oldListChkBox').prop('disabled', true);
                 }
-            }
-            
-            
+
             },
             error: function (xhr, ajaxOptions, error) {
                 console.log(error);
             }
         });
 
-       
+
     }
 
     // initiate index page data
@@ -360,11 +346,8 @@ $(document).ready(function () {
 
         let userId = $('input#userId');
         let familyId = $('input#familyId');
-        if (familyId.length != 0) {
-            familyId = familyId.val();
-        }
-        else{
-            familyId=null;
+        if (familyId.length == 0) {
+            familyId = null;
         }
         if (userId.length != 0) {
             userId = userId.val();
@@ -375,7 +358,7 @@ $(document).ready(function () {
                 refreshProducts(listId);
 
                 // 2-populate lists combo boxes with all user's lists
-                populateListsDrop(listId, userId,familyId);
+                populateListsDrop(listId, userId, familyId);
             } else {
                 console.log('error getting the list id');
             }
@@ -388,7 +371,11 @@ $(document).ready(function () {
         initIndexPage();
     } else if ($('input#userId').length !== 0) {
         let userId = $('input#userId').val();
-        populateListsDrop(null, userId);
+        let familyId = $('input#familyId');
+        if (familyId.length == 0) {
+            familyId = null;
+        }
+        populateListsDrop(null, userId,familyId);
     }
 
     $(document).on('click', 'input.btnDone', function (e) {
@@ -550,17 +537,17 @@ $(document).ready(function () {
             console.log('list name exists for user');
             invalidate('input#listName');
             $('span#modalMsgList').append('You already have list with this name');
-        } else if(familyLists.some((list) => list.name === name)) {
-                console.log('list name exists for family');
-                invalidate('input#listName');
-                $('span#modalMsgList').append('Your family already have list with this name');
+        } else if (familyLists.some((list) => list.name === name)) {
+            console.log('list name exists for family');
+            invalidate('input#listName');
+            $('span#modalMsgList').append('Your family already have list with this name');
         } else {
             $('#submitList').click();
         }
     });
 
     /***********login script**********/
-    
+
     /***********invite script**********/
     // ********************send invite *********/
     if (document.URL.includes("invites.php")) {
@@ -784,7 +771,7 @@ $(document).ready(function () {
                         }
 
                         for (item of requests) {
-                            
+
                             request = {
                                 requestId: item['id'],
                                 senderId: item['userId'],
@@ -895,10 +882,10 @@ $(document).ready(function () {
 
 
         $('input#btnSendRequest').click(function (e) {
-           
+
             $('span#requestMsg').empty();
             let familyName = $('input#familyName').val();
-          
+
 
             // if family name is empty
             if (familyName.length < 1) {
@@ -915,7 +902,7 @@ $(document).ready(function () {
                 },
 
                 success: function (response) {
-                    
+
                     if (response.length < 1) {
 
                         $('span#requestMsg').append('Please Choose family from the suggested list only');
@@ -929,7 +916,7 @@ $(document).ready(function () {
             });
 
         });
-        
+
     }
     // ****** view family members *****/
     if (document.URL.includes("familyMembers.php")) {
@@ -980,14 +967,19 @@ $(document).ready(function () {
     }
 
 
-    //************products list***********/
+    // ************products list***********/
     if (document.URL.includes("productsList.php")) {
         function getAllProducts() {
-           
+            let userId = $('input#userId').val();
+            let familyId = $('input#familyId').val();
             $('table#products tbody').html('');
             $.ajax({
                 type: "GET",
-                url: "api/getAllProducts.php",
+                url: "api/getAllDoneProductsForUser.php",
+                data: {
+                    userId: userId,
+                    familyId: familyId
+                },
 
                 success: function (products) {
                     if (products.length > 0) {
@@ -997,12 +989,10 @@ $(document).ready(function () {
                         }
 
                         for (item of products) {
-                        
+
                             product = {
                                 id: item['id'],
-                                name: item['name'],
-                                
-
+                                name: item['name']
                             };
 
                             addAllProducts(product);
@@ -1023,44 +1013,44 @@ $(document).ready(function () {
         }
         getAllProducts();
 
-        $(document).on("dblclick","table#products td.name",function (e) {
-            e.stopPropagation();      
+        $(document).on("dblclick", "table#products td.name", function (e) {
+            e.stopPropagation();
             let currentEle = $(this);
             let value = $(this).html();
-            
+
             updateVal(currentEle, value);
         });
-        
+
         function updateVal(currentEle, value) {
             $(currentEle).html('<input class="thVal form-control col-6 py-3 text-center" type="text" value="' + value + '" />');
             let thVal = $(".thVal");
-            let id=$(currentEle).parents('tr').attr('data-id');
+            let id = $(currentEle).parents('tr').attr('data-id');
             thVal.focus();
             thVal.keyup(function (event) {
                 if (event.keyCode == 13) {
                     $(currentEle).html(thVal.val());
-                    
-                    save(id,thVal.val());
+
+                    save(id, thVal.val());
                 }
             });
-        
+
             thVal.focusout(function () {
-                let id=$(this).parents('tr').attr('data-id');
+                let id = $(this).parents('tr').attr('data-id');
                 $(currentEle).html(thVal.val().trim());
-                return save(id,thVal.val()); 
+                return save(id, thVal.val());
             });
-        
+
         }
-        
-        function save(id,value) {
+
+        function save(id, value) {
             $.ajax({
                 type: "POST",
                 url: "api/updateProductName.php",
                 data: {
-                    id : id,
-                    newName:value
+                    id: id,
+                    newName: value
                 },
-                
+
                 success: function (response) {
                     getAllProducts();
                 },
