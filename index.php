@@ -189,11 +189,22 @@ else {
                     </thead>
                     <tbody id="uncheckedRows">
                         <!--unchecked products will go here-->
-                        <tr v-for="product in uncheckedrows" class="unchecked" v-bind:data-id="product.id"> 
+                        <!-- <tr v-for="product in uncheckedrows" class="unchecked" v-bind:data-id="product.id"> 
                             <td class="btnDone">
                             <input type="checkbox" class="btnDone"></td>
                             <td class="name"> {{product.name}}</td>
                             <td class="amount">{{product.amount}}</td>
+                            <td>
+                                <a href="#" class="btnRemove">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </td>
+                            </tr> -->
+                            <tr v-if="productName" class="unchecked" > 
+                            <td class="btnDone">
+                            <input type="checkbox" class="btnDone"></td>
+                            <td class="name"> {{productName}}</td>
+                            <td class="amount">{{productAmount}}</td>
                             <td>
                                 <a href="#" class="btnRemove">
                                     <i class="fas fa-times"></i>
@@ -204,7 +215,7 @@ else {
 
                     <tbody id="checkedRows">
                         <!--checked products will go here-->
-                        <tr v-for="product in checkedrows" class="checked" v-bind:data-id="product.id"> 
+                        <!-- <tr v-for="product in checkedrows" class="checked" v-bind:data-id="product.id"> 
                             <td class="btnDone">
                             <input type="checkbox" class="btnDone"></td>
                             <td class="name"> {{product.name}}</td>
@@ -214,7 +225,7 @@ else {
                                     <i class="fas fa-times"></i>
                                 </a>
                             </td>
-                            </tr>
+                            </tr> -->
                     </tbody>
 
                 </table>
@@ -266,7 +277,7 @@ else {
                             <div class="row">
                                 <div class="col-md-12">
                                     <label for="prdctName" class="">Name*: </label><br>
-                                    <input type="text" name="prdctName" id="prdctName" class="form-control" placeholder="Product Name" aria-describedby="helpId" required>
+                                    <input  v-model="productName" type="text" name="prdctName" id="prdctName" class="form-control" placeholder="Product Name" aria-describedby="helpId" required>
                                     <div id="menu-container" style="position:relative; width: auto;">
                                         <!--List of suggested products-->
                                     </div>
@@ -288,7 +299,7 @@ else {
                                 <div class="col-md-12 amount">
                                     <br>
                                     <label for="prdctAmount" class="">Amount: </label><br>
-                                    <input type="number" id="prdctAmount" class="form-control" name="prdctAmount" min="1" max="100" value="1" aria-describedby="helpId" />
+                                    <input v-model="productAmount" type="number" id="prdctAmount" class="form-control" name="prdctAmount" min="1" max="100" value="1" aria-describedby="helpId" />
 
                                 </div>
                             </div>
@@ -412,67 +423,12 @@ else {
     new Vue({
       el: "#app",
       data() {
-        return {
-            
-            
-        //   user: {
-    //         // firstName: $userId,
-    // //         lastName: "",
-    // //         bio: "",
-    // //         favColor: "",
-    // //         githubURL: "",
-    // //         hobbies: [],
-    // //         birthday: ""
-        //   },
-    // //       hobbies: ["Running", "Gaming", "Surffing", "Watch TV", "Books"],
-    // //       searchedHobbie: "",
-        }
-      },
-    //   computed:{
-    // //     filterdHobbies() {
-    // //       if (this.searchedHobbie) {
-    // //         let filteredHobbies = this.hobbies.filter((hobbie) => {
-    // //           return hobbie.toLowerCase().includes(this.searchedHobbie.toLowerCase());
-    // //         })
-    // //         return filteredHobbies;
-    // //       }
-    // //       else
-    // //         return this.hobbies;
-    // //     },
-    // //     fixedGitHubURL() {
-    // //       if (!this.user.githubURL.startsWith("http://") && !this.user.githubURL.startsWith("https://"))
-    // //         return "https://" + this.user.githubURL;
-    // //       else
-    // //         return this.user.githubURL;
-    // //     },
-    // //     fullName(){
-    // //       return `${this.user.firstName} ${this.user.lastName}`;
-    // //     },
-    // //     calculateAge() { // birthday is a date
-    // //       birthdayDate = new Date(this.user.birthday);
-    // //       let ageDifMs = Date.now() - birthdayDate.getTime();
-    // //       let ageDate = new Date(ageDifMs); // miliseconds from epoch
-    // //       return Math.abs(ageDate.getUTCFullYear() - 1970);
-    // //     }
-    //   },
-      methods: {
-          getFamilyId(e){
-              let id = e.target.value;
-              this.familyId= id;
-          }
-    // //     getRequests() {
-    // //       console.log(JSON.stringify(this.user));
-    // //     }
-    // //     ,
-    // //     clearHobbies() {
-    // //       this.user.hobbies = [];
-    // //     },
-      }
-    //   filters: {
-    // //     capitalize: function (value) {
-    // //       return nameCapitalized = value.charAt(0).toUpperCase() + value.slice(1)
-    // //     },
-    //   }
+       
+            productName : "",
+            productAmount :  ""
+    
+            }
+    
     });
   </script> 
 

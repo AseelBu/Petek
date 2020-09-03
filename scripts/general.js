@@ -1,46 +1,39 @@
-let listTable = new Vue({
-    el: '#listTable',
-    data: {
-        id: 0,
-        name : "",
-        amount : "",
-        isChecked:"",
-        uncheckedrows:[],
-        checkedrows:[],
-        titles:['Done','Name','Amount','']
-    },
-    methods:{
-        addRow(id, name, amount, isChecked){
-            amount = amount == 0 ? '---' : amount;
-            isChecked = isChecked === 'Y' ? 'check' : 'uncheck';
-          let product = {
-            id: id,
-            name : name,
-            amount : amount,
-            isChecked:isChecked,
-          };
-          if(isChecked === 'check'){
-          this.checkedrows.push(product);
-          }else if(isChecked === 'uncheck'){
-            this.uncheckedrows.push(product);
-          }
+// let listTable = new Vue({
+//     el: '#listTable',
+//     data: {
+//         id: 0,
+//         name : "",
+//         amount : "",
+//         isChecked:"",
+//         uncheckedrows:[],
+//         checkedrows:[],
+//         titles:['Done','Name','Amount','']
+//     },
+//     methods:{
+//         addRow(id, name, amount, isChecked){
+//             amount = amount == 0 ? '---' : amount;
+//             isChecked = isChecked === 'Y' ? 'check' : 'uncheck';
+//           let product = {
+//             id: id,
+//             name : name,
+//             amount : amount,
+//             isChecked:isChecked,
+//           };
+//           if(isChecked === 'check'){
+//           this.checkedrows.push(product);
+//           }else if(isChecked === 'uncheck'){
+//             this.uncheckedrows.push(product);
+//           }
 
-          this.id = 0;
-          this.name = "";
-          this.amount = "";
-          this.isChecked="";
+//           this.id = 0;
+//           this.name = "";
+//           this.amount = "";
+//           this.isChecked="";
           
-        }
-    //     removeRow(ID){
-    //         for (let i = 0; i < this.rows.length; i++) {
-    //             if(this.rows[i].ID == ID){
-    //                 this.rows.splice(i, 1);
-    //                 return;
-    //             }
-    //         }
-    //       }
-      }
-});
+//         }
+    
+//       }
+// });
 
 
 /***************reset************/
@@ -111,10 +104,7 @@ function addProductToTable(product) {
     let amount = product.amount;
     let isChecked = product.isChecked;
 
-    // console.log('amount=' + amount);
-    // console.log('amount==0?' + (
-    //     amount == 0
-    // ));
+    
     amount = amount == 0 ? '---' : amount;
     isChecked = isChecked === 'Y' ? 'check' : 'uncheck';
 
@@ -141,7 +131,7 @@ function addAllProducts(product) {
 
 
     let tr = `<tr  data-id="${id}"> 
-          <td class="name d-flex justify-content-center" title="Double click to edit">{{${name}}}</td>
+          <td class="name d-flex justify-content-center" title="Double click to edit">${name}</td>
          
           <td class="actions ">
               <a href="#" class="btnRemoveProduct">
@@ -264,8 +254,8 @@ $(document).ready(function () {
                             amount: item['amount'],
                             isChecked: item['done']
                         };
-
-                        listTable.addRow(item['id'], item['name'],item['amount'],item['done']);
+                        addProductToTable(product);
+                        // listTable.addRow(item['id'], item['name'],item['amount'],item['done']);
                         listProducts.push(product);
                     }
                     $('table tr.check input[type=checkbox]').prop('checked', true);
