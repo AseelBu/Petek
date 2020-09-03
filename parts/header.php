@@ -94,60 +94,58 @@
         <input type="checkbox" id="switch" name="theme" /><label for="switch">Toggle</label>
     </div>
 
+   
     <script>
 
-        function getCookie(name) {
-            alert('getting '+name)
-            // var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-            // return v ? v[2] : null;
-            return 'dark';
-        }
-            
-        function setCookie(name, value, days) {
-                alert('setting '+name)
-            var d = new Date;
-            d.setTime(d.getTime() + 24 * 60 * 60 * 1000 * days);
-            document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
-        }
+function getCookie(name) {
+    //alert('getting '+name)
+     var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+     return v ? v[2] : null;
+   // return 'dark';
+}
+    
+function setCookie(name, value, days) {
+        //alert('setting '+name+' with value: '+value)
+    var d = new Date;
+    d.setTime(d.getTime() + 24 * 60 * 60 * 1000 * days);
+    document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
+}
 
-        var checkbox = document.querySelector('input[name=theme]');
-        loadTheme();
-        checkbox.addEventListener('change', function() {
-            trans()
-            if (this.checked) {
-                changeTheme('dark')
-            } else {
-                changeTheme( 'light')
-            }
-        })
-        window.setTimeout(() => {
-            alert('changing theme')
-            changeTheme('dark');
-            }, 1000)
+var checkbox = document.querySelector('input[name=theme]');
+loadTheme();
+checkbox.addEventListener('change', function() {
+    trans()
+    if (this.checked) {
+        changeTheme('dark')
+    } else {
+        changeTheme( 'light')
+    }
+})
 
 
-        let trans = () => {
-            document.documentElement.classList.add('transition');
-            window.setTimeout(() => {
-                document.documentElement.classList.remove('transition')
-            }, 1000)
-        }
+let trans = () => {
+    document.documentElement.classList.add('transition');
+    window.setTimeout(() => {
+        document.documentElement.classList.remove('transition')
+    }, 500)
+}
 
-        function changeTheme(theme)
-        {
-            document.documentElement.setAttribute('data-theme', theme)
-           
-            setCookie('Theme',theme,null);
-        }
+function changeTheme(theme)
+{
+    document.documentElement.setAttribute('data-theme', theme)
+    var checkbox = document.querySelector('input[name=theme]');
+    checkbox.checked = 'dark'==theme;
+    setCookie('Theme',theme,100);
+}
 
-        function loadTheme()
-        {
-            currentTheme = getCookie('Theme');
-            changeTheme(currentTheme)
-        }
+function loadTheme()
+{
+    currentTheme = getCookie('Theme');
+    changeTheme(currentTheme)
+}
 
-        
-    </script>
+
+</script>
 
 
 
