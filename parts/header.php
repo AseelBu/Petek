@@ -188,7 +188,7 @@ function loadTheme()
 
     <?php if (isset($_SESSION['userId'])): ?>
         <span class="px-3">
-            <a href="#"> <?=  $_SESSION['usermail'] ; ?> </a>
+            <a href="userChangePass.php"> <?=  $_SESSION['usermail'] ; ?> </a>
         </span>
                 
         <div class="d-flex justify-content-end">

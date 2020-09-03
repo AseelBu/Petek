@@ -7,6 +7,9 @@ require_once('db.php');
 $password = isset($_SESSION['password']) ? $_SESSION['password'] : null;
 $conpwdReg = isset($_SESSION['conpwdReg']) ? $_SESSION['conpwdReg'] : null;
 
+$userId= isset($_SESSION['userId']);
+
+$email = isset($_SESSION['email']);
 
 ?>
 
@@ -45,16 +48,24 @@ $conpwdReg = isset($_SESSION['conpwdReg']) ? $_SESSION['conpwdReg'] : null;
 
             
             ?>
-
-            
                 <div class="alert alert-danger" role="alert">
                     <?= $MSG ?>
                 </div>
 
             <?php endif; ?>
+
+
+
+            <?php if (isset($usermail) || isset($userId)): ?>
+
+               
+             
+
+                <?php endif; ?>
+
             <h2><b>Change Password</b></h2>
             <p>change your password</p>
-            <form class="align-middle" id="passwordRegFrm" method="POST" action="updatePassword.php">
+            <form class="align-middle" id="passwordRegFrm" method="POST" action="changeUserPass.php">
                 <div class="form-group col-md-12">
 
 
@@ -76,12 +87,14 @@ $conpwdReg = isset($_SESSION['conpwdReg']) ? $_SESSION['conpwdReg'] : null;
 
                     <br>
                     <?php
-                    if (isset($_GET["status"]) && ($_GET["status"] == "misMatch" || $_GET["status"] == "shortPass" || $_GET["status"]=="requirelostKey")) :
+                    if (isset($_GET["status"]) && ($_GET["status"] == "misMatch" || $_GET["status"] == "shortPass" )) :
                       $MSG = ($_GET["status"] == "misMatch") ?  "Inserted Passwords are not identical" : "<strong>Password too short.</strong> <br>It must contain at lest 5 characters";
                     
                        
-                       
+
                   ?>
+
+
 
                     
 
