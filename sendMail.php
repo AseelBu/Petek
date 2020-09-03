@@ -37,7 +37,7 @@
         $mail->setFrom($email);
         $mail->addAddress($email);
         $mail->Subject = $subject;
-        $mail->Body =  $body.$rndm."<br>to reset your password please "."<a href='http://localhost/petek-master/changePassword.php'>click here </a>";
+        $mail->Body =  $body.$rndm."<br>to reset your password please "."<a href='http://localhost/petek/changePassword.php'>click here </a>";
 
         
 
