@@ -20,7 +20,7 @@ body::after {
   height: 400px;
 }
 h2{
-  color: rgb(140, 63, 16) ;
+  color: rgb(184, 91, 33) ;
 }
 
 /*navigation bar*/
@@ -133,6 +133,12 @@ div .main {
   background-color: whitesmoke;
   color: #f4b031;
 }
+
+div.alert-warning{
+  color:#ebe6dd;
+  background-color: rgba(214, 179, 104, 0.993);
+}
+
 
 div.loggedIn {
   color: #8a5005;
@@ -298,13 +304,6 @@ html[data-theme="dark"] td a:hover {
   color: #332d23;
 }
 
-html[data-theme="dark"] h2 {
-
-  color: #6d6bc5 ;
-  /*toggle dark mode*/
-}
-
-
 html[data-theme="dark"] tr,
 html[data-theme="dark"] td a {
   color: #a79bc4;
@@ -328,11 +327,22 @@ html[data-theme="dark"] .table-hover tbody tr.check:hover {
   outline: 0.08rem solid rgba(107, 28, 117, 0.993);
 }
 
+
+
 html[data-theme="dark"] .navbar-light {
   background-color: #29272b;
   color: #9461be;
   /*toggle dark mode*/
 }
+
+html[data-theme="dark"] h2 {
+
+  color: #6d6bc5 ;
+  /*toggle dark mode*/
+}
+
+
+
 
 html[data-theme="dark"] .navbar-light input[type="checkbox"] {
   height: 0;
@@ -387,6 +397,13 @@ html[data-theme="dark"] .navbar-light html.transition *:after {
 html[data-theme="dark"] div .main {
   background-color: #272629;
   color: #6d6bc5;
+}
+
+
+
+html[data-theme="dark"] div.alert-warning{
+  color:#ece6db;
+  background-color: rgba(36, 29, 35, 0.993);
 }
 
 html[data-theme="dark"] div.loggedIn {
