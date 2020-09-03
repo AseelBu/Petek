@@ -9,7 +9,7 @@ if (isset($_GET['userId'])) {
 
 $sql= "SELECT DISTINCT `product`.`name` 
         FROM `userlists` INNER JOIN `listproducts` ON `userlists`.`listId`=`listproducts`.`ListId` 
-                INNER JOIN `product` ON `listproducts`.`ProductId`=`product`.`id`
+                INNER JOIN `product` ON `listproducts`.`ProductId`=`product`.`id` 
         WHERE `userlists`.`userId`=$userId AND  `listproducts`.`done`='Y'";
  $result = $conn->query($sql);
  $products = array();

@@ -4,10 +4,12 @@ require_once("../db.php");
 // require_once("../parts/sessionCheck.php");
 
 
-if (isset($_SESSION['userId']) && isset($_SESSION['familyId']) && isset($_POST['listName'])) {
-
+if (isset($_SESSION['userId'])  && isset($_POST['listName'])) {
+    
     $userId = $_SESSION['userId'];
+    if( isset($_SESSION['familyId'])){
     $familyId = $_SESSION['familyId'];
+    }
     $listName = htmlspecialchars($_POST['listName']);
     
     if (isset($_POST['oldListChkBox'])) {

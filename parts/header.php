@@ -48,6 +48,16 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="listsDrop">
                     <!-- user Lists-->
+                    <span class="dropdown-item-text">Your Lists</span>
+                    <!-- <h6 class="px-2" ></h6> -->
+                    <div id="userLists"> </div>
+                    <?php if (!is_null($familyId)): ?>
+                    <div class="dropdown-divider"></div>
+                    <!-- family lists ---->
+                    <span class="dropdown-item-text">Family Lists</span>
+                    
+                    <div id="familyLists"> </div>
+                    <?php endif; ?>
                 </div>
             </li>
             <li class="nav-item">

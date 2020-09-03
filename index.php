@@ -68,7 +68,7 @@ if (isset($_POST['email'])) {
 
     
 }
-
+require_once('parts/sessionCheck.php');
 if (
     is_null($userId) ||
     !isset($_SESSION['usermail']) ||
@@ -78,17 +78,9 @@ if (
     exit();
 } else {
     if (isset($_GET['listId'])) {
-        $listId = $_GET['listId'];
-        //check if this list is for this user
-        $sql = "SELECT `userId` FROM `userlists` WHERE `userId`=$userId AND `listId`=$listId";
-        $result = $conn->query($sql);
-        //this list doesn't belong to user
-        if ($result->num_rows <= 0) {
-            header('Location:index.php?status=noAccess');
-            exit();
-        } else {
-            setcookie('listId', $listId);
-        }
+
+      require_once 'parts/isList4User.php';
+      
     } elseif (
         isset($_COOKIE['listId']) &&
         isset($_GET['status']) &&
@@ -96,24 +88,8 @@ if (
     ) {
         $listId = $_COOKIE['listId'];
     } else {
-        //get details of most recent list for user
-        $sql = "SELECT `list`.* 
-    FROM `userlists` INNER JOIN `list` on `userlists`.`listId`=`list`.`id`
-    WHERE `userlists`.`userId`= $userId
-    ORDER BY `list`.`creteTime` DESC
-    LIMIT 1";
-
-        $result = $conn->query($sql);
-        if ($result->num_rows > 0) {
-            $list = $result->fetch_assoc();
-            $listId = $list['id'];
-            $listName = $list['name'];
-
-            setcookie('listId', $listId);
-            setcookie('listName', $listName);
-        }
+       require_once 'parts/getMostRecentList.php';
     }
-    require_once 'parts/sessionCheck.php';
 }
 
 if (is_null($listId)) {
@@ -128,7 +104,6 @@ else {
         $listName = $row['name'];
     }
 }
-
 
 ?>
 <!DOCTYPE html>
@@ -152,6 +127,7 @@ else {
         </div>
     </header>
 
+    <div id="app">
     <div class="container my-5 px-4 py-4 overflow-auto">
         <?php if (isset($_GET['status']) && $_GET['status'] == 'noAccess'): ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -172,7 +148,9 @@ else {
         <div class="container row d-flex justify-content-between">
 
             <span class="col-sm-6">
+                <?php if (isset($listName)): ?>
                 <h2 id="id=" listName><?= $listName ?></h2>
+                <?php endif; ?>
             </span>
             <div class="container d-flex justify-content-end col-sm-12 ">
                 <?php if (!is_null($listId)): ?>
@@ -212,8 +190,9 @@ else {
         </div>
     </div>
     <!-- hidden input -->
-    <input type="hidden" id="userId" name="userId" value="<?= $userId ?>">
-    <input type="hidden" id="listIdIndex" name="listIdIndex" value="<?= $listId ?>">
+    <input  type="hidden" id="userId" name="userId" value="<?= $userId ?>">
+    <input  type="hidden" id="familyId" name="familyId" value="<?= $familyId ?>">
+    <input  type="hidden" id="listIdIndex" name="listIdIndex" value="<?= $listId ?>">
 
     <?php require 'parts/footer.php'; ?>
 
@@ -326,7 +305,8 @@ else {
                                     <input type="text" name="listName" id="listName" class="form-control " placeholder="List Name" aria-describedby="helpId" required>
                                 </div>
                             </div>
-                            <div class="form-group ">
+                            <?php if(isset($familyId)&& !is_null($familyId)): ?>
+                            <div  class="form-group ">
                                 <div class="col-md-12">
                                 <div class="form-check form-check-inline ">
                                     <input type="radio" id="privateChk" class="form-check-input" name="privacy" value="private" title="Choose this if you want to keep list private" checked>
@@ -340,12 +320,13 @@ else {
                                 </div>
                                 </div>
                             </div>
+                            <?php endif; ?>
                             
                             <div class="form-group ">
                                 <div class="col-md-12">
 
                                     <div class="form-check">
-                                        <input type="checkbox" id="oldListChkBox" class="form-check-input " name="oldListChkBox" value="on" aria-describedby="helpId">
+                                        <input type="checkbox" id="oldListChkBox" class="form-check-input " name="oldListChkBox" value="on" >
                                         <label for="oldListChkBox" class="form-check-label">Add all Products from old list
                                         </label>
                                         <br>
@@ -380,7 +361,7 @@ else {
 
     </div>
 
-
+            </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 
@@ -394,6 +375,72 @@ else {
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="scripts/list_script.js"></script>
     <script src="scripts/general.js"></script>
+    <script>
+    new Vue({
+      el: "#app",
+      data() {
+        return {
+            familyId: ""
+        //   user: {
+    //         // firstName: $userId,
+    // //         lastName: "",
+    // //         bio: "",
+    // //         favColor: "",
+    // //         githubURL: "",
+    // //         hobbies: [],
+    // //         birthday: ""
+        //   },
+    // //       hobbies: ["Running", "Gaming", "Surffing", "Watch TV", "Books"],
+    // //       searchedHobbie: "",
+        }
+      },
+    //   computed:{
+    // //     filterdHobbies() {
+    // //       if (this.searchedHobbie) {
+    // //         let filteredHobbies = this.hobbies.filter((hobbie) => {
+    // //           return hobbie.toLowerCase().includes(this.searchedHobbie.toLowerCase());
+    // //         })
+    // //         return filteredHobbies;
+    // //       }
+    // //       else
+    // //         return this.hobbies;
+    // //     },
+    // //     fixedGitHubURL() {
+    // //       if (!this.user.githubURL.startsWith("http://") && !this.user.githubURL.startsWith("https://"))
+    // //         return "https://" + this.user.githubURL;
+    // //       else
+    // //         return this.user.githubURL;
+    // //     },
+    // //     fullName(){
+    // //       return `${this.user.firstName} ${this.user.lastName}`;
+    // //     },
+    // //     calculateAge() { // birthday is a date
+    // //       birthdayDate = new Date(this.user.birthday);
+    // //       let ageDifMs = Date.now() - birthdayDate.getTime();
+    // //       let ageDate = new Date(ageDifMs); // miliseconds from epoch
+    // //       return Math.abs(ageDate.getUTCFullYear() - 1970);
+    // //     }
+    //   },
+      methods: {
+          getFamilyId(e){
+              let id = e.target.value;
+              this.familyId= id;
+          }
+    // //     getRequests() {
+    // //       console.log(JSON.stringify(this.user));
+    // //     }
+    // //     ,
+    // //     clearHobbies() {
+    // //       this.user.hobbies = [];
+    // //     },
+      }
+    //   filters: {
+    // //     capitalize: function (value) {
+    // //       return nameCapitalized = value.charAt(0).toUpperCase() + value.slice(1)
+    // //     },
+    //   }
+    });
+  </script> 
 
     <?php $conn->close(); ?>
 </body>
