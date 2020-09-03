@@ -18,7 +18,7 @@ body::after {
 }
 
 h2{
-  color: rgb(140, 63, 16) ;
+  color: rgb(184, 91, 33) ;
 }
 
 /*navigation bar*/
@@ -145,6 +145,11 @@ div#oldList {
 /*dropdownList*/
 .dropdown-item {
   color: #f4b031;
+}
+
+div.alert-warning{
+  color:#ebe6dd;
+  background-color: rgba(214, 179, 104, 0.993);
 }
 
 .dropdown-item:focus,
@@ -366,14 +371,22 @@ html[data-theme="dark"] {
   }
 
  
-  h2{
-    color: rgb(27, 16, 9) ;
-  }
 
   /*Divs*/
   div .main {
     background-color: rgb(39, 38, 41);
     color: #6d6bc5;
+  }
+
+
+
+  div.alert-warning{
+    color:#ece6db;
+    background-color: rgba(36, 29, 35, 0.993);
+  }
+  
+  h2{
+    color: #6d6bc5 ;
   }
 
   div.loggedIn {
@@ -419,6 +432,8 @@ html[data-theme="dark"] {
     text-align: center;
   }
 
+
+   
   /*links*/
   .check a {
     color: rgba(77, 75, 72, 0.993);

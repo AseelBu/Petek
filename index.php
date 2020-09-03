@@ -127,6 +127,9 @@ else {
         </div>
     </header>
 
+
+  
+
     <div id="app">
     <div class="container my-5 px-4 py-4 overflow-auto">
         <?php if (isset($_GET['status']) && $_GET['status'] == 'noAccess'): ?>
@@ -137,6 +140,16 @@ else {
                 </button>
             </div>
         <?php endif; ?>
+
+        <?php
+      if (isset($_GET["status"]) && $_GET["status"] == "passwordChanged") : ?>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          password changed succefully :)
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+        </div>
+      <?php endif; ?>
         <?php if (isset($_GET['status']) && $_GET['status'] == 'noProducts'): ?>
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 The List you chose doesn't have any products
