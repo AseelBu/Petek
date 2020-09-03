@@ -298,6 +298,13 @@ html[data-theme="dark"] td a:hover {
   color: #332d23;
 }
 
+html[data-theme="dark"] h2 {
+
+  color: #6d6bc5 ;
+  /*toggle dark mode*/
+}
+
+
 html[data-theme="dark"] tr,
 html[data-theme="dark"] td a {
   color: #a79bc4;
