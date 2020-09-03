@@ -1,14 +1,14 @@
-// let listTable = new Vue({
-//     el: '#listTable',
-//     data: {
-//         id: 0,
-//         name : "",
-//         amount : "",
-//         isChecked:"",
-//         uncheckedrows:[],
-//         checkedrows:[],
-//         titles:['Done','Name','Amount','']
-//     },
+let listTable = new Vue({
+    el: '#listTable',
+    data: {
+        id: 0,
+        name : "",
+        amount : "",
+        isChecked:"",
+        uncheckedrows:[],
+        checkedrows:[],
+        titles:['Done','Name','Amount','']
+    }
 //     methods:{
 //         addRow(id, name, amount, isChecked){
 //             amount = amount == 0 ? '---' : amount;
@@ -33,7 +33,7 @@
 //         }
     
 //       }
-// });
+});
 
 
 /***************reset************/
