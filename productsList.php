@@ -37,7 +37,6 @@ require_once 'parts/sessionCheck.php';
                             <th scope="col">Name</th>
                             <th scope="col">Remove</th>
                             
-                            
                         </tr>
                     </thead>
                     <tbody>

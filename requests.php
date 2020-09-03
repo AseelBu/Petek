@@ -92,7 +92,7 @@ if ($result->num_rows <1) {
  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="scripts/general.js"></script>
 
-<!-- <script> -->
+<script>
     // new Vue({
     //   el: "#app",
     //   data() {
@@ -152,7 +152,6 @@ if ($result->num_rows <1) {
     // //     },
     //   }
     // });
-  <!-- </script> -->
-</body>
+   </script> 
 <?php $conn->close(); ?>
 </html>

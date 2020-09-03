@@ -86,8 +86,8 @@ require_once 'parts/sessionCheck.php';
                                 </div>
 
                             <span class="mt-2"> **People in: your family/has family/already been invited to your family,<br> can't be invited again</span>
-                                <input type="hidden" id="userId" name="userId" value="<?= $userId ?>">
-                                <input type="hidden" name="familyId" value="<?= $familyId ?>">
+                            <input type="hidden" id="userId" name="userId" value="<?= $userId ?>">
+                                <input type="hidden" id="familyId" name="familyId" value="<?= $familyId ?>">
                                 <input type="hidden" id="invitedId" name="invitedId" value="">
 
                             </div>
@@ -108,7 +108,9 @@ require_once 'parts/sessionCheck.php';
                     <h2><b>Family Invitations</b></h2><br>
 
                     <input type="hidden" id="userId" name="userId" value="<?= $userId ?>">
-                               
+                    
+                <input type="hidden" id="familyId" name="familyId" value="<?= $familyId ?>">
+                                
 
                         <div class="table-responsive" id="viewInvites">
                 
