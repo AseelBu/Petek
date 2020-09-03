@@ -31,18 +31,19 @@ if (isset($_POST['conpwdReg'])) {
 
 if (!is_null($keypass)) {
 
-    // for security, check again that email doesn't exist in db
+
     $sql = "SELECT  `lostKeyPass`
-     FROM `users`";
+     FROM `users` where lostKeyPass='$keypass'";
     $result = $conn->query($sql);
-    if ($result->num_rows < 0) {
-        while ($row = $result->fetch_assoc()) {
-            if (strcmp($row['keypass'], $keypass) === 0) {
-                header("Location:signup.php?status=exists");
-                exit();
-            }
-        }
+
+
+    //this list doesn't belong to user
+    if ($result->num_rows <= 0) {
+        header("Location:changePassword.php?status=requirelostKey");
+        exit();
     }
+
+    
 
     if (isset($_POST['password']) && isset($_POST['conpwdReg'])) {
 
@@ -51,7 +52,7 @@ if (!is_null($keypass)) {
 
         //if the password is too short
         if (strlen($password) < 5) {
-            header("Location:setPassword.php?status=shortPass&p=$pl");
+            header("Location:changePassword.php?status=shortPass");
             exit();
         }
 

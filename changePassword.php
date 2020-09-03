@@ -82,9 +82,11 @@ $conpwdReg = isset($_SESSION['conpwdReg']) ? $_SESSION['conpwdReg'] : null;
                     //if (isset($_GET["status"]) && ($_GET["status"] == "misMatch" || $_GET["status"] == "shortPass" || $_GET["status"]=="requirelostKey")) :
                      //  $MSG = ($_GET["status"] == "misMatch") ?  "Inserted Passwords are not identical" : "<strong>Password too short.</strong> <br>It must contain at lest 5 characters";
                     
-                       if (isset($_GET["status"]) && ($_GET["status"] == "misMatch" || $_GET["status"] == "shortPass" || $_GET["status"]=="requirelostKey")) :
+                       if (isset($_GET["status"]) && ($_GET["status"] == "misMatch" || $_GET["status"] == "shortPass" || $_GET["status"]=="requirelostKey"  )) :
                         $MSG = ($_GET["status"] == "misMatch") ?  "Inserted Passwords are not identical" :(($_GET["status"] == "shortPass") ? "<strong>Password too short.</strong> <br>It must contain at lest 5 characters" : "please enter lost keypass!");
                      
+                      
+                        
                        
                   ?>
 
