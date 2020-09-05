@@ -39,9 +39,9 @@ if (!is_null($keypass)) {
 
     //this list doesn't belong to user
     if ($result->num_rows <= 0) {
-        var_dump($result);
-        // header("Location:changePassword.php?status=requirelostKey");
-        // exit();
+        
+        header("Location:changePassword.php?status=requirelostKey");
+        exit();
     }
 
     

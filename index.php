@@ -65,7 +65,6 @@ if (isset($_POST['email'])) {
     // update login date
     $sql="UPDATE `users` SET `lastLogin`=now()  WHERE `id`= $userId ";
     $conn->query($sql);
-
     
 }
 require_once('parts/sessionCheck.php');
@@ -219,7 +218,7 @@ else {
                             <td class="btnDone">
                             <input type="checkbox" class="btnDone" checked></td>
                             <td class="name"> {{product.name}}</td>
-                            <td class="amount">{{product.amount}}</td>
+                            <td  class="amount">{{product.amount}}</td>
                             <td>
                                 <a href="#" class="btnRemove">
                                     <i class="fas fa-times"></i>

@@ -1,6 +1,6 @@
 let listTable = new Vue({
     el: '#listTable',
-    data: {
+    data:{
         id: 0,
         name : "",
         amount : "",
@@ -8,6 +8,7 @@ let listTable = new Vue({
         uncheckedrows:[],
         checkedrows:[],
         titles:['Done','Name','Amount','']
+        
     },
     methods:{
         addRow(id, name, amount, isChecked){
@@ -33,7 +34,33 @@ let listTable = new Vue({
         }
     
       }
-});
+})
+
+// let doneProductsTable = new Vue({
+//     el: '#products',
+//     data:{
+//         id: 0,
+//         name : "",
+//         doneProducts:[],
+//         titles:['Name','Remove']
+        
+//     },
+//     methods:{
+//         addRow(id, name){
+           
+//           let product = {
+//             id: id,
+//             name : name
+//           };
+         
+//           this.doneProducts.push(product);
+//           this.id = 0;
+//           this.name = "";
+          
+//         }
+    
+//       }
+// })
 
 
 /***************reset************/
@@ -72,7 +99,7 @@ function validate(selector) {
     }
 }
 
-/**********grocery_list script*********/
+//**********grocery_list script*********/
 
 let listProducts = [
     // current products in the list
@@ -86,64 +113,46 @@ let familyLists = [
     // current lists
 ];
 
-function sortByName(a, b) {
-    let aName = a.name.toLowerCase();
-    let bName = b.name.toLowerCase();
-    return aName < bName ? -1 : aName > bName ? 1 : 0;
-}
+// function sortByName(a, b) {
+//     let aName = a.name.toLowerCase();
+//     let bName = b.name.toLowerCase();
+//     return aName < bName ? -1 : aName > bName ? 1 : 0;
+// }
 
-function sortByTr(a, b) {
-    let aName = $(a).find('.name').text().toLowerCase();
-    let bName = $(b).find('.name').text().toLowerCase();
-    return aName < bName ? -1 : aName > bName ? 1 : 0;
-}
+// function sortByTr(a, b) {
+//     let aName = $(a).find('.name').text().toLowerCase();
+//     let bName = $(b).find('.name').text().toLowerCase();
+//     return aName < bName ? -1 : aName > bName ? 1 : 0;
+// }
 
-function addProductToTable(product) {
-    let id = product.id;
-    let name = product.name;
-    let amount = product.amount;
-    let isChecked = product.isChecked;
+// function addProductToTable(product) {
+//     let id = product.id;
+//     let name = product.name;
+//     let amount = product.amount;
+//     let isChecked = product.isChecked;
 
     
-    amount = amount == 0 ? '---' : amount;
-    isChecked = isChecked === 'Y' ? 'check' : 'uncheck';
+//     amount = amount == 0 ? '---' : amount;
+//     isChecked = isChecked === 'Y' ? 'check' : 'uncheck';
 
-    let tr = `<tr class="${isChecked}" data-id="${id}"> <td class="btnDone">
-          <input type="checkbox" class="btnDone"></td>
-          <td class="name"> ${name}</td>
-          <td class="amount">${amount}</td>
-          <td>
-              <a href="#" class="btnRemove">
-                  <i class="fas fa-times"></i>
-              </a>
-          </td>
-          </tr>`;
+//     let tr = `<tr class="${isChecked}" data-id="${id}"> <td class="btnDone">
+//           <input type="checkbox" class="btnDone"></td>
+//           <td class="name"> ${name}</td>
+//           <td class="amount">${amount}</td>
+//           <td>
+//               <a href="#" class="btnRemove">
+//                   <i class="fas fa-times"></i>
+//               </a>
+//           </td>
+//           </tr>`;
 
-    if (isChecked === 'check') {
-        $('table#products tbody#checkedRows').append(tr);
-    } else if (isChecked === 'uncheck') {
-        $('table#products tbody#uncheckedRows').append(tr);
-    }
-}
-function addAllProducts(product) {
-    let id = product.id;
-    let name = product.name;
+//     if (isChecked === 'check') {
+//         $('table#products tbody#checkedRows').append(tr);
+//     } else if (isChecked === 'uncheck') {
+//         $('table#products tbody#uncheckedRows').append(tr);
+//     }
+// }
 
-
-    let tr = `<tr  data-id="${id}"> 
-          <td class="name d-flex justify-content-center" title="Double click to edit">${name}</td>
-         
-          <td class="actions ">
-              <a href="#" class="btnRemoveProduct">
-              <i class="fas fa-times fa-lg"></i>
-              </a>
-          </td>
-          </tr>`;
-
-
-    $('table#products tbody').append(tr);
-
-}
 
 function addInviteToTable(invite) {
     let familyId = invite.familyId;
@@ -312,7 +321,7 @@ $(document).ready(function () {
                     }
 
                 }
-                console.log(familyId);
+                
                 if (familyId !== null) { // get family lists
                     familyId=$(familyId).val();
                     $.ajax({
@@ -1004,6 +1013,26 @@ $(document).ready(function () {
 
     // ************products list***********/
     if (document.URL.includes("productsList.php")) {
+        function addDoneProducts(product) {
+            let id = product.id;
+            let name = product.name;
+        
+        
+            let tr = `<tr  data-id="${id}"> 
+                  <td class="name d-flex justify-content-center" title="Double click to edit">${name}</td>
+                 
+                  <td class="actions ">
+                      <a href="#" class="btnRemoveProduct">
+                      <i class="fas fa-times fa-lg"></i>
+                      </a>
+                  </td>
+                  </tr>`;
+        
+        
+            $('table#products tbody').append(tr);
+        
+        }
+
         function getAllProducts() {
             let userId = $('input#userId').val();
             let familyId = $('input#familyId').val();
@@ -1030,7 +1059,7 @@ $(document).ready(function () {
                                 name: item['name']
                             };
 
-                            addAllProducts(product);
+                            addDoneProducts(product);
 
                         }
                     } else { // no new members
@@ -1136,14 +1165,12 @@ if (document.URL.includes("resetPassword.php")) {
       }
 
       $(document).on('click','input#btnSendReset',function (e) {
-        console.log("at least");
+        
         let email = $("#EmailLogin");
       
 
         if ( isNotEmpty(email) ) {
             $("input#submitReset").click();
-        }else{
-            console.log("else");
         }
       });
     }

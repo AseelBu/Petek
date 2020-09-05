@@ -34,14 +34,21 @@ require_once 'parts/sessionCheck.php';
                 <table class="table table-hover text-center shadow rounded col-10" id="products">
                     <thead>
                         <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Remove</th>
+                            <th v-for="title in titles" scope="col">{{title}}</th>
                             
                         </tr>
                     </thead>
                     <tbody>
                         <!-- products will show here--->
-                     
+                        <tr  v-for="product in doneProducts" v-bind:data-id="product.id"> 
+                          <td class="name d-flex justify-content-center" title="Double click to edit">{{product.name}}</td>
+                 
+                          <td class="actions ">
+                              <a href="#" class="btnRemoveProduct">
+                              <i class="fas fa-times fa-lg"></i>
+                              </a>
+                          </td>
+                        </tr>
                     </tbody>
 
                 </table>
@@ -67,7 +74,7 @@ require_once 'parts/sessionCheck.php';
  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="scripts/general.js"></script>
 
-<script>
+<!-- <script>
     new Vue({
       el: "#app",
       data() {
@@ -127,7 +134,7 @@ require_once 'parts/sessionCheck.php';
     //     },
       }
     });
-  </script>
+  </script> -->
 </body>
 <?php $conn->close(); ?>
 </html>
