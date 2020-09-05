@@ -97,14 +97,32 @@
         <?php endif; ?>
     </ul>
 
-
-
-    <div class="toggle-container">
+    <div class="container d-flex justify-content-end">
+    <div class="toggle-container mx-2">
         <h10><i class="fas fa-adjust" title="Light/Dark"></i></h10>
-        <input type="checkbox" id="switch" name="theme" /><label for="switch">Toggle</label>
+        <input type="checkbox" id="switch" name="theme" title="Light/Dark"/><label for="switch">Toggle</label>
     </div>
 
-   
+    
+    <?php if (isset($_SESSION['userId'])): ?>
+        <span class="px-3">
+            <a href="userChangePass.php"> <?=  $_SESSION['usermail'] ; ?> </a>
+        </span>
+                
+       
+            <a href="logout.php"><button class=" btn btn-default">Log Out</button></a>
+
+       
+    <?php else: ?>
+           
+            <span class=""><a href="login.php"> 
+            <button class=" btn btn-default">Login</button></a></span>
+            <span class="ml-2 "><a href="signup.php"> 
+            <button class=" btn btn-default">Sign-up</button></a></span>
+             
+    <?php endif; ?>
+    </div>
+
     <script>
 
 function getCookie(name) {
@@ -157,9 +175,7 @@ function loadTheme()
 
 </script>
 
-
-
-    <!-- <script>
+<!-- <script>
         // dark mode switch 2
         var setTheme = function(theme) {
             if (theme === 'dark') {
@@ -194,27 +210,3 @@ function loadTheme()
             }
         })
     </script> -->
-
-
-    <?php if (isset($_SESSION['userId'])): ?>
-        <span class="px-3">
-            <a href="userChangePass.php"> <?=  $_SESSION['usermail'] ; ?> </a>
-        </span>
-                
-        <div class="d-flex justify-content-end">
-            <a href="logout.php"><button class=" btn btn-default">Log Out</button></a>
-
-        </div>
-    <?php endif; ?>
-
-
-    
-    <!-- <div class="d-flex justify-content-end">
-
-                        <a href="login.php"><button class=" btn btn-default">Log Out</button></a>
-
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </header> -->

@@ -11,13 +11,7 @@
     <div class="fixed-top">
       <nav class="navbar navbar-expand-lg navbar-light">
         <?php require "parts/header.php"; ?>
-        <div class="container d-flex justify-content-end">
-          <span>
-            <span class="col-6 "><a href="login.php"> <button class=" btn btn-default">Login</button></a></span>
-            <span class="col-6 "><a href="signup.php"> <button class=" btn btn-default">Sign-up</button></a></span>
-          </span>
-
-        </div>
+        
     </div>
     </nav>
     </div>
@@ -28,7 +22,7 @@
     <div class="py-3 px-3 shadow main" id="Login">
       <h2><b>Reset Password</b></h2>
 
-      <form class="align-middle " id="resetPassFrm" action="login.php">
+      <form class="align-middle " method="POST" action="sendMail.php" id="resetPassFrm" >
         <div class="form-group col-md-12">
           <div class="form-row ">
 
@@ -38,14 +32,12 @@
 
 
           <div class="d-flex justify-content-end my-2">
-            <input type="submit"  onclick="sendEmail()"  class="btn btn-default" id="btnSendReset" value="Send">
-
-     
+            <input type="button"    class="btn btn-default" id="btnSendReset" value="Send">
            
           </div>
 
 
-
+        <input type="submit" class="d-none" id="submitReset">
 
         </div>
       </form>
@@ -53,44 +45,8 @@
   </div>
 
    
-  <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-    <script type="text/javascript">
-        function sendEmail() {
-           
-            var email = $("#EmailLogin");
-        
-
-            if ( isNotEmpty(email) ) {
-                $.ajax({
-                   url: 'sendMail.php',
-                   method: 'POST',
-                   dataType: 'json',
-                   data: {
-                       
-                       email: email.val(),
-                      
-                   }, success: function (response) {
-                        if (response.status == "success")
-                            alert('Email Has Been Sent!');
-                        else {
-                            alert('Please Try Again!');
-                            console.log(response);
-                        }
-                   }
-                });
-            }
-        }
-
-        function isNotEmpty(caller) {
-            if (caller.val() == "") {
-                caller.css('border', '1px solid red');
-                return false;
-            } else
-                caller.css('border', '');
-
-            return true;
-        }
-    </script>
+  
+   
 
 
 

@@ -8,31 +8,31 @@ let listTable = new Vue({
         uncheckedrows:[],
         checkedrows:[],
         titles:['Done','Name','Amount','']
-    }
-//     methods:{
-//         addRow(id, name, amount, isChecked){
-//             amount = amount == 0 ? '---' : amount;
-//             isChecked = isChecked === 'Y' ? 'check' : 'uncheck';
-//           let product = {
-//             id: id,
-//             name : name,
-//             amount : amount,
-//             isChecked:isChecked,
-//           };
-//           if(isChecked === 'check'){
-//           this.checkedrows.push(product);
-//           }else if(isChecked === 'uncheck'){
-//             this.uncheckedrows.push(product);
-//           }
+    },
+    methods:{
+        addRow(id, name, amount, isChecked){
+            amount = amount == 0 ? '---' : amount;
+            isChecked = isChecked === 'Y' ? 'check' : 'uncheck';
+          let product = {
+            id: id,
+            name : name,
+            amount : amount,
+            isChecked:isChecked,
+          };
+          if(isChecked === 'check'){
+          this.checkedrows.push(product);
+          }else if(isChecked === 'uncheck'){
+            this.uncheckedrows.push(product);
+          }
 
-//           this.id = 0;
-//           this.name = "";
-//           this.amount = "";
-//           this.isChecked="";
+          this.id = 0;
+          this.name = "";
+          this.amount = "";
+          this.isChecked="";
           
-//         }
+        }
     
-//       }
+      }
 });
 
 
@@ -254,8 +254,8 @@ $(document).ready(function () {
                             amount: item['amount'],
                             isChecked: item['done']
                         };
-                        addProductToTable(product);
-                        // listTable.addRow(item['id'], item['name'],item['amount'],item['done']);
+                        // addProductToTable(product);
+                        listTable.addRow(item['id'], item['name'],item['amount'],item['done']);
                         listProducts.push(product);
                     }
                     $('table tr.check input[type=checkbox]').prop('checked', true);
@@ -1096,3 +1096,54 @@ $(document).ready(function () {
         }
     }
 });
+//*****reset password****/
+if (document.URL.includes("resetPassword.php")) {
+
+    //   function sendEmail() {
+         
+    //       let email = $("#EmailLogin");
+      
+
+    //       if ( isNotEmpty(email) ) {
+    //           $.ajax({
+    //              url: '../sendMail.php',
+    //              method: 'POST',
+    //              dataType: 'json',
+    //              data: {
+                     
+    //                  email: email.val(),
+                    
+    //              }, success: function (response) {
+    //                   if (response.status == "success")
+    //                       alert('Email Has Been Sent!');
+    //                   else {
+    //                       alert('Please Try Again!');
+    //                       console.log(response);
+    //                   }
+    //              }
+    //           });
+    //       }
+    //   }
+
+      function isNotEmpty(caller) {
+          if (caller.val() == "") {
+              caller.css('border', '1px solid red');
+              return false;
+          } else
+              caller.css('border', '');
+
+          return true;
+      }
+
+      $(document).on('click','input#btnSendReset',function (e) {
+        console.log("at least");
+        let email = $("#EmailLogin");
+      
+
+        if ( isNotEmpty(email) ) {
+            $("input#submitReset").click();
+        }else{
+            console.log("else");
+        }
+      });
+    }

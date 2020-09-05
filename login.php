@@ -18,11 +18,11 @@ $password = isset($_COOKIE['password']) ? $_COOKIE['password'] : "";
     <div class="fixed-top">
       <nav class="navbar navbar-expand-lg navbar-light">
         <?php require "parts/header.php"; ?>
-        <div class="d-flex justify-content-end">
+        <!-- <div class="d-flex justify-content-end">
 
           <a href="signup.php"> <button class=" btn btn-default">Sign-up</button></a>
 
-        </div>
+        </div> -->
     </div>
     </nav>
     </div>
@@ -33,16 +33,25 @@ $password = isset($_COOKIE['password']) ? $_COOKIE['password'] : "";
     <div class="py-3 px-3 shadow main" id="Login">
       <!-- the user tried to access pages without logging in -->
       <?php
-      if (isset($_GET["status"]) && $_GET["status"] == "showMsg") : ?>
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      if (isset($_GET["status"]) && $_GET["status"] == "showMsg" ) : ?>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert"> 
           Please Login to view the page
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+        </div>
+      <?php endif; ?> 
+      <?php
+      if (isset($_GET["status"]) &&  $_GET["status"] == "notSent") : ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            Error sending password reset email!
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
         </div>
       <?php endif; ?>
       <?php
-      if (isset($_GET["email"])) : ?>
+      if (isset($_GET["status"]) &&  $_GET["status"] == "sent"): ?>
         <div class="alert alert-info alert-dismissible fade show" role="alert">
           A link to reset your password was sent to the Email:<br><?= $_GET['email'] ?>
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">

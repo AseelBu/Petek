@@ -27,11 +27,7 @@ $conpwdReg = isset($_SESSION['conpwdReg']) ? $_SESSION['conpwdReg'] : null;
         <div class="fixed-top">
             <nav class="navbar navbar-expand-lg navbar-light navbar-fixed-top">
                 <?php require "parts/header.php"; ?>
-                <div class="d-flex justify-content-end">
-
-                    <a href="login.php"><button class=" btn btn-default">Login</button></a>
-
-                </div>
+                
         </div>
         </nav>
         </div>
@@ -86,8 +82,6 @@ $conpwdReg = isset($_SESSION['conpwdReg']) ? $_SESSION['conpwdReg'] : null;
                         $MSG = ($_GET["status"] == "misMatch") ?  "Inserted Passwords are not identical" :(($_GET["status"] == "shortPass") ? "<strong>Password too short.</strong> <br>It must contain at lest 5 characters" : "please enter lost keypass!");
                      
                       
-                        
-                       
                   ?>
 
                     
@@ -117,19 +111,7 @@ $conpwdReg = isset($_SESSION['conpwdReg']) ? $_SESSION['conpwdReg'] : null;
     </script>
 
 
-
-
-
-
-
-
     <?php require "parts/footer.php"; ?>
-
-
-
-
-
-    
 
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>

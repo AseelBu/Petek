@@ -4,6 +4,7 @@
    require_once('db.php');
   
     use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
 
    $rndm=generateRandomString();
     
@@ -37,7 +38,7 @@
         $mail->setFrom($email);
         $mail->addAddress($email);
         $mail->Subject = $subject;
-        $mail->Body =  $body.$rndm."<br>to reset your password please "."<a href='http://localhost/petek/changePassword.php'>click here </a>";
+        $mail->Body =  $body.$rndm."<br>to reset your password please "."<a href='http://localhost/petek/changePassword.php?email= $email'>click here </a>";
 
         
 
@@ -59,14 +60,18 @@
     
 
         if ($mail->send()) {
-            $status = "success";
-            $response = "Email is sent!";
+            // $status = "success";
+            // $response = "Email is sent!";
+            header('Location:login.php?status=sent&email='.$email);
+            exit();
         } else {
-            $status = "failed";
-            $response = "Something is wrong: <br><br>" . $mail->ErrorInfo;
+            // $status = "failed";
+            // $response = "Something is wrong: <br><br>" . $mail->ErrorInfo;
+            header('Location:login.php?status=notSent');
+            exit();
         }
 
-        exit(json_encode(array("status" => $status, "response" => $response)));
+        //exit(json_encode(array("status" => $status, "response" => $response)));
 
 
     }

@@ -189,7 +189,7 @@ else {
                     </thead>
                     <tbody id="uncheckedRows">
                         <!--unchecked products will go here-->
-                        <!-- <tr v-for="product in uncheckedrows" class="unchecked" v-bind:data-id="product.id"> 
+                        <tr v-for="product in uncheckedrows" class="uncheck" v-bind:data-id="product.id"> 
                             <td class="btnDone">
                             <input type="checkbox" class="btnDone"></td>
                             <td class="name"> {{product.name}}</td>
@@ -199,8 +199,8 @@ else {
                                     <i class="fas fa-times"></i>
                                 </a>
                             </td>
-                            </tr> -->
-                            <tr v-if="productName" class="unchecked" > 
+                            </tr>
+                            <!-- <tr v-if="productName" class="unchecked" > 
                             <td class="btnDone">
                             <input type="checkbox" class="btnDone"></td>
                             <td class="name"> {{productName}}</td>
@@ -210,14 +210,14 @@ else {
                                     <i class="fas fa-times"></i>
                                 </a>
                             </td>
-                            </tr>
+                            </tr> -->
                     </tbody>
 
                     <tbody id="checkedRows">
                         <!--checked products will go here-->
-                        <!-- <tr v-for="product in checkedrows" class="checked" v-bind:data-id="product.id"> 
+                        <tr v-for="product in checkedrows" class="check" v-bind:data-id="product.id"> 
                             <td class="btnDone">
-                            <input type="checkbox" class="btnDone"></td>
+                            <input type="checkbox" class="btnDone" checked></td>
                             <td class="name"> {{product.name}}</td>
                             <td class="amount">{{product.amount}}</td>
                             <td>
@@ -225,7 +225,7 @@ else {
                                     <i class="fas fa-times"></i>
                                 </a>
                             </td>
-                            </tr> -->
+                            </tr>
                     </tbody>
 
                 </table>
@@ -420,16 +420,16 @@ else {
     <script src="scripts/list_script.js"></script>
     <script src="scripts/general.js"></script>
     <script>
-    new Vue({
-      el: "#app",
-      data() {
+    // new Vue({
+    //   el: "#app",
+    //   data() {
        
-            productName : "",
-            productAmount :  ""
+    //         productName : "",
+    //         productAmount :  ""
     
-            }
+    //         }
     
-    });
+    // });
   </script> 
 
     <?php $conn->close(); ?>

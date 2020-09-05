@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 03, 2020 at 10:28 PM
--- Server version: 10.4.13-MariaDB
--- PHP Version: 7.4.7
+-- Generation Time: Sep 03, 2020 at 10:51 PM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.4.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -36,10 +36,7 @@ CREATE TABLE `fadmin` (
 --
 
 INSERT INTO `fadmin` (`id`) VALUES
-(0),
-(1),
-(2),
-(3);
+(1);
 
 -- --------------------------------------------------------
 
@@ -58,10 +55,7 @@ CREATE TABLE `family` (
 --
 
 INSERT INTO `family` (`id`, `name`, `adminId`) VALUES
-(1, 'Smith', 1),
-(2, 'Williams', 0),
-(3, 'Hassan', 2),
-(6, 'Butto', 3);
+(1, 'happy family', 1);
 
 -- --------------------------------------------------------
 
@@ -79,9 +73,7 @@ CREATE TABLE `familylists` (
 --
 
 INSERT INTO `familylists` (`listId`, `familyId`) VALUES
-(2, 1),
-(3, 2),
-(5, 2);
+(2, 1);
 
 -- --------------------------------------------------------
 
@@ -101,8 +93,7 @@ CREATE TABLE `invites` (
 --
 
 INSERT INTO `invites` (`senderId`, `sendedToId`, `familyId`, `approved`) VALUES
-(2, 3, 1, 'W'),
-(3, 3, 2, 'W');
+(1, 2, 1, 'W');
 
 -- --------------------------------------------------------
 
@@ -113,6 +104,7 @@ INSERT INTO `invites` (`senderId`, `sendedToId`, `familyId`, `approved`) VALUES
 CREATE TABLE `list` (
   `id` int(6) UNSIGNED NOT NULL,
   `name` varchar(50) NOT NULL,
+  `privacy` char(1) NOT NULL CHECK (`privacy` in ('P','F')),
   `creteTime` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -120,13 +112,10 @@ CREATE TABLE `list` (
 -- Dumping data for table `list`
 --
 
-INSERT INTO `list` (`id`, `name`, `creteTime`) VALUES
-(1, 'list1', '2020-09-03 21:25:46'),
-(2, 'List2', '2020-09-03 22:14:57'),
-(3, 'List3', '2020-09-03 22:47:05'),
-(4, 'List3', '2020-09-03 22:47:08'),
-(5, 'List4', '2020-09-03 23:10:09'),
-(6, 'List5', '2020-09-03 23:10:21');
+INSERT INTO `list` (`id`, `name`, `privacy`, `creteTime`) VALUES
+(1, 'list 1', 'P', '2020-09-03 23:41:59'),
+(2, 'family list 1', 'F', '2020-09-03 23:43:25'),
+(3, 'list2', 'P', '2020-09-03 23:44:59');
 
 -- --------------------------------------------------------
 
@@ -146,14 +135,15 @@ CREATE TABLE `listproducts` (
 --
 
 INSERT INTO `listproducts` (`ListId`, `ProductId`, `amount`, `done`) VALUES
-(1, 1, 0, 'N'),
-(1, 2, 0, 'N'),
-(1, 6, 0, 'N'),
-(2, 4, 0, 'N'),
-(3, 5, 0, 'N'),
-(4, 3, 1, 'n'),
-(4, 7, 3, 'n'),
-(5, 9, 10, 'n');
+(1, 1, 0, 'Y'),
+(1, 2, 0, 'Y'),
+(1, 3, 0, 'N'),
+(1, 4, 0, 'N'),
+(1, 5, 2, 'N'),
+(2, 6, 3, 'Y'),
+(2, 7, 4, 'N'),
+(3, 8, 0, 'N'),
+(3, 9, 2, 'N');
 
 -- --------------------------------------------------------
 
@@ -171,15 +161,15 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id`, `name`) VALUES
-(4, 'Apple'),
-(6, 'Banana'),
-(10, 'cola'),
-(5, 'icecream'),
-(2, 'Meat'),
-(1, 'Milk'),
-(7, 'pineaplle'),
-(3, 'Salad'),
-(9, 'water');
+(5, 'Bannana'),
+(7, 'Bread'),
+(2, 'Butter'),
+(6, 'Chicken'),
+(3, 'Meat'),
+(9, 'Melon'),
+(1, 'Potato'),
+(4, 'Salt'),
+(8, 'Sugar');
 
 -- --------------------------------------------------------
 
@@ -200,7 +190,7 @@ CREATE TABLE `request` (
 --
 
 INSERT INTO `request` (`id`, `userId`, `adminId`, `approved`, `date`) VALUES
-(1, 1, 1, 'W', '2020-09-03 22:28:34');
+(1, 3, 1, 'W', '2020-09-03 23:46:49');
 
 -- --------------------------------------------------------
 
@@ -219,9 +209,7 @@ CREATE TABLE `userlists` (
 
 INSERT INTO `userlists` (`listId`, `userId`) VALUES
 (1, 1),
-(2, 1),
-(3, 2),
-(5, 3);
+(3, 3);
 
 -- --------------------------------------------------------
 
@@ -236,17 +224,18 @@ CREATE TABLE `users` (
   `Nickname` varchar(30) DEFAULT NULL,
   `phone` varchar(10) DEFAULT NULL,
   `lostKeyPass` varchar(10) DEFAULT NULL,
-  `familyId` int(6) DEFAULT NULL
+  `familyId` int(6) DEFAULT NULL,
+  `lastLogin` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `Email`, `pswrd`, `Nickname`, `phone`, `lostKeyPass`, `familyId`) VALUES
-(1, 'admin@admin.com', '12345', NULL, NULL, NULL, NULL),
-(2, 'amneh.hassan@gmail.com', '12345678', NULL, NULL, '\"!_hOyOSlB', 3),
-(3, 'amneh.hassan@hotmail.com', '123456', 'Amneh', '0528184457', 'NULL', 1);
+INSERT INTO `users` (`id`, `Email`, `pswrd`, `Nickname`, `phone`, `lostKeyPass`, `familyId`, `lastLogin`) VALUES
+(1, 'admin@admin.com', '12345', NULL, NULL, NULL, 1, '2020-09-03 23:41:42'),
+(2, 'aseel_bu@hotmail.com', 'momo1', 'sasa', NULL, NULL, NULL, '2020-09-03 23:40:38'),
+(3, 'potato@hotmail.com', 'qqwwee', NULL, '1234567890', NULL, NULL, '2020-09-03 23:44:51');
 
 --
 -- Indexes for dumped tables
@@ -325,19 +314,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `family`
 --
 ALTER TABLE `family`
-  MODIFY `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `list`
 --
 ALTER TABLE `list`
-  MODIFY `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `request`
