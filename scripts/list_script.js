@@ -8,11 +8,13 @@ $(document).ready(function () {
 
 					data: { term: request.term },
 					success: function (data) {
+						
 						products = [];
 						$(data).each(function (i, product) {
 							products.push(product['name']);
 						});
 						response(products);
+
 					},
 
 					error: function (result) {

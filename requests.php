@@ -37,41 +37,44 @@ if ($result->num_rows <1) {
 <div id="app">
     <div class="container my-5 px-4 py-4  overflow-auto">
    <div> <h2>Join Requests</h2></div>
-    <div class="table-responsive">
+   <div id="v-requests">
+        <div v-if="empty===false" class="table-responsive">
            
                 <table class="table table-hover text-center shadow rounded" id="requests">
                     <thead>
                         <tr>
-                            <th scope="col">Email</th>
-                            <th scope="col">Request Date</th>
-                            <th scope="col">Actions</th>
+                        <th v-for="title in titles" scope="col">{{title}}</th> 
                             
                         </tr>
                     </thead>
                     <tbody>
                         <!-- requests will show here--->
-                      <!---  <tr v-for="request in requests" data-id="{{request.id}}">
-                            <td>{{request.email}}</td>
-                            <td>{{request.date}}</td>
-                            <td>
-                                <span>
-                                <a><button type="button" class="btn btn-success approveBtn"><i class="fas fa-user-plus"></i> Approve</button></a>
-                                </span> 
-                                <span class="ml-3">
-                                <a><button type="button" class="btn btn-danger declineBtn"> <i class="fas fa-user-times"></i> Decline</button></a>
-                                </span>
-                            </td>
-                        </tr> -->
+                        <tr v-for="r in requests" v-bind:data-id="r.requestId">
+                            <td class="sender" v-bind:data-id="r.senderId"><b>{{r.email}}</b></td>
+                            <td class="date ml-3" ><b>{{r.date}}</b></td>
+                            <td class="actions ml-3">
+                
+                    <span>
+                        <a><button type="button" class="btn btn-success approveBtn"><i class="fas fa-user-plus"></i> Approve</button></a>
+                    </span> 
+                    <span class="mt-md-5">
+                        <a><button type="button" class="btn btn-danger declineBtn"> <i class="fas fa-user-times"></i> Decline</button></a>
+                    </span>
+
+                    </td>
+            </tr>
                     </tbody>
 
 
                 </table>
                 
         </div>
-        <div class="d-none d-flex justify-content-center" >
+
+        <div v-else-if="empty === true" class=" d-flex justify-content-center" >
             <div class="shadow main text-center px-5 py-5 d-none" id="msgNoRequests">
             <h4>You don't have new requests<h4>
             </div>
+        </div>
         </div>
         <div>
                 <input type="hidden" id="userId" name="userId" value="<?= $userId ?>">

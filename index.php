@@ -157,6 +157,7 @@ else {
                 </button>
             </div>
         <?php endif; ?>
+        <div id="listTable">
         <div class="container row d-flex justify-content-between">
 
             <span class="col-sm-6">
@@ -166,7 +167,7 @@ else {
             </span>
             <div class="container d-flex justify-content-end col-sm-12 ">
                 <?php if (!is_null($listId)): ?>
-                    <button type="button" data-toggle="modal" data-target="#modalNewProduct" id="btnNP" class="btn btn-default mx-1 col-sm-3 my-1"><i class="fas fa-plus"></i> New
+                    <button @click="addProduct" type="button" data-toggle="modal" data-target="#modalNewProduct" id="btnNP" class="btn btn-default mx-1 col-sm-3 my-1"><i class="fas fa-plus"></i> New
                         Product </button>
                 <?php endif; ?>
                 <button type="button" data-toggle="modal" data-target="#modalNewList" id="btnNewList" class="btn btn-default mx-1 my-1  col-sm-3"><i class="fas fa-folder-plus"></i> New List
@@ -176,7 +177,7 @@ else {
 
         </div>
         <br>
-        <div id="listTable">
+        
         <div class="table-responsive">
             <?php if (!is_null($listId)): ?>
                 <table class="table table-hover text-center shadow rounded" id="products">
@@ -188,6 +189,7 @@ else {
                     </thead>
                     <tbody id="uncheckedRows">
                         <!--unchecked products will go here-->
+  
                         <tr v-for="product in uncheckedrows" class="uncheck" v-bind:data-id="product.id"> 
                             <td class="btnDone">
                             <input type="checkbox" class="btnDone"></td>
@@ -199,18 +201,23 @@ else {
                                 </a>
                             </td>
                             </tr>
-                            <!-- <tr v-if="productName" class="unchecked" > 
+
+                    </tbody>
+                    <!-- <tbody id="new">
+                          row that shows when user inserting a new product -->
+                            <!-- v-if="newProduct===true" -->
+                           <!-- <tr v-if="newProduct===true" class="transperant" > 
                             <td class="btnDone">
                             <input type="checkbox" class="btnDone"></td>
-                            <td class="name"> {{productName}}</td>
-                            <td class="amount">{{productAmount}}</td>
+                            <td class="name"><span>{{newPrdctName}}</span></td>
+                            <td class="amount">{{newPrdctAmount}}</td>
                             <td>
                                 <a href="#" class="btnRemove">
                                     <i class="fas fa-times"></i>
                                 </a>
                             </td>
-                            </tr> -->
-                    </tbody>
+                            </tr>
+                    </tbody> -->
 
                     <tbody id="checkedRows">
                         <!--checked products will go here-->
@@ -226,11 +233,19 @@ else {
                             </td>
                             </tr>
                     </tbody>
+                    <tbody id="total">
+                        <tr class="totalRow">
+                            <td><i class="fas fa-check"></i> Total Bought:</td>
+                            <td><h5>{{totalFinished}}</h5></td>
+                            <td><i class="fas fa-shopping-cart"></i> Total To Buy:</td>
+                            <td><h5>{{totalLeft}}</h5></td>
+                        </tr>
+                    </tbody>
 
                 </table>
             <?php endif; ?>
         </div>
-            </div>
+        
     </div>
     <!-- hidden input -->
     <input  type="hidden" id="userId" name="userId" value="<?= $userId ?>">
@@ -239,6 +254,7 @@ else {
 
     <?php require 'parts/footer.php'; ?>
 
+    <!-- modal confirm removal -->
     <div class="modal fade remove " tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-centered " role="document">
             <div class="modal-content main">
@@ -261,7 +277,7 @@ else {
 
 
     <!-- new product modal -->
-    <div class="modal fade" tabindex="-1" role="dialog" id="modalNewProduct">
+    <div  class="modal fade" tabindex="-1" role="dialog" id="modalNewProduct">
         <div class="modal-dialog " role="document">
             <div class="modal-content main">
                 <div class="modal-header">
@@ -276,7 +292,7 @@ else {
                             <div class="row">
                                 <div class="col-md-12">
                                     <label for="prdctName" class="">Name*: </label><br>
-                                    <input  v-model="productName" type="text" name="prdctName" id="prdctName" class="form-control" placeholder="Product Name" aria-describedby="helpId" required>
+                                    <input  v-model="newPrdctName" type="text" name="prdctName" id="prdctName" class="form-control" placeholder="Product Name"  required>
                                     <div id="menu-container" style="position:relative; width: auto;">
                                         <!--List of suggested products-->
                                     </div>
@@ -288,7 +304,7 @@ else {
                                 <div class="col-md-6">
 
                                     <div class="form-check">
-                                        <input type="checkbox" id="amountChkBox" class="form-check-input " name="amountChkBox" aria-describedby="helpId">
+                                        <input v-model="newPrdctAmount" type="checkbox" id="amountChkBox" class="form-check-input " name="amountChkBox" aria-describedby="helpId">
                                         <label for="amountChkBox" class="form-check-label">Choose Product Amount
                                         </label>
                                         <br>
@@ -403,6 +419,7 @@ else {
         </div>
 
     </div>
+    </div>
 
             </div>
 
@@ -416,20 +433,9 @@ else {
     </script>
 
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="scripts/list_script.js"></script>
     <script src="scripts/general.js"></script>
-    <script>
-    // new Vue({
-    //   el: "#app",
-    //   data() {
-       
-    //         productName : "",
-    //         productAmount :  ""
+    <script src="scripts/list_script.js"></script>
     
-    //         }
-    
-    // });
-  </script> 
 
     <?php $conn->close(); ?>
 </body>

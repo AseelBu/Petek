@@ -1,66 +1,78 @@
 let listTable = new Vue({
     el: '#listTable',
-    data:{
+    data(){
+        return {
+        titles: ['Done', 'Name', 'Amount', ''],
         id: 0,
-        name : "",
-        amount : "",
-        isChecked:"",
-        uncheckedrows:[],
-        checkedrows:[],
-        titles:['Done','Name','Amount','']
+        name: "",
+        amount: "",
+        isChecked: "",
+        uncheckedrows: [],
+        checkedrows: [],
         
+        newProduct:false,
+        newPrdctName:'',
+        newPrdctAmount:''
+        }
     },
-    methods:{
-        addRow(id, name, amount, isChecked){
+    methods: {
+        addRow(id, name, amount, isChecked) {
             amount = amount == 0 ? '---' : amount;
             isChecked = isChecked === 'Y' ? 'check' : 'uncheck';
-          let product = {
-            id: id,
-            name : name,
-            amount : amount,
-            isChecked:isChecked,
-          };
-          if(isChecked === 'check'){
-          this.checkedrows.push(product);
-          }else if(isChecked === 'uncheck'){
-            this.uncheckedrows.push(product);
-          }
+            let product = {
+                id: id,
+                name: name,
+                amount: amount,
+                isChecked: isChecked
+            };
+            if (isChecked === 'check') {
+                this.checkedrows.push(product);
+            } else if (isChecked === 'uncheck') {
+                this.uncheckedrows.push(product);
+            }
 
-          this.id = 0;
-          this.name = "";
-          this.amount = "";
-          this.isChecked="";
-          
+            this.id = 0;
+            this.name = "";
+            this.amount = "";
+            this.isChecked = "";
+
+        },
+        addProduct:function(){
+            this.newProduct=true;
+            
         }
-    
-      }
-})
 
-// let doneProductsTable = new Vue({
-//     el: '#products',
-//     data:{
-//         id: 0,
-//         name : "",
-//         doneProducts:[],
-//         titles:['Name','Remove']
-        
-//     },
-//     methods:{
-//         addRow(id, name){
+    },computed:{
+        totalFinished :function(){
+            let totalChecked=0;
+
+            for (let i = 0; i < this.checkedrows.length; i++){
+               let a=this.checkedrows[i].amount;
+                a= a==='---'? 1:parseInt(a,10);
+                
+                totalChecked+=a;
+            }
+            let total=totalChecked;
+            totalChecked=0;
+            return total;
+            
+            
+        },totalLeft:function(){
+            let totalUnchecked=0;
            
-//           let product = {
-//             id: id,
-//             name : name
-//           };
-         
-//           this.doneProducts.push(product);
-//           this.id = 0;
-//           this.name = "";
-          
-//         }
-    
-//       }
-// })
+            for (let i = 0; i < this.uncheckedrows.length; i++){
+               let a=this.uncheckedrows[i].amount;
+               a= a==='---'? 1:parseInt(a,10);
+               
+                totalUnchecked+=a;
+            }
+            return totalUnchecked;
+            // let diffrence=totalUnchecked-totalChecked;
+            // console.log(diffrence);
+            // return diffrence<0 ? 0:diffrence;
+        }
+    }
+})
 
 
 /***************reset************/
@@ -99,7 +111,7 @@ function validate(selector) {
     }
 }
 
-//**********grocery_list script*********/
+// **********grocery_list script*********/
 
 let listProducts = [
     // current products in the list
@@ -131,7 +143,7 @@ let familyLists = [
 //     let amount = product.amount;
 //     let isChecked = product.isChecked;
 
-    
+
 //     amount = amount == 0 ? '---' : amount;
 //     isChecked = isChecked === 'Y' ? 'check' : 'uncheck';
 
@@ -154,89 +166,6 @@ let familyLists = [
 // }
 
 
-function addInviteToTable(invite) {
-    let familyId = invite.familyId;
-    let familyName = invite.familyName;
-    let senderEmail = invite.senderEmail;
-    let senderId = invite.senderId;
-
-
-    let tr = `<tr data-id="${familyId}">
-                <td class="sender" data-id="${senderId}"><b>${senderEmail}</b></td>
-                <td class="family ml-3" ><b>${familyName}</b></td>
-                <td class="actions ml-3">
-                
-                    <span>
-                        <a>
-                        <button type="button" class="btn btn-success btnRequestJoin"><i class="fas fa-user-plus"></i> Request to Join</button>
-                        </a>
-                    </span> 
-                    
-                    <span class="mt-md-5 ">
-                        <a>
-                        <button type="button" class="btn btn-danger btnDeclineInvite"> <i class="fas fa-user-times"></i> Decline</button>
-                        </a>
-                    </span>
-                    
-                    </td>
-            </tr>`;
-    $('table#invites tbody').append(tr);
-
-}
-
-// add request to the view requests table/
-function addRequestToTable(request) {
-    let requestId = request.requestId;
-    let senderId = request.senderId;
-    let senderEmail = request.senderEmail;
-    let date = request.date;
-
-
-    let tr = `<tr data-id="${requestId}">
-                <td class="sender" data-id="${senderId}"><b>${senderEmail}</b></td>
-                <td class="date ml-3" ><b>${date}</b></td>
-                <td class="actions ml-3">
-                
-                    <span>
-                        <a><button type="button" class="btn btn-success approveBtn"><i class="fas fa-user-plus"></i> Approve</button></a>
-                    </span> 
-                    <span class="mt-md-5">
-                        <a><button type="button" class="btn btn-danger declineBtn"> <i class="fas fa-user-times"></i> Decline</button></a>
-                    </span>
-
-                    </td>
-            </tr>`;
-    $('table#requests tbody').append(tr);
-
-}
-
-function addMemberToTable(member) {
-    let id = member.id;
-    let Email = member.email;
-    let Nickname = member.Nickname;
-    let isAdmin = $("input#isAdmin").val();
-
-
-    let tr = `<tr data-id="${id}">
-                <td class="email"><b>${Email}</b></td>
-                <td class="nickname ml-3" ><b>${Nickname}</b></td>`;
-    if (isAdmin) {
-        tr += `<td class="actions ml-3">
-                
-                <span>
-                    <a>
-                    <button type="button" class="btn btn-danger btnRemoveMember"> <i class="fas fa-user-times"></i> Remove from family</button>
-                    </a>
-                </span>
-                
-                </td>`;
-    }
-    tr += `</tr>`;
-
-    $('table#members tbody').append(tr);
-
-}
-
 $(document).ready(function () {
     /***********password script**********/
 
@@ -255,7 +184,7 @@ $(document).ready(function () {
             success: function (products) {
                 listProducts = [];
                 if (products.length > 0) {
-                    $('table#products tbody').html('');
+                   $('table#products tbody:not(#total)').html('');
                     for (item of products) {
                         product = {
                             id: item['id'],
@@ -264,7 +193,7 @@ $(document).ready(function () {
                             isChecked: item['done']
                         };
                         // addProductToTable(product);
-                        listTable.addRow(item['id'], item['name'],item['amount'],item['done']);
+                        listTable.addRow(item['id'], item['name'], item['amount'], item['done']);
                         listProducts.push(product);
                     }
                     $('table tr.check input[type=checkbox]').prop('checked', true);
@@ -306,7 +235,6 @@ $(document).ready(function () {
                             $('div #listsDrop div#userLists').append(link);
                         }
 
-                        
 
                         if (currentListId !== null) { // add lists to new list selection
                             let option = `<option value="${id}">${name}</option>`;
@@ -321,9 +249,9 @@ $(document).ready(function () {
                     }
 
                 }
-                
+
                 if (familyId !== null) { // get family lists
-                    familyId=$(familyId).val();
+                    familyId = $(familyId).val();
                     $.ajax({
                         type: "GET",
                         url: "api/getFamilyLists.php",
@@ -419,9 +347,12 @@ $(document).ready(function () {
         if (familyId.val().length == 0) {
             familyId = null;
         }
-        populateListsDrop(null, userId,familyId);
+        populateListsDrop(null, userId, familyId);
     }
 
+    if (document.URL.includes("index.php") || document.URL.includes("/")) {
+
+    // checking product off the list
     $(document).on('click', 'input.btnDone', function (e) {
         let dataId = $(this).parents('tr').attr('data-id');
         const name = $(this).parents('tr').find('.name').text();
@@ -443,6 +374,8 @@ $(document).ready(function () {
                 },
 
                 success: function (response) {
+                    listTable.uncheckedrows=[];
+                    listTable.checkedrows=[];
                     refreshProducts(listId);
                 },
                 error: function (xhr, ajaxOptions, error) {
@@ -463,6 +396,8 @@ $(document).ready(function () {
                     done: 'N'
                 },
                 success: function (response) {
+                    listTable.uncheckedrows=[];
+                    listTable.checkedrows=[];
                     refreshProducts(listId);
                 },
                 error: function (xhr, ajaxOptions, error) {
@@ -499,7 +434,9 @@ $(document).ready(function () {
                     listProducts = $.grep(listProducts, function (value) {
                         return value.id != rowToRemove.data('id');
                     });
-                    refreshProducts();
+                    listTable.uncheckedrows=[];
+                    listTable.checkedrows=[];
+                    refreshProducts(listId);
                 },
                 error: function (xhr, ajaxOptions, error) {
                     console.log(error);
@@ -557,6 +494,9 @@ $(document).ready(function () {
 
             success: function (response) {
                 if (response === true) {
+                    listTable.uncheckedrows=[];
+                    listTable.checkedrows=[];
+                    
                     refreshProducts(listId);
                     $('span#modalGoodMsg').append('Product was added to list successfuly !');
                     $('form#addProduct input#prdctName').val('');
@@ -589,7 +529,7 @@ $(document).ready(function () {
             $('#submitList').click();
         }
     });
-
+}
     /***********login script**********/
 
     /***********invite script**********/
@@ -674,6 +614,70 @@ $(document).ready(function () {
         });
 
         // ********* view invites ***********/
+
+        let invitesTable = new Vue({
+            el: '#v-invites',
+            data: {
+                familyId: 0,
+                familyName: "",
+                senderEmail: "",
+                senderId: 0,
+
+                empty: false,
+                invites: [],
+                titles: ['Sender', 'Family Name', 'Actions']
+
+            },
+            methods: {
+                addRow(familyId, familyName, senderEmail, senderId) {
+
+                    let invite = {
+                        familyId: familyId,
+                        familyName: familyName,
+                        senderEmail: senderEmail,
+                        senderId: senderId
+                    };
+
+                    this.invites.push(invite);
+                    this.familyId = 0;
+                    this.familyName = 0;
+                    this.senderEmail = "";
+                    this.senderId = 0;
+
+                }
+            }
+        })
+
+        // function addInviteToTable(invite) {
+        //     let familyId = invite.familyId;
+        //     let familyName = invite.familyName;
+        //     let senderEmail = invite.senderEmail;
+        //     let senderId = invite.senderId;
+
+
+        //     let tr = `<tr data-id="${familyId}">
+        //                 <td class="sender" data-id="${senderId}"><b>${senderEmail}</b></td>
+        //                 <td class="family ml-3" ><b>${familyName}</b></td>
+        //                 <td class="actions ml-3">
+
+        //                     <span>
+        //                         <a>
+        //                         <button type="button" class="btn btn-success btnRequestJoin"><i class="fas fa-user-plus"></i> Request to Join</button>
+        //                         </a>
+        //                     </span>
+
+        //                     <span class="mt-md-5 ">
+        //                         <a>
+        //                         <button type="button" class="btn btn-danger btnDeclineInvite"> <i class="fas fa-user-times"></i> Decline</button>
+        //                         </a>
+        //                     </span>
+
+        //                     </td>
+        //             </tr>`;
+        //     $('table#invites tbody').append(tr);
+
+        // }
+
         function getInvites() {
             let userId = $('input#userId').val();
             $('table#invites tbody').html('');
@@ -685,29 +689,16 @@ $(document).ready(function () {
                 },
                 success: function (invites) {
                     if (invites.length > 0) {
-                        $('div#msgNoInvites').addClass("d-none");
-                        if ($('table#invites ').hasClass("d-none")) {
-                            $('table#invites ').removeClass("d-none")
-                        }
-
+                        
+                        invitesTable.empty = false;
                         for (item of invites) {
-                            invite = {
-                                senderId: item['senderId'],
-                                senderEmail: item['Email'],
-                                familyId: item['familyId'],
-                                familyName: item['name']
-
-                            };
-
-                            addInviteToTable(invite);
-                            // listProducts.push(product);
+                          
+                            invitesTable.addRow(item['familyId'], item['name'], item['Email'], item['senderId']);
+                            
                         }
                     } else { // no new invitations
-
-                        $('table#invites ').addClass("d-none");
-                        if ($('div#msgNoInvites').hasClass("d-none")) {
-                            $('div#msgNoInvites').removeClass("d-none")
-                        }
+                        invitesTable.empty =true;
+                        
                     }
                 },
                 error: function (xhr, ajaxOptions, error) {
@@ -796,6 +787,41 @@ $(document).ready(function () {
     // *****view requests*****/
     if (document.URL.includes("requests.php")) {
 
+        let requestsTable = new Vue({
+            el: '#v-requests',
+            data: {
+                requestId: 0,
+                senderId: 0,
+                email: "",
+                date: "",
+                empty: false,
+                requests: [],
+                titles: ['Email', 'Request Date', 'Actions']
+
+            },
+            methods: {
+                addRow(requestId, senderId, email, date) {
+
+                    let request = {
+                        requestId: requestId,
+                        senderId: senderId,
+                        email: email,
+                        date: date
+                    };
+
+                    this.requests.push(request);
+                    this.requestId = 0;
+                    this.senderId = 0;
+                    this.email = "";
+                    this.date = "";
+
+                }
+
+
+            }
+        })
+
+        
         function getRequests() {
             let adminId = $('input#userId').val();
             $('table#requests tbody').html('');
@@ -809,11 +835,8 @@ $(document).ready(function () {
 
                 success: function (requests) {
                     if (requests.length > 0) {
-                        $('div#msgNoRequests').addClass("d-none");
-                        if ($('table#requests ').hasClass("d-none")) {
-                            $('table#requests ').removeClass("d-none")
-                        }
-
+                       
+                        requestsTable.empty = false;
                         for (item of requests) {
 
                             request = {
@@ -823,16 +846,13 @@ $(document).ready(function () {
                                 date: item["date"]
 
                             };
-
-                            addRequestToTable(request);
+                            requestsTable.addRow(item['id'], item['userId'], item['Email'], item["date"]);
+                           
 
                         }
                     } else { // no new requests
-
-                        $('table#requests ').addClass("d-none");
-                        if ($('div#msgNoRequests').hasClass("d-none")) {
-                            $('div#msgNoRequests').removeClass("d-none")
-                        }
+                        requestsTable.empty = true;
+                        
                     }
                 },
                 error: function (xhr, ajaxOptions, error) {
@@ -875,7 +895,7 @@ $(document).ready(function () {
                 success: function (response) {
                     getRequests();
                     // remove request row from requests list
-                    // TODO
+                    
                 },
                 error: function (xhr, ajaxOptions, error) {
                     console.log(error);
@@ -964,7 +984,71 @@ $(document).ready(function () {
     }
     // ****** view family members *****/
     if (document.URL.includes("familyMembers.php")) {
+        let rowToRemove='';
+        let membersTable = new Vue({
+            el: '#v-members',
+            data() {
+                return  {
+
+                id: 0,
+                email: "",
+                nickname: "",
+                isAdmin: Boolean,
+
+                empty: false,
+                members: [],
+                titles: [
+                    'Email', 'Nickname', 'Actions'
+                ],
+
+                removeMail: "",
+                msg:'',
+            
+            }
+            },
+            methods: {
+                addRow(id, email, nickname, isAdmin) {
+
+                    let member = {
+                        id: id,
+                        email: email,
+                        nickname: nickname,
+                        isAdmin: isAdmin
+                    };
+
+                    this.members.push(member);
+                    this.id = 0;
+                    this.email = "";
+                    this.nickname = "";
+                    this.isAdmin = Boolean;
+                },
+                showRemoveModal :function(e){
+                   
+                    this.removeMail=$(event.target).parents('tr').find('.email').text();
+                    this.msg='You are about to remove <b> '+ this.removeMail + '</b> from your family';
+                   
+                    $('.remove.modal').modal('show');
+                    rowToRemove = $(event.target).parents('tr');
+                    $('.remove.modal .modal-body p').html(this.msg);
+                    // console.log(memberMail);
+                    // membersTable.removeMail = memberMail;
+            
+            // $('.remove.modal .modal-body p').html(`You are about to delete <i>${productName}</i>`);
+                   
+                    // this.removeMail=$(event.target).parents('tr').find('.email').text();
+                    // console.log(membersTable.removeMail);
+              },
+                removeMember(id) {
+                    const members = this.members.filter(member => member.id !== id);
+                    this.members = members;
+                }
+            }
+        })
+
+        
+
         function getFamilyMembers() {
+            let userId = $('input#userId').val();
             let familyId = $('input#familyId').val();
             $('table#members tbody').html('');
             $.ajax({
@@ -977,29 +1061,27 @@ $(document).ready(function () {
 
                 success: function (members) {
                     if (members.length > 0) {
-                        $('div#msgNoMembers').addClass("d-none");
-                        if ($('table#members ').hasClass("d-none")) {
-                            $('table#members ').removeClass("d-none")
-                        }
+                        
+                        membersTable.empty = false;
 
                         for (item of members) {
-                            Nickname = item['Nickname'] === null ? "---" : item['Nickname'];
-                            member = {
-                                id: item['id'],
-                                email: item['Email'],
-                                Nickname: Nickname
+                            let Nickname = item['Nickname'] === null ? "---" : item['Nickname'];
+                            let isAdmin = item['id'] === userId ? true : false;
+                            // member = {
+                            //     id: item['id'],
+                            //     email: item['Email'],
+                            //     Nickname: Nickname
 
-                            };
+                            // };
 
-                            addMemberToTable(member);
+                            membersTable.addRow(item['id'], item['Email'], Nickname, isAdmin);
+                            // $("input#isAdmin").val()
+                            // addMemberToTable(member);
 
                         }
                     } else { // no new members
-
-                        $('table#members ').addClass("d-none");
-                        if ($('div#msgNoMembers').hasClass("d-none")) {
-                            $('div#msgNoMembers').removeClass("d-none")
-                        }
+                        membersTable.empty = true;
+                        
                     }
                 },
                 error: function (xhr, ajaxOptions, error) {
@@ -1008,34 +1090,126 @@ $(document).ready(function () {
             });
         }
         getFamilyMembers();
+
+
+        // removing member
+
+        // $('.remove.modal').modal({backdrop: 'static', show: false});
+        // let rowToRemove = '';
+
+        // $(document).on('click', 'button.btnRemoveMember', function () {
+            
+        //     $('.remove.modal').modal('show');
+        //     rowToRemove = $(this).parents('tr');
+        //     // const memberMail = $(this).parents('tr').find('.email').text();
+        //     // console.log(memberMail);
+        //     // membersTable.removeMail = memberMail;
+        //     console.log(membersTable.removeMail);
+        //     // $('.remove.modal .modal-body p').html(`You are about to delete <i>${productName}</i>`);
+        // });
+
+        // confirm remove
+        $(document).on('click', 'button#removeMember', function () {
+            $('.remove.modal').modal('hide');
+            membersTable.removeMail = "";
+            let familyId = $('input#familyId').val();
+            rowToRemove.fadeOut(function () {
+                $.ajax({
+                    type: 'POST',
+                    url: 'api/deleteFromFamily.php',
+                    data: {
+                        userId: rowToRemove.data('id'),
+                        familyId: familyId
+                    },
+                    success: function (response) {
+                       
+                        membersTable.removeMember(rowToRemove.data('id'));
+                        
+                    },
+                    error: function (xhr, ajaxOptions, error) {
+                        console.log(error);
+                    }
+                });
+            });
+        });
     }
-
-
     // ************products list***********/
     if (document.URL.includes("productsList.php")) {
-        function addDoneProducts(product) {
-            let id = product.id;
-            let name = product.name;
-        
-        
-            let tr = `<tr  data-id="${id}"> 
-                  <td class="name d-flex justify-content-center" title="Double click to edit">${name}</td>
-                 
-                  <td class="actions ">
-                      <a href="#" class="btnRemoveProduct">
-                      <i class="fas fa-times fa-lg"></i>
-                      </a>
-                  </td>
-                  </tr>`;
-        
-        
-            $('table#products tbody').append(tr);
-        
-        }
+        let doneProductsTable = new Vue({
+            el: '#doneProducts',
+            data: {
+                id: 0,
+                name: "",
+                empty: false,
+
+                doneProducts: [],
+                titles: ['Name', 'Remove']
+
+            },
+            methods: {
+                addRow(id, name) {
+
+                    let product = {
+                        id: id,
+                        name: name
+
+                    };
+
+                    this.doneProducts.push(product);
+                    this.id = 0;
+                    this.name = "";
+
+                },
+                sortByName(products) {
+                    console.log('sorting');
+                    // return _.orderBy(products, 'name', 'asc');
+                    return this.doneProducts.sort((a, b) => a.name - b.name);
+                    // return sorted;
+
+                }
+
+                // editProductName:function(event){
+                //     event.stopPropagation();
+
+                //     this.id=$(event.target).parents('tr').attr('data-id');
+                //     let index = this.doneProducts.findIndex(p=>p.id===this.id);
+                //     this.doneProducts[index].editing=true;
+                //     this.name=this.doneProducts[index].name;
+
+                //     updateVal($(event.target),this.name);
+                // }
+
+            }
+        })
+
+        // function addDoneProducts(product) {
+        //     let id = product.id;
+        //     let name = product.name;
+
+
+        //     let tr = `<tr  data-id="${id}">
+        //           <td class="name d-flex justify-content-center" title="Double click to edit">${name}</td>
+
+        //           <td class="actions ">
+        //               <a href="#" class="btnRemoveProduct">
+        //               <i class="fas fa-times fa-lg"></i>
+        //               </a>
+        //           </td>
+        //           </tr>`;
+
+
+        //     $('table#products tbody').append(tr);
+
+        // }
 
         function getAllProducts() {
             let userId = $('input#userId').val();
-            let familyId = $('input#familyId').val();
+            let familyId = $('input#familyId');
+            if (familyId.val().length == 0) {
+                familyId = -1;
+            } else {
+                familyId = familyId.val();
+            }
             $('table#products tbody').html('');
             $.ajax({
                 type: "GET",
@@ -1047,27 +1221,29 @@ $(document).ready(function () {
 
                 success: function (products) {
                     if (products.length > 0) {
-                        $('div#msgNoProducts').addClass("d-none");
-                        if ($('table#products ').hasClass("d-none")) {
-                            $('table#products').removeClass("d-none")
-                        }
+                        doneProductsTable.empty = false;
+                        // $('div#msgNoProducts').addClass("d-none");
+                        // if ($('table#products ').hasClass("d-none")) {
+                        //     $('table#products').removeClass("d-none")
+                        // }
 
                         for (item of products) {
 
-                            product = {
-                                id: item['id'],
-                                name: item['name']
-                            };
-
-                            addDoneProducts(product);
+                            // product = {
+                            //     id: item['id'],
+                            //     name: item['name']
+                            // };
+                            doneProductsTable.addRow(item['id'], item['name']);
+                            // addDoneProducts(product);
 
                         }
+                        // doneProductsTable.sortByName(doneProductsTable.doneProducts);
                     } else { // no new members
-
-                        $('table#products ').addClass("d-none");
-                        if ($('div#msgNoProducts').hasClass("d-none")) {
-                            $('div#msgNoProducts').removeClass("d-none")
-                        }
+                        doneProductsTable.empty = true;
+                        // $('table#products ').addClass("d-none");
+                        // if ($('div#msgNoProducts').hasClass("d-none")) {
+                        //     $('div#msgNoProducts').removeClass("d-none")
+                        // }
                     }
                 },
                 error: function (xhr, ajaxOptions, error) {
@@ -1081,7 +1257,6 @@ $(document).ready(function () {
             e.stopPropagation();
             let currentEle = $(this);
             let value = $(this).html();
-
             updateVal(currentEle, value);
         });
 
@@ -1093,8 +1268,8 @@ $(document).ready(function () {
             thVal.keyup(function (event) {
                 if (event.keyCode == 13) {
                     $(currentEle).html(thVal.val());
-
                     save(id, thVal.val());
+
                 }
             });
 
@@ -1114,9 +1289,9 @@ $(document).ready(function () {
                     id: id,
                     newName: value
                 },
-
-                success: function (response) {
-                    getAllProducts();
+                success: function (response) { // getAllProducts();
+                    let index = doneProductsTable.doneProducts.findIndex(p => p.id === id);
+                    doneProductsTable.doneProducts[index].name = value;
                 },
                 error: function (xhr, ajaxOptions, error) {
                     console.log(error);
@@ -1125,13 +1300,13 @@ $(document).ready(function () {
         }
     }
 });
-//*****reset password****/
+// *****reset password****/
 if (document.URL.includes("resetPassword.php")) {
 
-    //   function sendEmail() {
-         
+    // function sendEmail() {
+
     //       let email = $("#EmailLogin");
-      
+
 
     //       if ( isNotEmpty(email) ) {
     //           $.ajax({
@@ -1139,9 +1314,9 @@ if (document.URL.includes("resetPassword.php")) {
     //              method: 'POST',
     //              dataType: 'json',
     //              data: {
-                     
+
     //                  email: email.val(),
-                    
+
     //              }, success: function (response) {
     //                   if (response.status == "success")
     //                       alert('Email Has Been Sent!');
@@ -1152,25 +1327,27 @@ if (document.URL.includes("resetPassword.php")) {
     //              }
     //           });
     //       }
-    //   }
+    // }
 
-      function isNotEmpty(caller) {
-          if (caller.val() == "") {
-              caller.css('border', '1px solid red');
-              return false;
-          } else
-              caller.css('border', '');
-
-          return true;
-      }
-
-      $(document).on('click','input#btnSendReset',function (e) {
+    function isNotEmpty(caller) {
+        if (caller.val() == "") {
+            caller.css('border', '1px solid red');
+            return false;
+        } else 
+            caller.css('border', '');
         
-        let email = $("#EmailLogin");
-      
 
-        if ( isNotEmpty(email) ) {
+
+        return true;
+    }
+
+    $(document).on('click', 'input#btnSendReset', function (e) {
+
+        let email = $("#EmailLogin");
+
+
+        if (isNotEmpty(email)) {
             $("input#submitReset").click();
         }
-      });
-    }
+    });
+}

@@ -3,9 +3,10 @@ require_once("../db.php");
 
 header('Content-Type: application/json');
 if (isset($_GET['userId']) ) {
+
     $userId = $_GET['userId'];
     $familyId=NULL;
-    if(isset($_GET['familyId'])){
+    if(isset($_GET['familyId']) && $_GET['familyId']!== -1){
         $familyId=$_GET['familyId'];
 
     }

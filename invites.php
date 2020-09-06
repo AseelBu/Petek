@@ -102,42 +102,58 @@ require_once 'parts/sessionCheck.php';
                             </div>
                         </form>
                     <!-- </div> -->
-                    <?php else :?>
+                    <?php else: ?>
                     <!-- View Invites if user doesn't have family-->
                     <!-- <div class="tab-pane fade" id="viewInvite" role="tabpanel" aria-labelledby="view-tab"> -->
                     <h2><b>Family Invitations</b></h2><br>
 
                     <input type="hidden" id="userId" name="userId" value="<?= $userId ?>">
                     
-                <input type="hidden" id="familyId" name="familyId" value="<?= $familyId ?>">
-                                
+                    <input type="hidden" id="familyId" name="familyId" value="<?= $familyId ?>">
+                        <div id="v-invites">
 
-                        <div class="table-responsive" id="viewInvites">
-                
-                            <table class="table table-hover text-center shadow rounded" id="invites">
-                                <thead>
-                                    <tr>
-                                        <th scope="col"><big>Sender</big></th>
-                                        <th scope="col" class="ml-3"><big>Family name</big></th>
-                                        <th scope="col" class="ml-3"><big>Actions</big></th>
+                            <div v-if="empty===false" class="table-responsive" id="viewInvites">
+                    
+                                <table class="table table-hover text-center " id="invites">
+                                    <thead>
+                                        <tr>
                                         
-                                    </tr>
-                                </thead>
-                                <tbody >
-                                    <!--invites will go here-->
-                                    
-                                </tbody>
+                                        <th v-for="title in titles"  class="mx-2" scope="col"><big>{{title}}</big></th> 
+                                        </tr>
+                                    </thead>
+                                    <tbody >
+                                        <!--invites will go here-->
+                                        <tr v-for="i in invites" v-bind:data-id="i.familyId">
+                                            <td class="sender" v-bind:data-id="i.senderId"><b>{{i.senderEmail}}</b></td>
+                                            <td class="family ml-3" ><b>{{i.familyName}}</b></td>
+                                            <td class="actions ml-3">
+                            
+                                                <span>
+                                                    <a>
+                                                    <button type="button" class="btn btn-success btnRequestJoin"><i class="fas fa-user-plus"></i> Request to Join</button>
+                                                    </a>
+                                                </span> 
+                                                
+                                                <span class="mt-md-5 ">
+                                                    <a>
+                                                    <button type="button" class="btn btn-danger btnDeclineInvite"> <i class="fas fa-user-times"></i> Decline</button>
+                                                    </a>
+                                                </span>
+                                            
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
-
-                            </table>
-                            <div class="d-none" id="msgNoInvites">
+                            <div v-else-if="empty === true" class="" id="msgNoInvites">
                                 <h4>You don't have any invitations<h4>
                             </div>
-                        </div>
+                        
                     
-                    <!-- </div> -->
+                        </div>
 
-                </div>
+                    </div>
                     
                     <?php endif; ?>
                 
@@ -159,7 +175,7 @@ require_once 'parts/sessionCheck.php';
                 </ul> -->
     
     
-        <!-- </div> -->
+        </div>
         
     </div>
 

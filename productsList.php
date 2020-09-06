@@ -3,7 +3,6 @@ session_start();
 require_once 'db.php';
 
 require_once 'parts/sessionCheck.php';
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,39 +25,52 @@ require_once 'parts/sessionCheck.php';
         </nav>
         </div>
     </header>
-<div id="app">
+
     <div class="container my-5 px-4 py-4  overflow-auto">
    <div> <h2>Previously Bought Products</h2></div>
-    <div class="table-responsive d-flex justify-content-center pt-2">
-           
-                <table class="table table-hover text-center shadow rounded col-10" id="products">
-                    <thead>
-                        <tr>
-                            <th v-for="title in titles" scope="col">{{title}}</th>
-                            
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- products will show here--->
-                        <tr  v-for="product in doneProducts" v-bind:data-id="product.id"> 
-                          <td class="name d-flex justify-content-center" title="Double click to edit">{{product.name}}</td>
-                 
-                          <td class="actions ">
-                              <a href="#" class="btnRemoveProduct">
-                              <i class="fas fa-times fa-lg"></i>
-                              </a>
-                          </td>
-                        </tr>
-                    </tbody>
+   <div id="doneProducts">
 
-                </table>
+    <div v-if="empty===false" class="table-responsive d-flex justify-content-center pt-2">
+           
+      <table class="table table-hover text-center shadow rounded col-10" id="products">
+        <thead>
+          <tr>
+            <th v-for="title in titles" scope="col">{{title}}</th>
+                            
+          </tr>
+        </thead>
+        <tbody>
+          <!-- products will show here--->
+            <tr  v-for="product in doneProducts" v-bind:data-id="product.id"> 
+                        
+              <td class="name d-flex justify-content-center" title="Double click to edit">{{product.name}}
+                <!-- <span v-if="editing===false" @dblclick="editProductName" ></span>
+                  <input v-else-if="editing===true" class="thVal form-control col-6 py-3 text-center" type="text" v-bind:value="product.name" > -->
+              </td>
+                         
+              <td class="actions ">
+                <a href="#" class="btnRemoveProduct">
+                    <i class="fas fa-times fa-lg"></i>
+                  </a>
+              </td>
+            </tr>
+        </tbody>
+
+      </table>
                 
+    </div>
+    <div v-else-if="empty === true" class=" d-flex justify-content-center" >
+        <div class="shadow main text-center px-5 py-5 " id="msgNoRequests">
+          <h4>You don't have new requests<h4>
         </div>
+    </div>
+    </div>
         
         <div>
                 <input type="hidden" id="userId" name="userId" value="<?= $userId ?>">
                 <input type="hidden" id="familyId" name="familyId" value="<?= $familyId ?>">
-    </div>
+    
+        </div>
 </div>
 
     <?php require_once 'parts/footer.php'; ?>

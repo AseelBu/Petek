@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 03, 2020 at 10:51 PM
+-- Generation Time: Sep 06, 2020 at 10:50 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
@@ -93,7 +93,8 @@ CREATE TABLE `invites` (
 --
 
 INSERT INTO `invites` (`senderId`, `sendedToId`, `familyId`, `approved`) VALUES
-(1, 2, 1, 'W');
+(1, 2, 1, 'W'),
+(1, 4, 1, 'Y');
 
 -- --------------------------------------------------------
 
@@ -138,10 +139,12 @@ INSERT INTO `listproducts` (`ListId`, `ProductId`, `amount`, `done`) VALUES
 (1, 1, 0, 'Y'),
 (1, 2, 0, 'Y'),
 (1, 3, 0, 'N'),
-(1, 4, 0, 'N'),
 (1, 5, 2, 'N'),
-(2, 6, 3, 'Y'),
-(2, 7, 4, 'N'),
+(2, 2, 2, 'N'),
+(2, 3, 1, 'N'),
+(2, 4, 0, 'Y'),
+(2, 5, 0, 'N'),
+(2, 10, 0, 'Y'),
 (3, 8, 0, 'N'),
 (3, 9, 2, 'N');
 
@@ -161,14 +164,18 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id`, `name`) VALUES
+(13, 'Apple'),
 (5, 'Bannana'),
 (7, 'Bread'),
-(2, 'Butter'),
+(2, 'Butter                          '),
 (6, 'Chicken'),
+(11, 'Cups'),
+(12, 'Hallo'),
 (3, 'Meat'),
 (9, 'Melon'),
-(1, 'Potato'),
+(1, 'Milk                                          '),
 (4, 'Salt'),
+(10, 'Shampoo'),
 (8, 'Sugar');
 
 -- --------------------------------------------------------
@@ -190,7 +197,8 @@ CREATE TABLE `request` (
 --
 
 INSERT INTO `request` (`id`, `userId`, `adminId`, `approved`, `date`) VALUES
-(1, 3, 1, 'W', '2020-09-03 23:46:49');
+(1, 3, 1, 'W', '2020-09-03 23:46:49'),
+(2, 4, 1, 'Y', '2020-09-06 14:47:51');
 
 -- --------------------------------------------------------
 
@@ -233,9 +241,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `Email`, `pswrd`, `Nickname`, `phone`, `lostKeyPass`, `familyId`, `lastLogin`) VALUES
-(1, 'admin@admin.com', '12345', NULL, NULL, NULL, 1, '2020-09-03 23:41:42'),
-(2, 'aseel_bu@hotmail.com', 'momo1', 'sasa', NULL, NULL, NULL, '2020-09-03 23:40:38'),
-(3, 'potato@hotmail.com', 'qqwwee', NULL, '1234567890', NULL, NULL, '2020-09-03 23:44:51');
+(1, 'admin@admin.com', '12345', NULL, NULL, NULL, 1, '2020-09-06 20:35:38'),
+(2, 'aseel_bu@hotmail.com', '12345', 'sasa', NULL, 'r8lxLe$LNL', NULL, '2020-09-06 02:24:26'),
+(3, 'potato@hotmail.com', 'qqwwee', NULL, '1234567890', NULL, NULL, '2020-09-06 03:50:46'),
+(4, 'happy@today.com', '54321', 'hoho', NULL, NULL, 1, '2020-09-06 20:33:39');
 
 --
 -- Indexes for dumped tables
@@ -326,19 +335,19 @@ ALTER TABLE `list`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `request`
 --
 ALTER TABLE `request`
-  MODIFY `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
