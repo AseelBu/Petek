@@ -1,8 +1,7 @@
 # Petek
-project for course "Web Based Systems"
+"Petek" is shared grocery lists web application
+
+This project was created through the course "Web Based Systems"
 29.6.2020
-To login use :
-email: admin@admin.com
-password: 12345
 
 **Was built on Apache server using MariaDB (xampp)
